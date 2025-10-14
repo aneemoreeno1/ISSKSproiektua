@@ -6,11 +6,10 @@ Ane Moreno Ruiz
 Xinyan Wang
 
 #Docker bidez proiektua hedatzeko instrukzioak
+	# Docker LAMP
+	Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enableefault.
 
-# Docker LAMP
-Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
-
-## Instructions
+	## Instructions
 
 Enter the following command to start your containers:
 ```bash
