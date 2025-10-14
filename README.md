@@ -1,11 +1,11 @@
-#Taldekideen izenak
+# Taldekideen izenak
 Uxue Aurtenetxe MAortua
 Aimar Basterretxea Zubizarreta
 Yoel Justel Morala
 Ane Moreno Ruiz
 Xinyan Wang
 
-#Docker bidez proiektua hedatzeko instrukzioak
+# Docker bidez proiektua hedatzeko instrukzioak
 
 # Docker LAMP
 Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
