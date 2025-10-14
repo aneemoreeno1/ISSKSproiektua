@@ -1,13 +1,13 @@
 # Taldekideen izenak
-Uxue Aurtenetxe MAortua
+  Uxue Aurtenetxe Maortua
 
-Aimar Basterretxea Zubizarreta
+  Aimar Basterretxea Zubizarreta
 
-Yoel Justel Morala
+  Yoel Justel Morala
 
-Ane Moreno Ruiz
+  Ane Moreno Ruiz
 
-Xinyan Wang
+  Xinyan Wang
 
 
 # Docker bidez proiektua hedatzeko instrukzioak
