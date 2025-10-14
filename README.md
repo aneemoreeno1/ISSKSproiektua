@@ -1,27 +1,33 @@
 # Taldekideen izenak
 Uxue Aurtenetxe MAortua
+
 Aimar Basterretxea Zubizarreta
+
 Yoel Justel Morala
+
 Ane Moreno Ruiz
+
 Xinyan Wang
+
 
 # Docker bidez proiektua hedatzeko instrukzioak
 
-# Docker LAMP
-Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
 
-## Instructions
+  # Docker LAMP
+  Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
 
-Enter the following command to start your containers:
-```bash
-$ docker-compose up -d
-```
+  ## Instructions
 
-To stop them, use this:
-```bash
-$ docker-compose stop
-```
+  Enter the following command to start your containers:
+  ```bash
+  $ docker-compose up -d
+  ```
 
-Feel free to make pull requests and help to improve this.
+  To stop them, use this:
+  ```bash
+  $ docker-compose stop
+  ```
 
-If you are looking for phpMyAdmin, take a look at [this](https://github.com/celsocelante/docker-lamp/issues/2).
+  Feel free to make pull requests and help to improve this.
+
+  If you are looking for phpMyAdmin, take a look at [this](https://github.com/celsocelante/docker-lamp/issues/2).
