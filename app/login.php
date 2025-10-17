@@ -1,24 +1,33 @@
 <?php
-require_once 'includes/header.php';
+// Datu-basearekin konexioa
+$hostname = "db";
+$username = "admin";
+$password = "test";
+$db = "database";
+
+$conn = mysqli_connect($hostname,$username,$password,$db);
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
 ?>
 
-<h2>🔐 Saioa Hasi</h2>
-
-<form id="login_form" method="POST">
-    <div>
-        <label>Emaila:</label><br>
-        <input type="email" name="email" placeholder="zure@email.eus" required>
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Saioa Hasi</title>
+</head>
+<body>
+    <h1>Saioa Hasi</h1>
     
-    <div>
-        <label>Pasahitza:</label><br>
-        <input type="password" name="password" placeholder="Pasahitza" required>
-    </div>
-    
-    <br>
-    <button type="submit" id="login_submit">Sartu</button>
-</form>
+    <!-- Saio hasierako formularioa -->
+    <form id="login_form" method="POST">
+        Erabiltzailea: <input type="text" name="erabiltzailea" required><br><br>
+        Pasahitza: <input type="password" name="pasahitza" required><br><br>
+        
+        <!-- Sartzeko botoia -->
+        <input type="submit" id="login_submit" value="Sartu">
+    </form>
 
-<p><a href="register.php">Ez duzu konturik? Erregistratu hemen</a></p>
-
-<?php require_once 'includes/footer.php'; ?>
+    <p><a href="/">Atzera hasierako orrira</a></p>
+</body>
+</html>

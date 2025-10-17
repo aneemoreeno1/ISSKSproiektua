@@ -28,17 +28,22 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `usuarios` (
-  `id` int(11) NOT NULL,
-  `nombre` text NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  `nombre` text NOT NULL,
+  `nan` varchar(10) NOT NULL,
+  `telefonoa` varchar(9) NOT NULL,
+  `jaiotze_data` date NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `pasahitza` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nombre`) VALUES
-(1, 'mikel'),
-(2, 'aitor');
+INSERT INTO `usuarios` (`nombre`, `nan`, `telefonoa`, `jaiotze_data`, `email`, `pasahitza`) VALUES
+('mikel', '12345678-A', '123456789', '1990-01-01', 'mikel@adibide.com', 'pasahitz1'),
+('aitor', '87654321-B', '987654321', '1992-02-02', 'aitor@adibide.com', 'pasahitz2');
 
 --
 -- Índices para tablas volcadas
@@ -47,10 +52,9 @@ INSERT INTO `usuarios` (`id`, `nombre`) VALUES
 --
 -- Indices de la tabla `usuarios`
 --
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+

@@ -15,6 +15,7 @@ services:
      restart: always
      volumes:
        - ./mysql:/var/lib/mysql
+       #- ./database.sql:/docker-entrypoint-initdb.d/database.sql #Hau bakarrik hasieraketarako. Bukaeran kendu!!! DATABASE.USUSRIOS NO EXIST esaten badu, hau ipini.
      environment:
        MYSQL_ROOT_PASSWORD: root
        MYSQL_USER: admin
