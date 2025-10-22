@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 			
 			if (eguna < 1 || eguna > egunMaximoak[hilabetea - 1]) {
-			    window.alert("Eguna okerra. Hilabete " + hilabetea + "-k " + egunMaximoak[hilabetea - 1] + " egun baino ez ditu izan");
+			    window.alert("Eguna okerra. " + hilabetea + ". hilabeteak " + egunMaximoak[hilabetea - 1] + " egun baino ez ditu izan");
 			    return false;
 			}
 			
