@@ -15,6 +15,7 @@ if ($conn->connect_error) {
 $query = mysqli_query($conn, "SELECT * FROM usuarios")
 	or die(mysqli_error($conn));
 
+echo '<h2>Erabiltzaileak:</h2>';
 while ($row = mysqli_fetch_array($query)) {
 	echo
 		"<tr>
@@ -28,6 +29,6 @@ while ($row = mysqli_fetch_array($query)) {
 }
 
 // Estekak
-echo '<p><a href="login.php">SaioaHasi</a> | <a href="register.php">Erregistratu</a></p>';
+echo '<p><a href="login.php">SaioaHasi</a> | <a href="register.php">Erregistratu</a></p> | <a href="items.php">Pelikulak ikusi</a></p>';
 ?>
 
