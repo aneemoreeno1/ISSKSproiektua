@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 // Elementuak lortu
-$query = mysqli_query($conn, "SELECT * FROM pelikula")
+$query = mysqli_query($conn, "SELECT * FROM pelikulak")
     or die(mysqli_error($conn));
 ?>
 
