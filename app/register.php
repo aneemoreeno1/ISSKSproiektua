@@ -111,15 +111,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			var data = document.register_form.data.value;
 			var dataZatiak = data.split("-");
 			if (data.length != 10 || dataZatiak.length != 3) {
-				window.alert("Data formatua okerra. Adibidea: 2024-12-20");
-				return false;
+			    window.alert("Data formatua okerra. Adibidea: 2024-12-20");
+			    return false;
 			} else if (
-				dataZatiak[0].length != 4 || !bakarrikZenbakiak(dataZatiak[0]) ||
-				dataZatiak[1].length != 2 || !bakarrikZenbakiak(dataZatiak[1]) ||
-				dataZatiak[2].length != 2 || !bakarrikZenbakiak(dataZatiak[2])
+			    dataZatiak[0].length != 4 || !bakarrikZenbakiak(dataZatiak[0]) ||
+			    dataZatiak[1].length != 2 || !bakarrikZenbakiak(dataZatiak[1]) ||
+			    dataZatiak[2].length != 2 || !bakarrikZenbakiak(dataZatiak[2])
 			) {
-				window.alert("Data formatua okerra. Urteak 4 zenbaki, hilabeteak 2, egunak 2");
-				return false;
+			    window.alert("Data formatua okerra. Urteak 4 zenbaki, hilabeteak 2, egunak 2");
+			    return false;
+			}
+			
+			// Datuak zenbakietara bihurtu
+			var urtea = parseInt(dataZatiak[0]);
+			var hilabetea = parseInt(dataZatiak[1]);
+			var eguna = parseInt(dataZatiak[2]);
+			
+			// Hilabetearen balioztatzea (1-12)
+			if (hilabetea < 1 || hilabetea > 12) {
+			    window.alert("Hilabetea 1 eta 12 artean egon behar da");
+			    return false;
+			}
+			
+			// Egunaren balioztatzea (hilabetearen arabera)
+			var egunMaximoak = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+			
+			// Bisiesto egiaztatu (Urte bisiesto: 4rekin zatigarria, baina 100ekin ez, 400rekin bai)
+			if ((urtea % 4 === 0 && urtea % 100 !== 0) || (urtea % 400 === 0)) {
+			    egunMaximoak[1] = 29; // Otsaila 29 egun bisiestoan
+			}
+			
+			if (eguna < 1 || eguna > egunMaximoak[hilabetea - 1]) {
+			    window.alert("Eguna okerra. " + hilabetea + ". hilabeteak " + egunMaximoak[hilabetea - 1] + " egun baino ez ditu izan");
+			    return false;
+			}
+			
+			// Data historikoa egiaztatu (ez 120 urte baino gehiago)
+			var gaur = new Date();
+			var urteMaximoa = gaur.getFullYear() - 120;
+			var urteMinimoa = gaur.getFullYear();
+			
+			if (urtea < urteMaximoa) {
+			    window.alert("Ezin da 120 urte baino gehiago izan. Urte minimoa: " + urteMaximoa);
+			    return false;
+			}
+			
+			if (urtea > urteMinimoa) {
+			    window.alert("Ezin da etorkizuneko data izan. Urte maximoa: " + urteMinimoa);
+			    return false;
+			}
+			
+			// Data osoa balioztatu (Date objektua erabiliz)
+			var dataObjektua = new Date(urtea, hilabetea - 1, eguna);
+			if (
+			    dataObjektua.getFullYear() !== urtea ||
+			    dataObjektua.getMonth() !== hilabetea - 1 ||
+			    dataObjektua.getDate() !== eguna
+			) {
+			    window.alert("Data ez da existitzen. Egiaztatu eguna eta hilabetea");
+			    return false;
 			}
 
 			// Emaila: egokia izan behar da
@@ -128,7 +178,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				window.alert("Emaila ez da zuzena. Adibidea: adibidea@zerbitzaria.extentsioa");
 				return false;
 			}
+			
+			// Pasahitza (SOILIK OHARRA)
+			var pasahitza = document.register_form.pasahitza.value;
+			
+			if (pasahitza.length < 8) {
+				window.alert("Pasahitza ez segurua. Gutxienez 8 karaktere gomendatzen dira.");
+			}else if (!/[0-9]/.test(pasahitza)) {
+				window.alert("Pasahitza ez segurua. Gutxienez zenbaki bat gomendatzen da.");
+			}else if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pasahitza)) {
+				window.alert("Pasahitza ez segurua. Gutxienez karaktere berezi bat gomendatzen da.");
+			}
 
+			// Errepikatu passahitza (biak berdinak izan behar dira)
+			var errep_pasahitza = document.register_form.errep_pasahitza.value;
+			if (pasahitza != errep_pasahitza) {
+				window.alert("Pasahitzak ez dira berdinak.");
+				return false;
+			}
+	
 			// Datuak guztiz ongi badaude
 			return true;
 		}
@@ -147,6 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		Jaiotze data: <input type="text" name="data" required><br><br>
 		Email: <input type="text" name="email" required><br><br>
 		Pasahitza: <input type="password" name="pasahitza" required><br><br>
+		Errepikatu pasahitza: <input type="password" name="errep_pasahitza" required><br><br>
 
 		<!-- Bidaltzeko botoia -->
 		<input type="submit" id="register_submit" value="Erregistratu">

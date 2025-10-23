@@ -1,7 +1,9 @@
 <?php
 // PHP Kodea
-// Datu-basearekin konexioa
 
+session_start();
+
+// Datu-basearekin konexioa
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -22,7 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$emaitza = mysqli_query($conn, $sql);
 	
 	if (mysqli_num_rows($emaitza) > 0) {
+		// Datuak lortu
+		$user = mysqli_fetch_assoc($emaitza);
+		//Saioa hasi
+	        $_SESSION['user_id'] = $user['id'];
+        	$_SESSION['username'] = $user['nombre'];
+
 		echo "Ongi etorri " . $erabiltzailea . "!";
+		echo "<p><a href='modify_user.php?user={$user['id']}'>Editatu</a></p>";
+		
 	} else {
 		echo "Erabiltzailea edo pasahitza okerrak";
 	}
@@ -70,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	</form>
 
 	<p>
-		<a href="index.php">Atzera hasierako orrira</a> | 
+		<a href="index.php">Atzera hasierako orrira</a> 
 	</p>
 </body>
 </html>

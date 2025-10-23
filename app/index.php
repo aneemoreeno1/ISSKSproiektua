@@ -1,4 +1,6 @@
 <?php
+session_start(); 
+
 echo '<h1>Yeah, it works!</h1>';
 // phpinfo();
 
@@ -16,18 +18,28 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios")
 	or die(mysqli_error($conn));
 
 while ($row = mysqli_fetch_array($query)) {
-	echo
-		"<tr>
-			<td>{$row['id']}</td>
-			<td>{$row['nombre']}</td>
-			<td>
-				<a href='show_user.php?user={$row['id']}'>Ikusi</a> | 
-				<a href='modify_user.php?user={$row['id']}'>Editatu</a>
-			</td>
-		</tr>";
+    echo
+        "<tr>
+            <td>{$row['id']}</td>
+            <td>{$row['nombre']}</td>
+            <td>
+                <a href='show_user.php?user={$row['id']}'>Ikusi</a>";
+    
+    // SOILIK saioa duen erabiltzaileak editatu ahal du bere datuak
+    if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) {
+        echo " | <a href='modify_user.php?user={$row['id']}'>Editatu</a>";  
+    }
+    
+    echo "</td>
+        </tr>";
 }
+echo "</table>";
 
 // Estekak
-echo '<p><a href="login.php">SaioaHasi</a> | <a href="register.php">Erregistratu</a></p>';
+echo '<p>';
+echo '<a href="login.php">Saioa Hasi</a> | ';
+echo '<a href="register.php">Erregistratu</a> | ';
+echo '<a href="items.php">Pelikulak Ikusi</a>';
+echo '</p>';
 ?>
 

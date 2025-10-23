@@ -1,0 +1,57 @@
+<?php
+// items.php - Elementuen zerrenda
+
+$hostname = "db";
+$username = "admin";
+$password = "test";
+$db = "database";
+
+$conn = mysqli_connect($hostname, $username, $password, $db);
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
+
+// Elementuak lortu
+$query = mysqli_query($conn, "SELECT * FROM pelikulak")
+    or die(mysqli_error($conn));
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elementuak</title>
+</head>
+<body>
+    <h1>Elementuak</h1>
+    
+    <?php
+    // Elementuak erakusten
+    if (mysqli_num_rows($query) > 0) {
+        echo "<table border='1'>";
+        echo "<tr><th>ID</th><th>Izena</th><th> </th></tr>";
+        
+        while ($row = mysqli_fetch_array($query)) {
+            echo "<tr>";
+            echo "<td>{$row['id']}</td>";
+            echo "<td>{$row['izena']}</td>";
+            echo "<td>
+                    <a href='show_item.php?item={$row['id']}'>Ikusi</a> | 
+                    <a href='modify_item.php?item={$row['id']}'>Editatu</a> | 
+                    <a href='delete_item.php?item={$row['id']}'>Ezabatu</a>
+                  </td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    } else {
+        echo "<p>Ez daude pelikularik.</p>";
+    }
+    
+    mysqli_close($conn);
+    ?>
+    
+    <p>
+        <a href="add_item.php">Elementu Berria Gehitu</a> | 
+        <a href="index.php">Hasierara bueltatu</a>
+    </p>
+</body>
+</html>
