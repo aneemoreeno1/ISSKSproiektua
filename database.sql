@@ -52,6 +52,29 @@ INSERT INTO `usuarios` (`nombre`, `nan`, `telefonoa`, `jaiotze_data`, `email`, `
 --
 -- Indices de la tabla `usuarios`
 --
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `elementuak`
+--
+
+CREATE TABLE `pelikula` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `izena` varchar(100) NOT NULL,
+  `deskribapena` text,
+  `urtea` int(11),
+  `egilea` varchar(100),
+  `generoa` varchar(50),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `elementuak`
+--
+
+INSERT INTO `pelikula` (`izena`, `deskribapena`, `urtea`, `egilea`, `generoa`) VALUES
+('Harry Potter', 'Magia munduko abenturak', 1997, 'J.K. Rowling', 'Fantasia'),
+('1984', 'Distopia eleberri ospetsua', 1949, 'George Orwell', 'Zientzia-fikzioa'),
+('The Godfather', 'Mafia familia baten istorioa', 1972, 'Mario Puzo', 'Drama');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
