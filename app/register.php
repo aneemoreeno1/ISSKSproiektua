@@ -191,7 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pasahitza)) {
 				window.alert("Pasahitza ez segurua. Gutxienez karaktere berezi bat gomendatzen da.");
 			}
-			
+
+			// Errepikatu passahitza (biak berdinak izan behar dira
+			var errep_pasahitza = document.register_form.errep_pasahitza.value;
+			if (pasahitza != errep_pasahitza) {
+				window.alert("Pasahitzak ez dira berdinak.");
+				return false;
+			}
+	
 			// Datuak guztiz ongi badaude
 			return true;
 		}
@@ -210,6 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		Jaiotze data: <input type="text" name="data" required><br><br>
 		Email: <input type="text" name="email" required><br><br>
 		Pasahitza: <input type="password" name="pasahitza" required><br><br>
+		Errepikatu pasahitza: <input type="password" name="errep_pasahitza" required><br><br>
 
 		<!-- Bidaltzeko botoia -->
 		<input type="submit" id="register_submit" value="Erregistratu">
