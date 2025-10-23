@@ -64,7 +64,7 @@ CREATE TABLE `pelikulak` (
   `deskribapena` text,
   `urtea` int(11),
   `egilea` varchar(100),
-  `generoa` varchar(50),
+  `generoa` varchar(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
