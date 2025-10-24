@@ -6,6 +6,14 @@ $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
+    $item_id = $_POST['item_id'];
+    $sql = "DELETE FROM pelikulak WHERE id = $item_id";
+    mysqli_query($conn, $sql);
+    header("Location: items.php");
+    exit;
+}
+
 if (isset($_GET['item'])) {
     $item_id = $_GET['item'];
     
@@ -26,15 +34,6 @@ if (isset($_GET['item'])) {
     } else {
         echo "<p>Ez da pelikularik aurkitu.</p>";
     }
-}
-
-// Si se confirma la eliminación
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
-    $item_id = $_POST['item_id'];
-    $sql = "DELETE FROM pelikulak WHERE id = $item_id";
-    mysqli_query($conn, $sql);
-    header("Location: items.php");
-    exit;
 }
 
 echo "<br><a href='items.php'>Bueltatu</a>";
