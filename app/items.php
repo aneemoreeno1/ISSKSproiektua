@@ -19,10 +19,10 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Elementuak</title>
+    <title>Pelikulak</title>
 </head>
 <body>
-    <h1>Elementuak</h1>
+    <h1>Pelikulak</h1>
     
     <?php
     // Elementuak erakusten
@@ -50,7 +50,7 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
     ?>
     
     <p>
-        <a href="add_item.php">Elementu Berria Gehitu</a> | 
+        <a href="add_item.php">Pelikula Berria Gehitu</a> | 
         <a href="index.php">Hasierara bueltatu</a>
     </p>
 </body>
