@@ -47,14 +47,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return patroia.test(testua);
         }
 
+        function gutxienezLetraBat(testua) {
+            var patroia = /[A-Za-zÑñ]/;
+            return patroia.test(testua);
+        }
+
+        function karaktereArruntaK(testua) {
+            var patroia = /^[A-Za-zÑñ0-9\s.,!?¡¿()-]+$/;
+            return patroia.test(testua);
+        }
+
         function datuakEgiaztatu() {
             // Izena: ez hutsa eta letrak/zenbakiak onartu
             var izena = document.add_form.izena.value;
             if (izena.length < 1) {
                 window.alert("Izenak ezin du hutsik egon");
                 return false;
-            } else if (!bakarrikLetrakEtaZenbakiak(izena)) {
+            } 
+            else if (!bakarrikLetrakEtaZenbakiak(izena)) {
                 window.alert("Izenak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
+                return false;
+            }
+            else if (!gutxienezLetraBat(izena)) {
+                window.alert("Izenak gutxienez letra bat izan behar du");
                 return false;
             }
 
@@ -93,11 +108,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 window.alert("Egileak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
                 return false;
             }
+            else if (!gutxienezLetraBat(egilea)) {
+                window.alert("Egileak gutxienez letra bat izan behar du");
+                return false;
+            }
 
             // Generoa: letrak baino ez (aukerakoa)
             var generoa = document.add_form.generoa.value;
             if (generoa !== "" && !bakarrikLetrak(generoa)) {
                 window.alert("Generoak soilik letrak izan behar ditu");
+                return false;
+            }
+            else if (!gutxienezLetraBat(generoa)) {
+                window.alert("Generoak gutxienez letra bat izan behar du");
                 return false;
             }
 
