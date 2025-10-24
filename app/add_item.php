@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$izena', '$deskribapena', '$urtea', '$egilea', '$generoa')";
     mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
-    echo "<p>Elementua ondo gehitu da!</p>";
+    echo "<p>Pelikula ondo gehitu da!</p>";
     echo "<p><a href='items.php'>Zerrendara itzuli</a></p>";
     exit;
 }
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Elementu berria gehitu</title>
+    <title>Pelikula berria gehitu</title>
     
     <script>
         function bakarrikLetrak(testua) {
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body>
-    <h1>Elementu berria gehitu</h1>
+    <h1>Pelikula berria gehitu</h1>
     <form id="add_form" name="add_form" method="POST" onsubmit="return datuakEgiaztatu()">
         Izena: <input type="text" name="izena" required><br><br>
         Deskribapena: <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
