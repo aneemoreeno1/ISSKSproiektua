@@ -23,12 +23,12 @@ if ($emaitza->num_rows > 0) {
 	// Datuak erakutsi
 	echo '<h1>Erabiltzailearen datuak</h1>';
 	
-	echo '<p>ID: ' . $erabiltzailea['id'] . '</p>';
-	echo '<p>Izena: ' . $erabiltzailea['nombre'] . '</p>';
-	echo '<p>NAN: ' . $erabiltzailea['nan'] . '</p>';
-	echo '<p>Telefonoa: ' . $erabiltzailea['telefonoa'] . '</p>';
-	echo '<p>Jaiotze data: ' . $erabiltzailea['jaiotze_data'] . '</p>';
-	echo '<p>Email: ' . $erabiltzailea['email'] . '</p>';
+	echo '<p><b>ID:</b> ' . $erabiltzailea['id'] . '</p>';
+	echo '<p><b>Izena:</b> ' . $erabiltzailea['nombre'] . '</p>';
+	echo '<p><b>NAN:</b> ' . $erabiltzailea['nan'] . '</p>';
+	echo '<p><b>Telefonoa:</b> ' . $erabiltzailea['telefonoa'] . '</p>';
+	echo '<p><b>Jaiotze data:</b> ' . $erabiltzailea['jaiotze_data'] . '</p>';
+	echo '<p><b>Email:</b> ' . $erabiltzailea['email'] . '</p>';
 	
 	// Estekak
 	
