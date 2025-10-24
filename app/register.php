@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 <head>
 	<title>Erregistratu</title>
-	
+	<style>body { background-color: #f3f3f3ff; padding: 20px; }  </style>
 	<script>
 		function bakarrikLetrak(testua) {
 			var patroia = /^[A-Za-zÑñ\s]+$/;

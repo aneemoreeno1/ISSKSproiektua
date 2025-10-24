@@ -155,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
     <h1>Pelikularen datuak aldatu</h1>
 
     <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">

@@ -53,3 +53,5 @@ echo "<br><a href='items.php'>Bueltatu</a>";
 
 mysqli_close($conn);
 ?>
+<body>
+<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>"; ?>

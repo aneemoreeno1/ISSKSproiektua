@@ -16,7 +16,7 @@ $user_id = $_GET['user'];
 // Erabiltzailearen datuak kargatu
 $sql = "SELECT * FROM usuarios WHERE id = $user_id";
 $emaitza = mysqli_query($conn, $sql);
-
+echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>";
 if ($emaitza->num_rows > 0) {
 	$erabiltzailea = mysqli_fetch_array($emaitza);
 	

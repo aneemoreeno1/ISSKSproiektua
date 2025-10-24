@@ -210,7 +210,7 @@
 	</script>
 </head>
 
-<body>
+<body> <style>body { background-color: #f3f3f3ff; padding: 20px; }</style>
 	<h1>Erabiltzailearen datuak aldatu</h1>
 
 	<form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">

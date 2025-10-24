@@ -1,4 +1,5 @@
 <?php
+
 // items.php - Elementuen zerrenda
 
 $hostname = "db";
@@ -22,7 +23,8 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
     <title>Pelikulak</title>
 </head>
 <body>
-    <h1>Pelikulak</h1>
+<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 40%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
+    <h1>Pelikulak</h1>"
     
     <?php
     // Elementuak erakusten

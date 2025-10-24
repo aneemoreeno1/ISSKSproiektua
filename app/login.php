@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 <head>
 	<title>Sartu</title>
+	  
 
 	<script>
 	function datuakEgiaztatu() {
@@ -66,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	</script>
 </head>
 <body>
+<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
 	<!-- HTML Kodea -->
 	
 	<h1>Sartu</h1>
@@ -82,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<p>
 		<a href="index.php">Atzera hasierako orrira</a> 
 	</p>
-</body>
+	</style>
+</body> <style>body { background-color: #f3f3f3ff; padding: 20px; }</style>
 </html>
 

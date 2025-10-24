@@ -1,7 +1,8 @@
 <?php
 session_start(); 
 
-echo '<h1>Yeah, it works!</h1>';
+
+    
 
 $hostname = "db";
 $username = "admin";
@@ -16,8 +17,11 @@ if ($conn->connect_error) {
 $query = mysqli_query($conn, "SELECT * FROM usuarios")
     or die(mysqli_error($conn));
 
-echo "<h2>Erabiltzaileak:</h2>";
-echo "<table border='1'>";
+echo"<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>";
+echo "
+        
+        <h1>Erabiltzaileak:</h1>";
+echo "<table border='1px solid #ddd'>";
 echo "<tr><th>ID</th><th>Izena</th><th> </th></tr>";
 while ($row = mysqli_fetch_array($query)) {
     echo

@@ -17,6 +17,7 @@ $item_id = $_GET['item'];
 $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
 $emaitza = mysqli_query($conn, $sql);
 
+echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>";
 if ($emaitza->num_rows > 0) {
 	$pelikula = mysqli_fetch_array($emaitza);
 	
