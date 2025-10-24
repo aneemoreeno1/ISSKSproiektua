@@ -131,10 +131,51 @@
 			}
 
 			// Data
-			var data = document.user_modify_form.data.value;
-			var patroia = /^\d{4}-\d{2}-\d{2}$/;
-			if (!patroia.test(data)) {
-				alert("Data formatua okerra. Adibidea: 2024-12-20");
+			var data = document.register_form.data.value;
+			var dataZatiak = data.split("-");
+			if (data.length != 10 || dataZatiak.length != 3) {
+				window.alert("Data formatua okerra. Adibidea: 2024-12-20");
+				return false;
+			} else if (
+				dataZatiak[0].length != 4 || !bakarrikZenbakiak(dataZatiak[0]) ||
+				dataZatiak[1].length != 2 || !bakarrikZenbakiak(dataZatiak[1]) ||
+				dataZatiak[2].length != 2 || !bakarrikZenbakiak(dataZatiak[2])
+			) {
+				window.alert("Data formatua okerra. Urteak 4 zenbaki, hilabeteak 2, egunak 2");
+				return false;
+			}
+			
+			// Datuak zenbakietara bihurtu
+			var urtea = parseInt(dataZatiak[0]);
+			var hilabetea = parseInt(dataZatiak[1]);
+			var eguna = parseInt(dataZatiak[2]);
+			
+			// Hilabetearen balioztatzea (1-12)
+			if (hilabetea < 1 || hilabetea > 12) {
+				window.alert("Hilabetea 1 eta 12 artean egon behar da");
+				return false;
+			}
+			
+			// Egunaren balioztatzea (hilabetearen arabera)
+			var egunMaximoak = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+			
+			// Bisiesto egiaztatu (Urte bisiesto: 4rekin zatigarria, baina 100ekin ez, 400rekin bai)
+			if ((urtea % 4 === 0 && urtea % 100 !== 0) || (urtea % 400 === 0)) {
+				egunMaximoak[1] = 29; // Otsaila 29 egun bisiestoan
+			}
+			
+			if (eguna < 1 || eguna > egunMaximoak[hilabetea - 1]) {
+				window.alert("Eguna okerra. " + hilabetea + ". hilabeteak " + egunMaximoak[hilabetea - 1] + " egun baino ez ditu izan");
+				return false;
+			}
+			
+			// Data historikoa egiaztatu (ez 120 urte baino gehiago)
+			var gaur = new Date();
+			var urteMaximoa = gaur.getFullYear() - 120;
+			var urteMinimoa = gaur.getFullYear();
+			
+			if (urtea < urteMaximoa) {
+				window.alert("Ezin da 120 urte baino gehiago izan. Urte minimoa: " + urteMaximoa);
 				return false;
 			}
 
