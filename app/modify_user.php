@@ -225,8 +225,8 @@
 		
 		<!-- Bidaltzeko botoia -->
 		<input type="submit" id="user_modify_submit" value="Datuak gorde">
+		<button onclick="window.location.href='index.php'">Atzera</button>
 	</form>
 
-	<p><a href="index.php">Atzera zerrendara</a></p>
 </body>
 </html>

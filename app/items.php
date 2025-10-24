@@ -52,8 +52,8 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
     ?>
     
     <p>
-        <a href="add_item.php">Pelikula Berria Gehitu</a> | 
-        <a href="index.php">Hasierara bueltatu</a>
+        <button onclick="window.location.href='add_item.php'">Pelikula Berria Gehitu</button>
+        <button onclick="window.location.href='index.php'">Hasierara Bueltatu</button>
     </p>
 </body>
 </html>

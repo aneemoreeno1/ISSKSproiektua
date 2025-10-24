@@ -159,16 +159,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Pelikularen datuak aldatu</h1>
 
     <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        Izena: <input type="text" name="izena" value="<?php echo $pelikula['izena']; ?>" required><br><br>
-        Deskribapena: <textarea name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea><br><br>
-        Urtea: <input type="number" name="urtea" value="<?php echo $pelikula['urtea']; ?>"><br><br>
-        Egilea: <input type="text" name="egilea" value="<?php echo $pelikula['egilea']; ?>"><br><br>
-        Generoa: <input type="text" name="generoa" value="<?php echo $pelikula['generoa']; ?>"><br><br>
-        
+        <label for="izena">Izena:</label> <br><input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required><br><br>
+        <label for="deskribapena">Deskribapena</label> <br> <textarea id="deskribapena" name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea><br><br>
+        <label for="urtea">Urtea:</label> <br> <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>"><br><br>
+        <label for="egilea">Egilea:</label> <br> <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>"><br><br>
+        <label for="generoa">Generoa:</label> <br> <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>"><br><br>
+
         <!-- Bidaltzeko botoia -->
-        <input type="submit" id="item_modify_submit" value="Datuak gorde">
+        <button type="submit" id="item_modify_submit">Datuak gorde</button>
+        <button type="button" id="items.php" onclick="window.location.href='items.php'">Atzera</button>
     </form>
 
-    <p><a href="items.php">Atzera zerrendara</a></p>
+   
 </body>
 </html>

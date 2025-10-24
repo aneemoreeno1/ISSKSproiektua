@@ -31,7 +31,8 @@ if ($emaitza->num_rows > 0) {
 	echo '<p>Email: ' . $erabiltzailea['email'] . '</p>';
 	
 	// Estekak
-	echo '<p><a href="index.php">Atzera zerrendara</a></p>';
+	
+	echo '<button onclick="window.location.href=\'index.php\'">Atzera</button>';
 	
 } else {
 	echo 'Erabiltzailea ez da existitzen';

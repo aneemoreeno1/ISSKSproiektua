@@ -1,4 +1,5 @@
 <?php
+
 // add_item.php - Pelikula berria gehitu
 $hostname = "db";
 $username = "admin";
@@ -134,13 +135,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
     <h1>Pelikula berria gehitu</h1>
     <form id="add_form" name="add_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        Izena: <input type="text" name="izena" required><br><br>
-        Deskribapena: <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
-        Urtea: <input type="number" name="urtea"><br><br>
-        Egilea: <input type="text" name="egilea"><br><br>
-        Generoa: <input type="text" name="generoa"><br><br>
-        <input type="submit" value="Gehitu">
+        <label for="izena">Izena:</label> <br> <input type="text" name="izena" required><br><br>
+        <label for="deskribapena">Deskribapena:</label> <br> <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
+        <label for="urtea">Urtea:</label> <br> <input type="number" name="urtea" value="<?php echo date('Y'); ?>"><br><br>
+        <label for="egilea">Egilea:</label> <br> <input type="text" name="egilea"><br><br>
+        <label for="generoa">Generoa:</label> <br> <input type="text" name="generoa"><br><br>
+
+        <button type="submit" value="Gehitu">Gehitu</button>
+        <button type="button" id="items.php" onclick="window.location.href='items.php'">Atzera</button>
     </form>
-    <p><a href="items.php">Atzera</a></p>
+
 </body>
 </html>

@@ -24,15 +24,15 @@ if ($emaitza->num_rows > 0) {
 	// Datuak erakutsi
 	echo '<h1>Pelikularen datuak</h1>';
 	
-	echo '<p>ID: ' . $pelikula['id'] . '</p>';
-	echo '<p>Izena: ' . $pelikula['izena'] . '</p>';
-	echo '<p>Deskribapena: ' . $pelikula['deskribapena'] . '</p>';
-	echo '<p>Urtea: ' . $pelikula['urtea'] . '</p>';
-	echo '<p>Egilea: ' . $pelikula['egilea'] . '</p>';
-	echo '<p>Generoa: ' . $pelikula['generoa'] . '</p>';
+	echo '<p><b>ID:</b> ' . $pelikula['id'] . '</p>';
+	echo '<p><b>Izena:</b> ' . $pelikula['izena'] . '</p>';
+	echo '<p><b>Deskribapena:</b> ' . $pelikula['deskribapena'] . '</p>';
+	echo '<p><b>Urtea:</b> ' . $pelikula['urtea'] . '</p>';
+	echo '<p><b>Egilea:</b> ' . $pelikula['egilea'] . '</p>';
+	echo '<p><b>Generoa:</b> ' . $pelikula['generoa'] . '</p>';
 	
 	// Estekak
-	echo '<p><a href="items.php">Atzera zerrendara</a></p>';
+	echo '<button onclick="history.back()">Atzera</button> ';
 	
 } else {
 	echo 'Pelikula ez da existitzen';

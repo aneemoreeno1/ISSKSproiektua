@@ -43,8 +43,8 @@ echo "</table>";
 
 // Estekak
 echo '<p>';
-echo '<a href="login.php">Saioa Hasi</a> | ';
-echo '<a href="register.php">Erregistratu</a> | ';
-echo '<a href="items.php">Pelikulak Ikusi</a>';
+echo '<button onclick="window.location.href=\'login.php\'">Saioa Hasi</button> ';
+echo '<button onclick="window.location.href=\'register.php\'">Erregistratu</button>  |  ';
+echo '<button onclick="window.location.href=\'items.php\'">Pelikulak Ikusi</button>';
 echo '</p>';
 ?>

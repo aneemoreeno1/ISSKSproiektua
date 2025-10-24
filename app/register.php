@@ -209,18 +209,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	<!-- Erregistro formularioa -->
 	<form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-		Izena: <input type="text" name="izena" required><br><br>
-		NAN: <input type="text" name="nan" required><br><br>
-		Telefonoa: <input type="text" name="telefonoa" required><br><br>
-		Jaiotze data: <input type="text" name="data" required><br><br>
-		Email: <input type="text" name="email" required><br><br>
-		Pasahitza: <input type="password" name="pasahitza" required><br><br>
-		Errepikatu pasahitza: <input type="password" name="errep_pasahitza" required><br><br>
+		<label for="izena">Izena:</label><br>
+		<input type="text" id="izena" name="izena" required><br><br>
+		<label for="nan"></label>NAN:</label><br>
+		<input type="text" id="nan" name="nan" required><br><br>
+		<label for="telefonoa">Telefonoa:</label><br>
+		<input type="text" id="telefonoa" name="telefonoa" required><br><br>
+		<label for="data">Jaiotze data:</label><br>
+		<input type="text" id="data" name="data" required><br><br>
+		<label for="email">Email:</label><br>
+		<input type="text" id="email" name="email" required><br><br>
+		<label for="pasahitza">Pasahitza:</label><br>
+		<input type="password" id="pasahitza" name="pasahitza" required><br><br>
+		<label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
+		<input type="password" id="errep_pasahitza" name="errep_pasahitza" required><br><br>
 
 		<!-- Bidaltzeko botoia -->
-		<input type="submit" id="register_submit" value="Erregistratu">
+		<button type="submit" id="register_submit">Erregistratu</button>
+		<button type="button" id="index.php" onclick="window.location.href='index.php'">Atzera</button>
 	</form>
 
-	<p><a href="index.php">Atzera hasierako orrira</a></p>
+	
 </body>
 </html>

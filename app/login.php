@@ -74,16 +74,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
 	<!-- Login formularioa -->
 	<form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
-		Erabiltzailea: <input type="text" name="erabiltzailea" required><br><br>
-		Pasahitza: <input type="password" name="pasahitza" required><br><br>
-		
+		<label for="erabiltzailea">Erabiltzailea:</label><br>
+		<input type="text" id="erabiltzailea" name="erabiltzailea" required><br><br>
+		<label for="pasahitza">Pasahitza:</label><br>
+		<input type="password" id="pasahitza" name="pasahitza" required><br><br>
+
 		<!-- Bidaltzeko botoia -->
-		<input type="submit" id="login_submit" value="Sartu">
+		<button type="submit" id="login_submit">Sartu</button>
+		<button type="button" id="index.php" onclick="window.location.href='index.php'">Atzera</button>
 	</form>
 
-	<p>
-		<a href="index.php">Atzera hasierako orrira</a> 
-	</p>
+	
 	</style>
 </body> <style>body { background-color: #f3f3f3ff; padding: 20px; }</style>
 </html>
