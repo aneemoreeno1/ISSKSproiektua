@@ -12,22 +12,38 @@
 
 # Docker bidez proiektua hedatzeko instrukzioak
 
-
-  # Docker LAMP
-  Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
-
-  ## Instructions
-
-  Enter the following command to start your containers:
-  ```bash
+1. Biltegia klonatu
+```bash
+  $ git clone https://github.com/aneemoreeno1/ISSKSproiektua.git
+  ```
+2. Karpeta barruan sartu
+```bash
+  $ cd ISSKSproiektua
+  ```
+3.  Entregaren adarrera aldatu (_Kasu honetan entrega_1_ adarra)
+```bash
+  $ git checkout entrega_1
+  ```
+4. _docker_compose_ komandoa erabiliz, zerbitzua altzatu
+ ```bash
   $ docker-compose up -d
   ```
-
-  To stop them, use this:
+5. Datu-basea behar bezala importatzeko *phpMyAdmin* erbili:
+  5.1 Nabigatzailea ireki eta sartu hurrengo helbidean:
+       - http://localhost:8890/
+   5.2 Log ina bete:
+       - Username: *admin*
+       - Password: *test*
+   5.3 Datu-basea inportatu
+     - _import_ atalean sakatu
+     - Gure entrega_1 adarraren barruan dagoen *_database.sql_* fitxategia inportatu
+       *!* Hau egitea oso garrantzitsua da. Bestela honako errorea agertuko zaigu :
+           '_database.usuarios doesn't exist_'
+  6. Web-sisteman satu:
+    6.1 Dena ondo eginez gero, hurrengo helbidean sartuz, pelikulak gordetzeko web sistema irekiko da:
+       - http://localhost:81/
+  7. Edukiontziak itzaili eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
   ```bash
-  $ docker-compose stop
+  $ docker-compose down
   ```
 
-  Feel free to make pull requests and help to improve this.
-
-  If you are looking for phpMyAdmin, take a look at [this](https://github.com/celsocelante/docker-lamp/issues/2).
