@@ -135,30 +135,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h1>Erregistratu</h1>
-    <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        <label for="izena">Izena:</label><br>
-        <input type="text" id="izena" name="izena" required><br><br>
-
-        <label for="nan">NAN:</label><br>
-        <input type="text" id="nan" name="nan" required><br><br>
-
-        <label for="telefonoa">Telefonoa:</label><br>
-        <input type="text" id="telefonoa" name="telefonoa" required><br><br>
-
-        <label for="data">Jaiotze data:</label><br>
-        <input type="text" id="data" name="data" required><br><br>
-
-        <label for="email">Email:</label><br>
-        <input type="text" id="email" name="email" required><br><br>
-
-        <label for="pasahitza">Pasahitza:</label><br>
-        <input type="password" id="pasahitza" name="pasahitza" required><br><br>
-
-        <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
-        <input type="password" id="errep_pasahitza" name="errep_pasahitza" required><br><br>
-
-        <button type="submit" id="register_submit">Erregistratu</button>
-        <button type="button" onclick="window.location.href='index.php'">Atzera</button>
-    </form>
+    <div class="wrapper">
+        <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <label for="izena">Izena:</label><br>
+            <input type="text" id="izena" name="izena" required><br><br>
+    
+            <label for="nan">NAN:</label><br>
+            <input type="text" id="nan" name="nan" required><br><br>
+    
+            <label for="telefonoa">Telefonoa:</label><br>
+            <input type="text" id="telefonoa" name="telefonoa" required><br><br>
+    
+            <label for="data">Jaiotze data:</label><br>
+            <input type="text" id="data" name="data" required><br><br>
+    
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email" required><br><br>
+    
+            <label for="pasahitza">Pasahitza:</label><br>
+            <input type="password" id="pasahitza" name="pasahitza" required><br><br>
+    
+            <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
+            <input type="password" id="errep_pasahitza" name="errep_pasahitza" required><br><br>
+    
+            <button type="submit" id="register_submit">Erregistratu</button>
+            <button type="button" onclick="window.location.href='index.php'">Atzera</button>
+        </form>
+    <div>
 </body>
 </html>
