@@ -57,16 +57,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body>
-    <h1>Sartu</h1>
-    <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        <label for="erabiltzailea">Erabiltzailea:</label><br>
-        <input type="text" id="erabiltzailea" name="erabiltzailea" required><br><br>
+    <div class="wrapper">
+        <h1>Sartu</h1>
+        <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <label for="erabiltzailea">Erabiltzailea:</label><br>
+            <input type="text" id="erabiltzailea" name="erabiltzailea" required><br><br>
 
-        <label for="pasahitza">Pasahitza:</label><br>
-        <input type="password" id="pasahitza" name="pasahitza" required><br><br>
+            <label for="pasahitza">Pasahitza:</label><br>
+            <input type="password" id="pasahitza" name="pasahitza" required><br><br>
 
-        <button type="submit" id="login_submit">Sartu</button>
-        <button type="button" id="login_back" onclick="window.location.href='index.php'">Atzera</button>
-    </form>
+            <div class="botoiak">
+                <button type="submit" id="login_submit">Sartu</button>
+                <button type="button" id="login_back" onclick="window.location.href='index.php'">Atzera</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
