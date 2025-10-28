@@ -1,16 +1,17 @@
-/* ===== ESTILO OROKORRA ===== */
+/* ===== ESTILO GENERAL ===== */
 body {
-    background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-movie-cinema-icons-background_9202-205.jpg'); 
+    background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-movie-cinema-icons-background_9202-205.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    position: relative;
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #f0f0f0;
     margin: 0;
     padding: 0;
+    text-align: center; /* Centra contenido principal */
 }
 
+/* Capa oscura sobre el fondo */
 body::before {
     content: "";
     position: fixed;
@@ -22,24 +23,25 @@ body::before {
     z-index: -1;
 }
 
-/* ===== IZENBURUAK ===== */
+/* ===== TITULOS Y TEXTOS ===== */
 h1, h2, h3, p, label, a, th, td {
     color: #f0f0f0;
+    margin: 10px 0;
 }
 
 h1 {
-    text-align: center;
     margin-top: 40px;
 }
 
-/* ===== FORMULARIOAK ===== */
+/* ===== FORMULARIOS ===== */
 form {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     max-width: 500px;
-    margin: 80px auto;
+    margin: 40px auto; /* Centra horizontal y verticalmente */
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: left;
 }
 
 form input[type="text"],
@@ -57,13 +59,11 @@ form input[type="date"] {
     box-sizing: border-box;
 }
 
-form input[type="text"]::placeholder,
-form input[type="password"]::placeholder,
-form input[type="email"]::placeholder {
+form input::placeholder {
     color: #ddd;
 }
 
-/* ===== BOTOIAK OROKORRA ===== */
+/* ===== BOTONES GENERALES ===== */
 input[type="submit"],
 button {
     background-color: #3498db;
@@ -80,12 +80,12 @@ button:hover {
     background-color: #2980b9;
 }
 
-/* ===== TAULAK ===== */
+/* ===== TABLAS ===== */
 table {
     border-collapse: collapse;
-    width: 60%;
-    margin: 50px auto;
-    background-color: rgba(0, 0, 0, 0.6);
+    width: 80%; /* Más ancho para mostrar info */
+    margin: 30px auto; /* Centra tabla */
+    background-color: rgba(0, 0, 0, 0.7);
     color: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -106,28 +106,28 @@ tr:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ===== NABIGAZIO BOTOIAK ===== */
+/* ===== BLOQUES DE INFO INDIVIDUAL ===== */
+.show-item, .show-user, .delete-item {
+    background-color: rgba(0, 0, 0, 0.7);
+    display: inline-block;
+    text-align: left;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    max-width: 600px;
+}
+
+/* ===== CONTENEDOR DE BOTONES DE NAVEGACIÓN ===== */
 .botoiak {
     text-align: center;
     margin-top: 30px;
 }
 
 .botoiak button {
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
     margin: 0 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
-.botoiak button:hover {
-    background-color: #2980b9;
-}
-
-/* ===== ESTEKAK ===== */
+/* ===== ENLACES ===== */
 a {
     color: #66c2ff;
     text-decoration: none;
@@ -137,7 +137,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ===== SCROLLBAR ===== */
+/* ===== SCROLLBAR (opcional) ===== */
 ::-webkit-scrollbar {
     width: 10px;
 }
