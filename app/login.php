@@ -55,13 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="wrapper">
         <h1>Sartu</h1>
-
         <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <label for="erabiltzailea">Erabiltzailea:</label><br>
-            <input type="text" id="erabiltzailea" name="erabiltzailea" required> <br><br>
-
-            <label for="pasahitza">Pasahitza:</label><br>
-            <input type="password" id="pasahitza" name="pasahitza" required>
+            <input type="text" id="erabiltzailea" name="erabiltzailea" placeholder="Erabiltzailea" required> <br>
+            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required>
 
             <div class="botoiak">
                 <button type="button" class="btn-primary" id="login_submit">Sartu</button>

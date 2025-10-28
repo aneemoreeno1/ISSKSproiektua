@@ -144,26 +144,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <label for="izena">Izena:</label>
-            <input type="text" id="izena" name="izena" required>
+            <input type="text" id="izena" name="izena" placeholder="Izen Abizenak" required>
 
-            <label for="nan">NAN:</label>
-            <input type="text" id="nan" name="nan" required>
+            <input type="text" id="nan" name="nan" placeholder="NAN" required>
 
-            <label for="telefonoa">Telefonoa:</label>
-            <input type="text" id="telefonoa" name="telefonoa" required>
+            <input type="text" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required>
 
-            <label for="data">Jaiotze data:</label>
-            <input type="text" id="data" name="data" required>
+            <input type="text" id="data" name="data" placeholder="Jaiotze Data UUUU-HH-EE" required>
 
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required>
+            <input type="text" id="email" name="email" placeholder="Email" required>
 
-            <label for="pasahitza">Pasahitza:</label>
-            <input type="password" id="pasahitza" name="pasahitza" required>
+            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required>
 
-            <label for="errep_pasahitza">Errepikatu pasahitza:</label>
-            <input type="password" id="errep_pasahitza" name="errep_pasahitza" required>
+            <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required>
 
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="register_submit">Erregistratu</button>

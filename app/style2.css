@@ -91,7 +91,7 @@ form textarea {
 
 form input::placeholder,
 form textarea::placeholder {
-    color: #ddd;
+    color: #696969;
 }
 
 /* ===== BOTONAK OROKORRA ===== */
@@ -159,7 +159,7 @@ table {
 th, td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.137);
+    border-bottom: 1px solid #5c000237;
 }
 
 th {
