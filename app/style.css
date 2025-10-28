@@ -10,8 +10,8 @@ body {
     padding: 0;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center; /* centra horizontalmente */
+    align-items: center;     /* centra verticalmente */
 }
 
 /* Capa oscura sobre el fondo */
@@ -26,15 +26,14 @@ body::before {
     z-index: -1;
 }
 
-/* ===== CONTENEDOR GENERAL PARA TODO ===== */
-body > * {
+/* ===== CONTENEDOR GENERAL ===== */
+.wrapper {
     background-color: rgba(0, 0, 0, 0.6);
-    max-width: 800px;
-    width: 90%;
-    margin: 40px auto;
-    padding: 25px;
+    padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    width: 90%;
+    max-width: 800px;
     color: #f0f0f0;
 }
 
@@ -50,12 +49,10 @@ h1 {
 
 /* ===== FORMULARIOAK ===== */
 form {
-    background-color: transparent; /* ya el contenedor general da fondo */
-    max-width: 100%;
+    background-color: transparent; /* ya lo da el wrapper */
+    width: 100%;
     margin: 0 auto;
     padding: 0;
-    border-radius: 0;
-    box-shadow: none;
 }
 
 form input[type="text"],
@@ -73,9 +70,7 @@ form input[type="date"] {
     box-sizing: border-box;
 }
 
-form input[type="text"]::placeholder,
-form input[type="password"]::placeholder,
-form input[type="email"]::placeholder {
+form input::placeholder {
     color: #ddd;
 }
 
@@ -101,7 +96,7 @@ table {
     border-collapse: collapse;
     width: 100%;
     margin: 20px auto;
-    background-color: transparent; /* ya el contenedor general da fondo */
+    background-color: transparent; /* ya el wrapper da fondo */
     color: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -170,3 +165,4 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.6);
 }
+
