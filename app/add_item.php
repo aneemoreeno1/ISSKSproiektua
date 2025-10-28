@@ -110,30 +110,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body>
-    <h1>Pelikula berria gehitu</h1>
+    <div class="wrapper">
+        <h1>Pelikula berria gehitu</h1>
 
-    <?php if ($mezua !== ""): ?>
-        <p style="text-align:center; font-weight:bold; font-size:1.2em; color:#66ff66;"><?php echo $mezua; ?></p>
-    <?php endif; ?>
+        <?php if ($mezua !== ""): ?>
+            <p style="text-align:center; font-weight:bold; font-size:1.2em; color:#66ff66;">
+                <?php echo $mezua; ?>
+            </p>
+        <?php endif; ?>
 
-    <form id="item_add_form" name="item_add_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        <label for="izena">Izena:</label><br>
-        <input type="text" name="izena" required><br><br>
+        <form id="item_add_form" name="item_add_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <label for="izena">Izena:</label><br>
+            <input type="text" name="izena" required><br><br>
 
-        <label for="deskribapena">Deskribapena:</label><br>
-        <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
+            <label for="deskribapena">Deskribapena:</label><br>
+            <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
 
-        <label for="urtea">Urtea:</label><br>
-        <input type="number" name="urtea" value="<?php echo date('Y'); ?>"><br><br>
+            <label for="urtea">Urtea:</label><br>
+            <input type="number" name="urtea" value="<?php echo date('Y'); ?>"><br><br>
 
-        <label for="egilea">Egilea:</label><br>
-        <input type="text" name="egilea"><br><br>
+            <label for="egilea">Egilea:</label><br>
+            <input type="text" name="egilea"><br><br>
 
-        <label for="generoa">Generoa:</label><br>
-        <input type="text" name="generoa"><br><br>
+            <label for="generoa">Generoa:</label><br>
+            <input type="text" name="generoa"><br><br>
 
-        <button id="item_add_submit" type="submit">Gehitu</button>
-        <button type="button" onclick="window.location.href='items.php'">Atzera</button>
-    </form>
+            <div class="botoiak">
+                <button id="item_add_submit" type="submit">Gehitu</button>
+                <button type="button" onclick="window.location.href='items.php'">Atzera</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
