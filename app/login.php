@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: index.php");
         exit;
     } else {
-        echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Erabiltzaile edo pasahitza okerrak</p>";
+        echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Usuario o contraseña incorrectos</p>";
     }
 }
 ?>
@@ -34,41 +33,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="eu">
 <head>
     <meta charset="UTF-8">
-    <title>Erabiltzaileak</title>
+    <title>Sartu</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        function datuakEgiaztatu() {
+            var erabiltzailea = document.login_form.erabiltzailea.value;
+            var pasahitza = document.login_form.pasahitza.value;
+
+            if (erabiltzailea.length < 1) {
+                alert("Sartu erabiltzaile izena");
+                return false;
+            }
+            if (pasahitza.length < 1) {
+                alert("Sartu pasahitza");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="wrapper">
-        <h1>Erabiltzaileak:</h1>
+        <h1>Sartu</h1>
 
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Izena</th>
-                <th>Ekintzak</th>
-            </tr>
+        <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <label for="erabiltzailea">Erabiltzailea:</label>
+            <input type="text" id="erabiltzailea" name="erabiltzailea" required>
 
-            <?php while ($row = mysqli_fetch_array($query)) { ?>
-                <tr>
-                    <td><?= $row['id'] ?></td>
-                    <td><?= $row['nombre'] ?></td>
-                    <td>
-                        <a href="show_user.php?user=<?= $row['id'] ?>">Ikusi</a>
-                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?>
-                            | <a href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a>
-                        <?php } ?>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
+            <label for="pasahitza">Pasahitza:</label>
+            <input type="password" id="pasahitza" name="pasahitza" required>
 
-        <div class="botoiak">
-            <button type="button" onclick="window.location.href='login.php'">Saioa Hasi</button>
-            <button type="button" onclick="window.location.href='register.php'">Erregistratu</button>
-            <button type="button" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>
-        </div>
+            <div class="botoiak">
+                <button type="submit" id="login_submit">Sartu</button>
+                <button type="button" onclick="window.location.href='index.php'">Atzera</button>
+            </div>
+        </form>
     </div>
-
-<?php mysqli_close($conn); ?>
 </body>
 </html>
+<?php mysqli_close($conn); ?>
