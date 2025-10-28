@@ -1,5 +1,5 @@
 <?php
-// Datu-basearekin konexioa
+// delete_item.php - Pelikula ezabatu
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -10,15 +10,13 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-// Formularioa bidali bada (ezabaketa baieztatu da)
+// Formularioa bidali bada (ezabaketa baieztatu)
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
     $item_id = $_POST['item_id'];
 
-    // DELETE kontsulta prestatu eta exekutatu
     $sql = "DELETE FROM pelikulak WHERE id = $item_id";
     mysqli_query($conn, $sql);
     
-    // Items orrira bueltatu automatikoki
     header("Location: items.php");
     exit;
 }
@@ -51,14 +49,14 @@ if (isset($_GET['item'])) {
 
         <form method="post">
             <input type="hidden" name="item_id" value="<?php echo $pelikula['id']; ?>">
-            <button type="submit">Ezabatu</button>
+            <button id="item_delete_submit" type="submit">Ezabatu</button>
         </form>
     <?php else: ?>
         <p>Ez da pelikularik aurkitu.</p>
     <?php endif; ?>
 
     <br>
-    <button onclick="window.location.href='items.php'">Bueltatu</button>
+    <button type="button" onclick="window.location.href='items.php'">Bueltatu</button>
 
 <?php mysqli_close($conn); ?>
 </body>
