@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+session_start();
 
 $hostname = "db";
 $username = "admin";
@@ -11,8 +11,9 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-$query = mysqli_query($conn, "SELECT * FROM usuarios")
-    or die(mysqli_error($conn));
+$query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn));
+?>
+
 <!DOCTYPE html>
 <html lang="eu">
 <head>
@@ -23,8 +24,14 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios")
 <body>
 
     <h1>Erabiltzaileak:</h1>
+
     <table>
-        <tr><th>ID</th><th>Izena</th><th> </th></tr>
+        <tr>
+            <th>ID</th>
+            <th>Izena</th>
+            <th>Ekintzak</th>
+        </tr>
+
         <?php while ($row = mysqli_fetch_array($query)) { ?>
             <tr>
                 <td><?= $row['id'] ?></td>
@@ -40,10 +47,11 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios")
     </table>
 
     <p class="botoiak">
-        <button onclick="window.location.href='login.php'">Saioa Hasi</button>
-        <button onclick="window.location.href='register.php'">Erregistratu</button>
-        <button onclick="window.location.href='items.php'">Pelikulak Ikusi</button>
+        <button id="login_submit" type="button" onclick="window.location.href='login.php'">Saioa Hasi</button>
+        <button id="register_submit" type="button" onclick="window.location.href='register.php'">Erregistratu</button>
+        <button id="items.php" type="button" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>
     </p>
 
+<?php mysqli_close($conn); ?>
 </body>
 </html>
