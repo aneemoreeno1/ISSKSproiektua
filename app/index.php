@@ -17,7 +17,6 @@ if ($conn->connect_error) {
 $query = mysqli_query($conn, "SELECT * FROM usuarios")
     or die(mysqli_error($conn));
 
-echo"<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>";
 echo "
         
         <h1>Erabiltzaileak:</h1>";
