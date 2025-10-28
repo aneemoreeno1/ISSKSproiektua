@@ -131,7 +131,7 @@
 			}
 
 			// Data
-			var data = document.register_form.data.value;
+			var data = document.user_modify_form.data.value;
 			var dataZatiak = data.split("-");
 			if (data.length != 10 || dataZatiak.length != 3) {
 				window.alert("Data formatua okerra. Adibidea: 2024-12-20");
