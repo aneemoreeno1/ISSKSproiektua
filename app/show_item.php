@@ -1,42 +1,40 @@
 <?php
-// Datu-basearekin konexioa
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
-if ($conn->connect_error) {
-	die("Database connection failed: " . $conn->connect_error);
-}
+if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
 
-// URL-tik pelikula ID-a hartu
 $item_id = $_GET['item'];
-
-// Pelikularen datuak kargatu
 $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
 $emaitza = mysqli_query($conn, $sql);
-
-echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>";
-
-if ($emaitza->num_rows > 0) {
-	$pelikula = mysqli_fetch_array($emaitza);
-	
-	// Datuak erakutsi
-	echo '<h1>Pelikularen datuak</h1>';
-	echo '<p><b>ID:</b> ' . $pelikula['id'] . '</p>';
-	echo '<p><b>Izena:</b> ' . $pelikula['izena'] . '</p>';
-	echo '<p><b>Deskribapena:</b> ' . $pelikula['deskribapena'] . '</p>';
-	echo '<p><b>Urtea:</b> ' . $pelikula['urtea'] . '</p>';
-	echo '<p><b>Egilea:</b> ' . $pelikula['egilea'] . '</p>';
-	echo '<p><b>Generoa:</b> ' . $pelikula['generoa'] . '</p>';
-	
-	// Estekak
-	echo '<button onclick="history.back()">Atzera</button>';
-	
-} else {
-	echo 'Pelikula ez da existitzen';
-}
-
-mysqli_close($conn);
+$pelikula = mysqli_fetch_array($emaitza);
 ?>
+
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+<meta charset="UTF-8">
+<title>Pelikularen datuak</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+      <?php if ($pelikula): ?>
+          <h1>Pelikularen datuak</h1>
+          <p><b>ID:</b> <?php echo $pelikula['id']; ?></p>
+          <p><b>Izena:</b> <?php echo $pelikula['izena']; ?></p>
+          <p><b>Deskribapena:</b> <?php echo $pelikula['deskribapena']; ?></p>
+          <p><b>Urtea:</b> <?php echo $pelikula['urtea']; ?></p>
+          <p><b>Egilea:</b> <?php echo $pelikula['egilea']; ?></p>
+          <p><b>Generoa:</b> <?php echo $pelikula['generoa']; ?></p>
+          <button onclick="history.back()">Atzera</button>
+      <?php else: ?>
+          <p>Pelikula ez da existitzen</p>
+      <?php endif; ?>
+  </div>
+<?php mysqli_close($conn); ?>
+</body>
+</html>
