@@ -39,25 +39,26 @@ if (isset($_GET['item'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Ezabatu Pelikula</h1>
-
-    <?php if ($pelikula): ?>
-        <h3>Ezabatu pelikula:</h3>
-        <p><strong>ID:</strong> <?php echo $pelikula['id']; ?></p>
-        <p><strong>Izena:</strong> <?php echo $pelikula['izena']; ?></p>
-        <p><strong>Urtea:</strong> <?php echo $pelikula['urtea']; ?></p>
-
-        <form method="post">
-            <input type="hidden" name="item_id" value="<?php echo $pelikula['id']; ?>">
-            <button id="item_delete_submit" type="submit">Ezabatu</button>
-        </form>
-    <?php else: ?>
-        <p>Ez da pelikularik aurkitu.</p>
-    <?php endif; ?>
-
-    <br>
-    <button type="button" onclick="window.location.href='items.php'">Bueltatu</button>
-
+    <div class="wrapper">
+        <h1>Ezabatu Pelikula</h1>
+    
+        <?php if ($pelikula): ?>
+            <h3>Ezabatu pelikula:</h3>
+            <p><strong>ID:</strong> <?php echo $pelikula['id']; ?></p>
+            <p><strong>Izena:</strong> <?php echo $pelikula['izena']; ?></p>
+            <p><strong>Urtea:</strong> <?php echo $pelikula['urtea']; ?></p>
+    
+            <form method="post">
+                <input type="hidden" name="item_id" value="<?php echo $pelikula['id']; ?>">
+                <button id="item_delete_submit" type="submit">Ezabatu</button>
+            </form>
+        <?php else: ?>
+            <p>Ez da pelikularik aurkitu.</p>
+        <?php endif; ?>
+    
+        <br>
+        <button type="button" onclick="window.location.href='items.php'">Bueltatu</button>
+    <div>
 <?php mysqli_close($conn); ?>
 </body>
 </html>
