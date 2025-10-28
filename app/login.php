@@ -32,9 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="eu">
 <head>
+    <meta charset="UTF-8">
     <title>Sartu</title>
+    <link rel="stylesheet" href="style.css">
     <script>
         function datuakEgiaztatu() {
             var erabiltzailea = document.login_form.erabiltzailea.value;
@@ -53,21 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return true;
         }
     </script>
-    <style>
-        body {
-            background-color: #f3f3f3ff;
-            padding: 20px;
-        }
-        table {
-            border-collapse: collapse;
-            width: 25%;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-    </style>
 </head>
 <body>
     <h1>Sartu</h1>
@@ -79,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <input type="password" id="pasahitza" name="pasahitza" required><br><br>
 
         <button type="submit" id="login_submit">Sartu</button>
-        <button type="button" id="index.php" onclick="window.location.href='index.php'">Atzera</button>
+        <button type="button" id="login_back" onclick="window.location.href='index.php'">Atzera</button>
     </form>
 </body>
 </html>
