@@ -1,4 +1,4 @@
-/* ===== ESTILO GENERAL ===== */
+/* ===== ESTILO OROKORRA ===== */
 body {
     background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-movie-cinema-icons-background_9202-205.jpg');
     background-size: cover;
@@ -8,9 +8,13 @@ body {
     color: #f0f0f0;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Capa oscura para mejorar visibilidad */
+/* Capa oscura sobre el fondo */
 body::before {
     content: "";
     position: fixed;
@@ -22,20 +26,36 @@ body::before {
     z-index: -1;
 }
 
-/* ===== TITULOS Y TEXTOS ===== */
-h1, h2, h3, p, label, a, th, td {
-    color: #f0f0f0;
-}
-
-/* ===== FORMULARIOS ===== */
-form, .show-item, .show-user, .delete-item {
-    background-color: rgba(0, 0, 0, 0.8);
-    max-width: 550px;
+/* ===== CONTENEDOR GENERAL PARA TODO ===== */
+body > * {
+    background-color: rgba(0, 0, 0, 0.6);
+    max-width: 800px;
+    width: 90%;
     margin: 40px auto;
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     color: #f0f0f0;
+}
+
+/* ===== TITULOS Y TEXTOS ===== */
+h1, h2, h3, p, label, a, th, td {
+    color: #f0f0f0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+}
+
+/* ===== FORMULARIOAK ===== */
+form {
+    background-color: transparent; /* ya el contenedor general da fondo */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 form input[type="text"],
@@ -50,14 +70,18 @@ form input[type="date"] {
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.15);
     color: #fff;
+    box-sizing: border-box;
 }
 
-form input::placeholder {
+form input[type="text"]::placeholder,
+form input[type="password"]::placeholder,
+form input[type="email"]::placeholder {
     color: #ddd;
 }
 
-/* ===== BOTONES ===== */
-input[type="submit"], button {
+/* ===== BOTONAK OROKORRA ===== */
+input[type="submit"],
+button {
     background-color: #3498db;
     color: #fff;
     border: none;
@@ -67,16 +91,17 @@ input[type="submit"], button {
     transition: background 0.3s;
 }
 
-input[type="submit"]:hover, button:hover {
+input[type="submit"]:hover,
+button:hover {
     background-color: #2980b9;
 }
 
-/* ===== TABLAS ===== */
+/* ===== TAULAK ===== */
 table {
     border-collapse: collapse;
-    width: 80%;
-    margin: 40px auto;
-    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    margin: 20px auto;
+    background-color: transparent; /* ya el contenedor general da fondo */
     color: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -85,21 +110,63 @@ table {
 th, td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 th {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: bold;
 }
 
-/* Hover filas */
 tr:hover {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ===== CENTRADO TEXTO EN BLOQUES ===== */
-.show-item p, .show-user p, .delete-item p {
-    text-align: left;
-    margin: 8px 0;
+/* ===== NAVEGAZIO BOTONAK ===== */
+.botoiak {
+    text-align: center;
+    margin-top: 30px;
 }
 
+.botoiak button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.botoiak button:hover {
+    background-color: #2980b9;
+}
+
+/* ===== ESTEKAK ===== */
+a {
+    color: #66c2ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.4);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.4);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.6);
+}
