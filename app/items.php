@@ -13,8 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Elementuak lortu
-$query = mysqli_query($conn, "SELECT * FROM pelikulak")
-    or die(mysqli_error($conn));
+$query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($conn));
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +30,7 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
     // Elementuak erakusten
     if (mysqli_num_rows($query) > 0) {
         echo "<table>";
-        echo "<tr><th>ID</th><th>Izena</th><th> </th></tr>";
+        echo "<tr><th>ID</th><th>Izena</th><th>Ekintzak</th></tr>";
         
         while ($row = mysqli_fetch_array($query)) {
             echo "<tr>";
@@ -53,8 +52,8 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
     ?>
     
     <p>
-        <button onclick="window.location.href='add_item.php'">Pelikula Berria Gehitu</button>
-        <button onclick="window.location.href='index.php'">Hasierara Bueltatu</button>
+        <button id="item_add_submit" type="button" onclick="window.location.href='add_item.php'">Pelikula Berria Gehitu</button>
+        <button id="home" type="button" onclick="window.location.href='index.php'">Hasierara Bueltatu</button>
     </p>
 </body>
 </html>
