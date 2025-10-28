@@ -14,7 +14,7 @@ body {
     align-items: center;
 
 }
-/*body::before {
+body::before {
 
     content: "";
     position: fixed;
@@ -24,7 +24,7 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.18);
     yez-index: -1;
-}*/
+}
 
 
 /* ===== OROKORRA ===== */

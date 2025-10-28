@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -17,9 +18,9 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
 <!DOCTYPE html>
 <html lang="eu">
 <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <title>Erabiltzaileak</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="wrapper">
