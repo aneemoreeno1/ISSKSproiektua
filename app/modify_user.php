@@ -225,7 +225,7 @@
 		
 		<!-- Bidaltzeko botoia -->
 		<input type="submit" id="user_modify_submit" value="Datuak gorde">
-		<button onclick="window.location.href='index.php'">Atzera</button>
+		<button type="button" id="index.php" onclick="window.location.href='index.php'">Atzera</button>
 	</form>
 
 </body>
