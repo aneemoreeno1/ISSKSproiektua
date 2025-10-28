@@ -10,11 +10,9 @@ body {
     padding: 0;
     min-height: 100vh;
     display: flex;
-    justify-content: center; /* centra horizontalmente */
-    align-items: center;     /* centra verticalmente */
-}
+    justify-content: center;
+    align-items: center;
 
-/* Capa oscura sobre el fondo */
 body::before {
     content: "";
     position: fixed;
@@ -26,10 +24,10 @@ body::before {
     z-index: -1;
 }
 
-/* ===== CONTENEDOR GENERAL ===== */
+/* ===== OROKORRA ===== */
 .wrapper {
     background-color: rgba(0, 0, 0, 0.6);
-    padding: 30px;
+    padding: 20px 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     width: 90%;
@@ -37,14 +35,21 @@ body::before {
     color: #f0f0f0;
 }
 
-/* ===== TITULOS Y TEXTOS ===== */
+/* ===== IZENBURUAK ETA TESTUAK ===== */
 h1, h2, h3, p, label, a, th, td {
     color: #f0f0f0;
+    font-size: 0.9rem;
 }
 
 h1 {
     text-align: center;
     margin-top: 0;
+    margin-bottom: 20px;
+}
+
+h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /* ===== FORMULARIOAK ===== */
@@ -58,9 +63,10 @@ form {
 form input[type="text"],
 form input[type="password"],
 form input[type="email"],
-form input[type="date"] {
+form input[type="date"],
+form textarea {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     margin-top: 5px;
     margin-bottom: 15px;
     border: none;
@@ -68,9 +74,11 @@ form input[type="date"] {
     background-color: rgba(255, 255, 255, 0.15);
     color: #fff;
     box-sizing: border-box;
+    font-size: 0.9rem;
 }
 
-form input::placeholder {
+form input::placeholder,
+form textarea::placeholder {
     color: #ddd;
 }
 
@@ -84,6 +92,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
+    font-size: 0.9rem;
 }
 
 input[type="submit"]:hover,
@@ -91,12 +100,30 @@ button:hover {
     background-color: #2980b9;
 }
 
+/* ===== BOTOIAK ===== */
+.botoiak {
+    display: flex;
+    justify-content: center;
+    gap: 10px;ç
+    margin-top: 20px;
+}
+
+/* ===== LINKAK ===== */
+a {
+    color: #66c2ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 /* ===== TAULAK ===== */
 table {
     border-collapse: collapse;
     width: 100%;
     margin: 20px auto;
-    background-color: transparent; /* ya el wrapper da fondo */
+    background-color: transparent;
     color: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -116,53 +143,3 @@ th {
 tr:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
-
-/* ===== NAVEGAZIO BOTONAK ===== */
-.botoiak {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.botoiak button {
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    margin: 0 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.botoiak button:hover {
-    background-color: #2980b9;
-}
-
-/* ===== ESTEKAK ===== */
-a {
-    color: #66c2ff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.4);
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.4);
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.6);
-}
-
