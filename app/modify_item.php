@@ -151,26 +151,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body>
-    <h1>Pelikularen datuak aldatu</h1>
+    <div class="wrapper">
+        <h1>Pelikularen datuak aldatu</h1>
 
-    <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        <label for="izena">Izena:</label><br>
-        <input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required><br><br>
+        <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <label for="izena">Izena:</label><br>
+            <input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required><br><br>
 
-        <label for="deskribapena">Deskribapena:</label><br>
-        <textarea id="deskribapena" name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea><br><br>
+            <label for="deskribapena">Deskribapena:</label><br>
+            <textarea id="deskribapena" name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea><br><br>
 
-        <label for="urtea">Urtea:</label><br>
-        <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>"><br><br>
+            <label for="urtea">Urtea:</label><br>
+            <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>"><br><br>
 
-        <label for="egilea">Egilea:</label><br>
-        <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>"><br><br>
+            <label for="egilea">Egilea:</label><br>
+            <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>"><br><br>
 
-        <label for="generoa">Generoa:</label><br>
-        <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>"><br><br>
+            <label for="generoa">Generoa:</label><br>
+            <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>"><br><br>
 
-        <button type="submit" id="item_modify_submit">Datuak gorde</button>
-        <button type="button" id="items_back" onclick="window.location.href='items.php'">Atzera</button>
-    </form>
+            <div class="botoiak">
+                <button type="submit" id="item_modify_submit">Datuak gorde</button>
+                <button type="button" id="items_back" onclick="window.location.href='items.php'">Atzera</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
