@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="style.css">
     <title>Pelikula berria gehitu</title>
-    <style>body { background-color: #f3f3f3ff; padding: 20px; }</style>
     <script>
         function bakarrikLetrak(testua) {
             var patroia = /^[A-Za-zÑñ\s]+$/;
@@ -132,8 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body>
-<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
-    <h1>Pelikula berria gehitu</h1>
+<h1>Pelikula berria gehitu</h1>
     <form id="add_form" name="add_form" method="POST" onsubmit="return datuakEgiaztatu()">
         <label for="izena">Izena:</label> <br> <input type="text" name="izena" required><br><br>
         <label for="deskribapena">Deskribapena:</label> <br> <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
