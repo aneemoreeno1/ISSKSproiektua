@@ -18,18 +18,19 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="eu">
 <head>
+    <meta charset="UTF-8">
     <title>Pelikulak</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 40%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
-    <h1>Pelikulak</h1>"
+    <h1>Pelikulak</h1>
     
     <?php
     // Elementuak erakusten
     if (mysqli_num_rows($query) > 0) {
-        echo "<table border='1'>";
+        echo "<table>";
         echo "<tr><th>ID</th><th>Izena</th><th> </th></tr>";
         
         while ($row = mysqli_fetch_array($query)) {
@@ -47,7 +48,7 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak")
     } else {
         echo "<p>Ez daude pelikularik.</p>";
     }
-    
+
     mysqli_close($conn);
     ?>
     
