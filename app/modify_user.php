@@ -208,9 +208,12 @@
 			return true;
 		}
 	</script>
+	<meta charset="UTF-8">
+    <title>Erabiltzailearen datuak aldatu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body> <style>body { background-color: #f3f3f3ff; padding: 20px; }</style>
+<body>
 	<h1>Erabiltzailearen datuak aldatu</h1>
 
 	<form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
