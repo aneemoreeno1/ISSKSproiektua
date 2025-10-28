@@ -15,18 +15,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $erabiltzailea = $_POST['erabiltzailea'];
     $pasahitza = $_POST['pasahitza'];
 
-    $sql = "SELECT * FROM usuarios WHERE nombre = '$erabiltzailea' AND pasahitza = '$pasahitza'";
-    $emaitza = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM usuarios WHERE nombre='$erabiltzailea' AND pasahitza='$pasahitza'";
+    $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($emaitza) > 0) {
-        $user = mysqli_fetch_assoc($emaitza);
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['nombre'];
-
-        echo "Ongi etorri " . $erabiltzailea . "!";
-        echo "<p><a href='modify_user.php?user={$user['id']}'>Editatu</a></p>";
+    if ($result && mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['user_name'] = $row['nombre'];
+        header("Location: index.php");
+        exit;
     } else {
-        echo "Erabiltzailea edo pasahitza okerrak";
+        echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Erabiltzaile edo pasahitza okerrak</p>";
     }
 }
 ?>
