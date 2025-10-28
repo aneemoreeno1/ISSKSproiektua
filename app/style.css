@@ -13,20 +13,23 @@ body {
     justify-content: center;
     align-items: center;
 
-body::before {
+}
+/*body::before {
+
     content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-}
+    background-color: rgba(0, 0, 0, 0.18);
+    yez-index: -1;
+}*/
+
 
 /* ===== OROKORRA ===== */
 .wrapper {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.35);
     padding: 20px 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -104,7 +107,7 @@ button:hover {
 .botoiak {
     display: flex;
     justify-content: center;
-    gap: 10px;ç
+    gap: 10px;
     margin-top: 20px;
 }
 
