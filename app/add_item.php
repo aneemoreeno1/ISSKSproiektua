@@ -1,6 +1,5 @@
 <?php
 // add_item.php - Pelikula berria gehitu
-
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -11,6 +10,8 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
+$mezua = ""; // Mezua erakusteko variablea
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $izena = $_POST['izena'];
     $deskribapena = $_POST['deskribapena'];
@@ -20,32 +21,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sql = "INSERT INTO pelikulak (izena, deskribapena, urtea, egilea, generoa)
             VALUES ('$izena', '$deskribapena', '$urtea', '$egilea', '$generoa')";
-    mysqli_query($conn, $sql) or die(mysqli_error($conn));
-
-    echo "<p>Pelikula ondo gehitu da!</p>";
-    echo "<p><a href='items.php'>Zerrendara itzuli</a></p>";
-    exit;
+    if (mysqli_query($conn, $sql)) {
+        $mezua = "Pelikula ondo gehitu da!";
+    } else {
+        $mezua = "Arazo bat egon da: " . mysqli_error($conn);
+    }
 }
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="eu">
 <head>
     <meta charset="UTF-8">
     <title>Pelikula berria gehitu</title>
     <link rel="stylesheet" href="style.css">
     <script>
+        // --- Validazioak ---
         function bakarrikLetrak(testua) {
             return /^[A-Za-zÑñ\s]+$/.test(testua);
         }
-
         function bakarrikZenbakiak(testua) {
             return /^[0-9]+$/.test(testua);
         }
-
         function bakarrikLetrakEtaZenbakiak(testua) {
             return /^[A-Za-zÑñ0-9\s.,!?¡¿()-]+$/.test(testua);
         }
-
         function gutxienezLetraBat(testua) {
             return /[A-Za-zÑñ]/.test(testua);
         }
@@ -111,6 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h1>Pelikula berria gehitu</h1>
+
+    <?php if ($mezua !== ""): ?>
+        <p style="text-align:center; font-weight:bold; font-size:1.2em; color:#66ff66;"><?php echo $mezua; ?></p>
+    <?php endif; ?>
 
     <form id="item_add_form" name="item_add_form" method="POST" onsubmit="return datuakEgiaztatu()">
         <label for="izena">Izena:</label><br>
