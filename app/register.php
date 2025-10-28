@@ -1,5 +1,6 @@
 <?php
-// PHP Kodea
+// register.php - Erabiltzaile berria gehitu
+
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -10,7 +11,8 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-// Formularioa bidali bada
+$mezua = ""; // Mezua erakusteko
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $izena = $_POST['izena'];
     $nan = $_POST['nan'];
@@ -22,12 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) 
             VALUES ('$izena', '$nan', '$telefonoa', '$data', '$email', '$pasahitza')";
 
-    $emaitza = mysqli_query($conn, $sql);
-
-    if ($emaitza) {
-        echo "<script>alert('Ondo gorde da!'); window.location.href='login.php';</script>";
+    if (mysqli_query($conn, $sql)) {
+        $mezua = "Ondo gorde da!";
     } else {
-        echo "Arazo bat egon da: " . mysqli_error($conn);
+        $mezua = "Arazo bat egon da: " . mysqli_error($conn);
     }
 }
 ?>
@@ -37,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Erregistratu</title>
-    <style>body { background-color: #f3f3f3ff; padding: 20px; }</style>
-
+    <link rel="stylesheet" href="style.css">
     <script>
+        
         function bakarrikLetrak(testua) {
             return /^[A-Za-zÑñ\s]+$/.test(testua);
         }
@@ -135,32 +135,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h1>Erregistratu</h1>
-    <div class="wrapper">
-        <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <label for="izena">Izena:</label><br>
-            <input type="text" id="izena" name="izena" required><br><br>
-    
-            <label for="nan">NAN:</label><br>
-            <input type="text" id="nan" name="nan" required><br><br>
-    
-            <label for="telefonoa">Telefonoa:</label><br>
-            <input type="text" id="telefonoa" name="telefonoa" required><br><br>
-    
-            <label for="data">Jaiotze data:</label><br>
-            <input type="text" id="data" name="data" required><br><br>
-    
-            <label for="email">Email:</label><br>
-            <input type="text" id="email" name="email" required><br><br>
-    
-            <label for="pasahitza">Pasahitza:</label><br>
-            <input type="password" id="pasahitza" name="pasahitza" required><br><br>
-    
-            <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
-            <input type="password" id="errep_pasahitza" name="errep_pasahitza" required><br><br>
-    
-            <button type="submit" id="register_submit">Erregistratu</button>
-            <button type="button" onclick="window.location.href='index.php'">Atzera</button>
-        </form>
-    <div>
+
+    <?php if ($mezua !== ""): ?>
+        <p style="text-align:center; font-weight:bold; font-size:1.2em; color:#66ff66;"><?php echo $mezua; ?></p>
+    <?php endif; ?>
+
+    <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
+        <label for="izena">Izena:</label><br>
+        <input type="text" id="izena" name="izena" required><br><br>
+
+        <label for="nan">NAN:</label><br>
+        <input type="text" id="nan" name="nan" required><br><br>
+
+        <label for="telefonoa">Telefonoa:</label><br>
+        <input type="text" id="telefonoa" name="telefonoa" required><br><br>
+
+        <label for="data">Jaiotze data:</label><br>
+        <input type="text" id="data" name="data" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email" required><br><br>
+
+        <label for="pasahitza">Pasahitza:</label><br>
+        <input type="password" id="pasahitza" name="pasahitza" required><br><br>
+
+        <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
+        <input type="password" id="errep_pasahitza" name="errep_pasahitza" required><br><br>
+
+        <button type="submit" id="register_submit">Erregistratu</button>
+        <button type="button" onclick="window.location.href='index.php'">Atzera</button>
+    </form>
 </body>
 </html>
