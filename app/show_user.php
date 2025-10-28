@@ -1,42 +1,40 @@
 <?php
-// Datu-basearekin konexioa
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
-if ($conn->connect_error) {
-	die("Database connection failed: " . $conn->connect_error);
-}
+if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
 
-// URL-tik erabiltzaile ID-a hartu
 $user_id = $_GET['user'];
-
-// Erabiltzailearen datuak kargatu
 $sql = "SELECT * FROM usuarios WHERE id = $user_id";
 $emaitza = mysqli_query($conn, $sql);
-
-echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>";
-
-if ($emaitza->num_rows > 0) {
-	$erabiltzailea = mysqli_fetch_array($emaitza);
-	
-	// Datuak erakutsi
-	echo '<h1>Erabiltzailearen datuak</h1>';
-	echo '<p><b>ID:</b> ' . $erabiltzailea['id'] . '</p>';
-	echo '<p><b>Izena:</b> ' . $erabiltzailea['nombre'] . '</p>';
-	echo '<p><b>NAN:</b> ' . $erabiltzailea['nan'] . '</p>';
-	echo '<p><b>Telefonoa:</b> ' . $erabiltzailea['telefonoa'] . '</p>';
-	echo '<p><b>Jaiotze data:</b> ' . $erabiltzailea['jaiotze_data'] . '</p>';
-	echo '<p><b>Email:</b> ' . $erabiltzailea['email'] . '</p>';
-	
-	// Estekak
-	echo '<button onclick="window.location.href=\'index.php\'">Atzera</button>';
-	
-} else {
-	echo 'Erabiltzailea ez da existitzen';
-}
-
-mysqli_close($conn);
+$erabiltzailea = mysqli_fetch_array($emaitza);
 ?>
+
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+<meta charset="UTF-8">
+<title>Erabiltzailearen datuak</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+      <?php if ($erabiltzailea): ?>
+          <h1>Erabiltzailearen datuak</h1>
+          <p><b>ID:</b> <?php echo $erabiltzailea['id']; ?></p>
+          <p><b>Izena:</b> <?php echo $erabiltzailea['nombre']; ?></p>
+          <p><b>NAN:</b> <?php echo $erabiltzailea['nan']; ?></p>
+          <p><b>Telefonoa:</b> <?php echo $erabiltzailea['telefonoa']; ?></p>
+          <p><b>Jaiotze data:</b> <?php echo $erabiltzailea['jaiotze_data']; ?></p>
+          <p><b>Email:</b> <?php echo $erabiltzailea['email']; ?></p>
+          <button onclick="window.location.href='index.php'">Atzera</button>
+      <?php else: ?>
+          <p>Erabiltzailea ez da existitzen</p>
+      <?php endif; ?>
+  </div>
+<?php mysqli_close($conn); ?>
+</body>
+</html>
