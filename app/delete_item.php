@@ -26,32 +26,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
 // GET bidez item ID-a jaso bada (ezabaketa orria erakusteko)
 if (isset($_GET['item'])) {
     $item_id = $_GET['item'];
-    
-    // Pelikularen datuak kargatu    
+
     $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
     $result = mysqli_query($conn, $sql);
     $pelikula = mysqli_fetch_assoc($result);
-    
-    if ($pelikula) {
-        // Pelikularen informazioa erakutsi
-        echo "<h3>Ezabatu pelikula:</h3>";
-        echo "<p><strong>ID:</strong> " . $pelikula['id'] . "</p>";
-        echo "<p><strong>Izena:</strong> " . $pelikula['izena'] . "</p>";
-        echo "<p><strong>Urtea:</strong> " . $pelikula['urtea'] . "</p>";
-
-        // Ezabaketa baieztatzeko formularioa
-        echo "<form method='post'>";
-        echo "<input type='hidden' name='item_id' value='" . $pelikula['id'] . "'>";
-        echo "<button type='submit' id='item_delete_submit'>Ezabatu</button>";
-        echo "</form>";
-    } else {
-        echo "<p>Ez da pelikularik aurkitu.</p>";
-    }
 }
-
-echo "<br><a href='items.php'>Bueltatu</a>";
-
-mysqli_close($conn);
 ?>
+
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+    <meta charset="UTF-8">
+    <title>Ezabatu Pelikula</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>"; ?>
+    <h1>Ezabatu Pelikula</h1>
+
+    <?php if ($pelikula): ?>
+        <h3>Ezabatu pelikula:</h3>
+        <p><strong>ID:</strong> <?php echo $pelikula['id']; ?></p>
+        <p><strong>Izena:</strong> <?php echo $pelikula['izena']; ?></p>
+        <p><strong>Urtea:</strong> <?php echo $pelikula['urtea']; ?></p>
+
+        <form method="post">
+            <input type="hidden" name="item_id" value="<?php echo $pelikula['id']; ?>">
+            <button type="submit">Ezabatu</button>
+        </form>
+    <?php else: ?>
+        <p>Ez da pelikularik aurkitu.</p>
+    <?php endif; ?>
+
+    <br>
+    <button onclick="window.location.href='items.php'">Bueltatu</button>
+
+<?php mysqli_close($conn); ?>
+</body>
+</html>
