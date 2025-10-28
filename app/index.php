@@ -24,8 +24,7 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
 </head>
 <body>
     <div class="wrapper">
-        <h1>Erabiltzaileak:</h1>
-
+        <h1>Erabiltzaileak</h1>
         <table>
             <tr>
                 <th>ID</th>

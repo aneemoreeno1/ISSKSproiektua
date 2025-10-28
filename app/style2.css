@@ -12,16 +12,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 
 /* ===== OROKORRA ===== */
 .wrapper {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     justify-items: left;
-    padding: 20px 30px;
-    margin-top:20px;
+    padding:30px;
     margin-bottom: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -31,24 +29,38 @@ body {
 }
 
 /* ===== IZENBURUAK ETA TESTUAK ===== */
-h1,h2,h3{
+h1{
     color: #000000;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
     justify-self: left;
     margin-bottom: 20px;
+    margin-top: auto;
+    margin-bottom: 30px;
+}
+h2{
+    color: #000000;
+    font-size: 1.3rem;
+    font-weight: bold;
+    justify-self: left;
+    margin-bottom: 15px;
+}
+
+h3{
+    color: #000000;
+    font-size: 1.1rem;
+    font-weight: bold;
+    justify-self: left;
+    margin-bottom: 10px;
 }
 p, label, a, th, td {
     color: #000000;
-    font-size: 0,9rem;
+    font-size: 0.9rem;
     justify-self: left;
 }
 
 
-h2, h3 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
+
 
 /* ===== FORMULARIOAK ===== */
 form {
