@@ -14,6 +14,13 @@ if ($conn->connect_error) {
 $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($conn));
 ?>
 
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+    <meta charset="UTF-8">
+    <title>Pelikulak</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
     <div class="wrapper">
         <h1>Pelikulak</h1>
@@ -47,5 +54,5 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
         </div>
     </div>
 </body>
-
+</html>
 <?php mysqli_close($conn); ?>
