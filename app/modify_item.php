@@ -1,6 +1,5 @@
 <?php
-// PHP Kodea
-// Datu-basearekin konexioa
+// modify_item.php - Pelikularen datuak aldatu
 
 $hostname = "db";
 $username = "admin";
@@ -12,7 +11,7 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-// ID lortu
+// ID lortu GET bidez
 $item_id = $_GET['item'];
 
 // Pelikularen datuak kargatu
@@ -57,10 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="eu">
 <head>
+    <meta charset="UTF-8">
     <title>Pelikularen datuak aldatu</title>
-
+    <link rel="stylesheet" href="style.css">
     <script>
         function bakarrikLetrak(testua) {
             var patroia = /^[A-Za-zÑñ\s]+$/;
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         function datuakEgiaztatu() {
-            // Izena: ez hutsa, karaktere arruntak eta gutxienez letra 1
+            // Izena
             var izena = document.item_modify_form.izena.value;
             if (izena.length < 1) {
                 alert("Izenak ezin du hutsik egon");
@@ -96,36 +96,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return false;
             }
 
-            // Deskribapena: luzera maximoa egiaztatu (aukerakoa)
+            // Deskribapena
             var deskribapena = document.item_modify_form.deskribapena.value;
             if (deskribapena.length > 500) {
                 alert("Deskribapenak ezin du 500 karaktere baino gehiago izan");
                 return false;
             }
 
-            // Urtea: zenbaki arrunta eta arrazoizko tartea
+            // Urtea
             var urtea = document.item_modify_form.urtea.value;
             if (urtea !== "") {
                 if (!bakarrikZenbakiak(urtea)) {
                     alert("Urteak zenbaki osoa izan behar du");
                     return false;
                 }
-                
                 var urteZenbakia = parseInt(urtea);
                 var gaurkoUrtea = new Date().getFullYear();
-                
                 if (urteZenbakia < 1888) {
                     alert("Urtea ez da egokia. 1888 baino handiagoa izan behar da");
                     return false;
                 }
-                
                 if (urteZenbakia > gaurkoUrtea + 5) {
                     alert("Urtea ez da egokia. Ezin da etorkizuneko 5 urte baino gehiago izan");
                     return false;
                 }
             }
 
-            // Egilea: letrak eta karaktere arruntak baino ez + gutxienez letra 1 (aukerakoa)
+            // Egilea
             var egilea = document.item_modify_form.egilea.value;
             if (egilea !== "") {
                 if (!karaktereArruntaK(egilea)) {
@@ -137,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-            // Generoa: letrak baino ez + gutxienez letra 1 (aukerakoa)
+            // Generoa
             var generoa = document.item_modify_form.generoa.value;
             if (generoa !== "") {
                 if (!bakarrikLetrak(generoa)) {
@@ -153,23 +150,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 </head>
-
 <body>
-<?php echo "<style>body { background-color: #f3f3f3ff; padding: 20px; } table { border-collapse: collapse; width: 25%; } th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } }</style>"; ?>
     <h1>Pelikularen datuak aldatu</h1>
 
     <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        <label for="izena">Izena:</label> <br><input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required><br><br>
-        <label for="deskribapena">Deskribapena</label> <br> <textarea id="deskribapena" name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea><br><br>
-        <label for="urtea">Urtea:</label> <br> <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>"><br><br>
-        <label for="egilea">Egilea:</label> <br> <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>"><br><br>
-        <label for="generoa">Generoa:</label> <br> <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>"><br><br>
+        <label for="izena">Izena:</label><br>
+        <input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required><br><br>
 
-        <!-- Bidaltzeko botoia -->
+        <label for="deskribapena">Deskribapena:</label><br>
+        <textarea id="deskribapena" name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea><br><br>
+
+        <label for="urtea">Urtea:</label><br>
+        <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>"><br><br>
+
+        <label for="egilea">Egilea:</label><br>
+        <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>"><br><br>
+
+        <label for="generoa">Generoa:</label><br>
+        <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>"><br><br>
+
         <button type="submit" id="item_modify_submit">Datuak gorde</button>
-        <button type="button" id="items.php" onclick="window.location.href='items.php'">Atzera</button>
+        <button type="button" id="items_back" onclick="window.location.href='items.php'">Atzera</button>
     </form>
-
-   
 </body>
 </html>
