@@ -170,21 +170,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 </head>
-
 <body>
-    <h1>Erabiltzailearen datuak aldatu</h1>
+    <div class="wrapper">
+        <h1>Erabiltzailearen datuak aldatu</h1>
 
-    <form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
-        Izena: <input type="text" name="izena" value="<?php echo $erabiltzailea['nombre']; ?>" required><br><br>
-        NAN: <input type="text" name="nan" value="<?php echo $erabiltzailea['nan']; ?>" required><br><br>
-        Telefonoa: <input type="text" name="telefonoa" value="<?php echo $erabiltzailea['telefonoa']; ?>" required><br><br>
-        Jaiotze data: <input type="text" name="data" value="<?php echo $erabiltzailea['jaiotze_data']; ?>" required><br><br>
-        Email: <input type="text" name="email" value="<?php echo $erabiltzailea['email']; ?>" required><br><br>
-        Pasahitza: <input type="password" name="pasahitza" value="<?php echo $erabiltzailea['pasahitza']; ?>" required><br><br>
-        Errepikatu pasahitza: <input type="password" name="errep_pasahitza" value="<?php echo $erabiltzailea['pasahitza']; ?>" required><br><br>
+        <form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <label for="izena">Izena:</label>
+            <input type="text" name="izena" value="<?= $erabiltzailea['nombre'] ?>" required>
 
-        <button type="submit" id="user_modify_submit">Datuak gorde</button>
-        <button type="button" onclick="window.location.href='index.php'">Atzera</button>
-    </form>
+            <label for="nan">NAN:</label>
+            <input type="text" name="nan" value="<?= $erabiltzailea['nan'] ?>" required>
+
+            <label for="telefonoa">Telefonoa:</label>
+            <input type="text" name="telefonoa" value="<?= $erabiltzailea['telefonoa'] ?>" required>
+
+            <label for="data">Jaiotze data:</label>
+            <input type="text" name="data" value="<?= $erabiltzailea['jaiotze_data'] ?>" required>
+
+            <label for="email">Email:</label>
+            <input type="text" name="email" value="<?= $erabiltzailea['email'] ?>" required>
+
+            <label for="pasahitza">Pasahitza:</label>
+            <input type="password" name="pasahitza" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+
+            <label for="errep_pasahitza">Errepikatu pasahitza:</label>
+            <input type="password" name="errep_pasahitza" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+
+            <div class="botoiak">
+                <button type="submit" id="user_modify_submit">Datuak gorde</button>
+                <button type="button" onclick="window.location.href='index.php'">Atzera</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
+<?php mysqli_close($conn); ?>
