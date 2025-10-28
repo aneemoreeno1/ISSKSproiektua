@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Pelikula berria gehitu</title>
     <link rel="stylesheet" href="style.css">
     <script>
-        // --- Validazioak ---
+
         function bakarrikLetrak(testua) {
             return /^[A-Za-zÑñ\s]+$/.test(testua);
         }
