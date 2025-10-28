@@ -91,9 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else if (!karaktereArruntaK(izena)) {
                 alert("Izenak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
                 return false;
-            } else if (!gutxienezLetraBat(izena)) {
-                alert("Izenak gutxienez letra bat izan behar du");
-                return false;
             }
 
             // Deskribapena
