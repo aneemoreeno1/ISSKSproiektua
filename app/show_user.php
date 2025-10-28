@@ -16,13 +16,14 @@ $user_id = $_GET['user'];
 // Erabiltzailearen datuak kargatu
 $sql = "SELECT * FROM usuarios WHERE id = $user_id";
 $emaitza = mysqli_query($conn, $sql);
+
 echo "<style>body { background-color: #f3f3f3ff; padding: 20px; }</style>";
+
 if ($emaitza->num_rows > 0) {
 	$erabiltzailea = mysqli_fetch_array($emaitza);
 	
 	// Datuak erakutsi
 	echo '<h1>Erabiltzailearen datuak</h1>';
-	
 	echo '<p><b>ID:</b> ' . $erabiltzailea['id'] . '</p>';
 	echo '<p><b>Izena:</b> ' . $erabiltzailea['nombre'] . '</p>';
 	echo '<p><b>NAN:</b> ' . $erabiltzailea['nan'] . '</p>';
@@ -31,11 +32,11 @@ if ($emaitza->num_rows > 0) {
 	echo '<p><b>Email:</b> ' . $erabiltzailea['email'] . '</p>';
 	
 	// Estekak
-	
 	echo '<button onclick="window.location.href=\'index.php\'">Atzera</button>';
 	
 } else {
 	echo 'Erabiltzailea ez da existitzen';
 }
-?>
 
+mysqli_close($conn);
+?>
