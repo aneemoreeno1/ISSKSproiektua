@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Pelikula berria gehitu</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
     <script>
 
         function bakarrikLetrak(testua) {
@@ -117,24 +117,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <form id="item_add_form" name="item_add_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <label for="izena">Izena:</label><br>
-            <input type="text" name="izena" required><br><br>
+            <div class="form-grid">
+                <div>
+                    <label for="izena">Izena:</label><br>
+                    <input type="text" name="izena" required>
+                </div>             
 
-            <label for="deskribapena">Deskribapena:</label><br>
-            <textarea name="deskribapena" rows="4" cols="50"></textarea><br><br>
+                <div>
+                    <label for="urtea">Urtea:</label><br>
+                    <input type="number" name="urtea" value="<?php echo date('Y'); ?>">
+                </div>
 
-            <label for="urtea">Urtea:</label><br>
-            <input type="number" name="urtea" value="<?php echo date('Y'); ?>"><br><br>
+                <div>
+                    <label for="egilea">Egilea:</label><br>
+                    <input type="text" name="egilea">
+                </div>
 
-            <label for="egilea">Egilea:</label><br>
-            <input type="text" name="egilea"><br><br>
+                <div>
+                    <label for="generoa">Generoa:</label><br>
+                    <input type="text" name="generoa">
+                </div>
+            </div>
 
-            <label for="generoa">Generoa:</label><br>
-            <input type="text" name="generoa"><br><br>
+            <div class="full-width">
+                    <label for="deskribapena">Deskribapena:</label><br>
+                    <textarea name="deskribapena" rows="4" style="width: 100%;"></textarea>
+                </div>
 
-            <div class="botoiak">
-                <button id="item_add_submit" type="submit">Gehitu</button>
-                <button type="button" onclick="window.location.href='items.php'">Atzera</button>
+            <div class="botoiak" style="margin-top:18px;">
+                <button id="item_add_submit" type="submit" class="btn-primary">Gehitu</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='items.php'">Atzera</button>
             </div>
         </form>
     </div>

@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Erabiltzailearen datuak aldatu</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
 
     <script>
         function bakarrikLetrak(testua) {

@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Erregistratu</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
     <script>
         
         function bakarrikLetrak(testua) {
@@ -166,8 +166,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="password" id="errep_pasahitza" name="errep_pasahitza" required>
 
             <div class="botoiak">
-                <button type="submit" id="register_submit">Erregistratu</button>
-                <button type="button" onclick="window.location.href='index.php'">Atzera</button>
+                <button type="submit" class="btn-primary" id="register_submit">Erregistratu</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
             </div>
         </form>
     </div>

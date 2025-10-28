@@ -18,7 +18,7 @@ $pelikula = mysqli_fetch_array($emaitza);
 <head>
 <meta charset="UTF-8">
 <title>Pelikularen datuak</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style2.css">
 </head>
 <body>
   <div class="wrapper">
@@ -30,7 +30,7 @@ $pelikula = mysqli_fetch_array($emaitza);
           <p><b>Urtea:</b> <?php echo $pelikula['urtea']; ?></p>
           <p><b>Egilea:</b> <?php echo $pelikula['egilea']; ?></p>
           <p><b>Generoa:</b> <?php echo $pelikula['generoa']; ?></p>
-          <button onclick="history.back()">Atzera</button>
+          <button class="btn-secondary" onclick="history.back()">Atzera</button>
       <?php else: ?>
           <p>Pelikula ez da existitzen</p>
       <?php endif; ?>

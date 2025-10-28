@@ -18,7 +18,7 @@ $erabiltzailea = mysqli_fetch_array($emaitza);
 <head>
 <meta charset="UTF-8">
 <title>Erabiltzailearen datuak</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style2.css">
 </head>
 <body>
   <div class="wrapper">
@@ -30,7 +30,7 @@ $erabiltzailea = mysqli_fetch_array($emaitza);
           <p><b>Telefonoa:</b> <?php echo $erabiltzailea['telefonoa']; ?></p>
           <p><b>Jaiotze data:</b> <?php echo $erabiltzailea['jaiotze_data']; ?></p>
           <p><b>Email:</b> <?php echo $erabiltzailea['email']; ?></p>
-          <button onclick="window.location.href='index.php'">Atzera</button>
+          <button class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
       <?php else: ?>
           <p>Erabiltzailea ez da existitzen</p>
       <?php endif; ?>

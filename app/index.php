@@ -18,7 +18,7 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
 <!DOCTYPE html>
 <html lang="eu">
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
     <meta charset="UTF-8">
     <title>Erabiltzaileak</title>
 </head>
@@ -30,7 +30,7 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
             <tr>
                 <th>ID</th>
                 <th>Izena</th>
-                <th>Ekintzak</th>
+                <th> </th>
             </tr>
 
             <?php while ($row = mysqli_fetch_array($query)) { ?>
@@ -48,9 +48,10 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
         </table>
 
         <div class="botoiak">
-            <button type="button" onclick="window.location.href='login.php'">Saioa Hasi</button>
-            <button type="button" onclick="window.location.href='register.php'">Erregistratu</button>
-            <button type="button" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>
+                <button type="button" class="btn-primary" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>      
+                <button type="button" class="btn-link" onclick="window.location.href='login.php'"> Saioa Hasi</button> | 
+                <button type="button" class="btn-link" onclick="window.location.href='register.php'">Erregistratu</button>
+            </div>
         </div>
     </div>
 
