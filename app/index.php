@@ -22,35 +22,36 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="wrapper">
+        <h1>Erabiltzaileak:</h1>
 
-    <h1>Erabiltzaileak:</h1>
-
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Izena</th>
-            <th>Ekintzak</th>
-        </tr>
-
-        <?php while ($row = mysqli_fetch_array($query)) { ?>
+        <table>
             <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= $row['nombre'] ?></td>
-                <td>
-                    <a href="show_user.php?user=<?= $row['id'] ?>">Ikusi</a>
-                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?>
-                        | <a href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a>
-                    <?php } ?>
-                </td>
+                <th>ID</th>
+                <th>Izena</th>
+                <th>Ekintzak</th>
             </tr>
-        <?php } ?>
-    </table>
 
-    <p class="botoiak">
-        <button id="login_submit" type="button" onclick="window.location.href='login.php'">Saioa Hasi</button>
-        <button id="register_submit" type="button" onclick="window.location.href='register.php'">Erregistratu</button>
-        <button id="items.php" type="button" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>
-    </p>
+            <?php while ($row = mysqli_fetch_array($query)) { ?>
+                <tr>
+                    <td><?= $row['id'] ?></td>
+                    <td><?= $row['nombre'] ?></td>
+                    <td>
+                        <a href="show_user.php?user=<?= $row['id'] ?>">Ikusi</a>
+                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?>
+                            | <a href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+
+        <div class="botoiak">
+            <button type="button" onclick="window.location.href='login.php'">Saioa Hasi</button>
+            <button type="button" onclick="window.location.href='register.php'">Erregistratu</button>
+            <button type="button" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>
+        </div>
+    </div>
 
 <?php mysqli_close($conn); ?>
 </body>
