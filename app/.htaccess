@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Redirect direct requests containing .php to the extensionless canonical URL
+RewriteCond %{THE_REQUEST} \s/([^\s]+?)\.php[?\s] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# If requested resource is not an existing file or dir
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# If adding .php produces an existing file, internally serve that .php file
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]

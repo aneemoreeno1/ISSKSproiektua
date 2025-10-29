@@ -61,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="botoiak">
                 <button type="button" class="btn-primary" id="login_submit">Sartu</button>
-                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button> <br>
+                <button type="button" class="btn-link" onclick="window.location.href='register.php'">Ez duzu konturik? Erregistratu</button>
             </div>
         </form>
     </div>

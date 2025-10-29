@@ -144,19 +144,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <input type="text" id="izena" name="izena" placeholder="Izen Abizenak" required>
+            <input type="text" id="izena" name="izena" placeholder="Izena" required><br>
 
-            <input type="text" id="nan" name="nan" placeholder="NAN" required>
+            <input type="text" id="nan" name="nan" placeholder="NAN" required><br>
 
-            <input type="text" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required>
+            <input type="text" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required><br>
 
-            <input type="text" id="data" name="data" placeholder="Jaiotze Data UUUU-HH-EE" required>
+            <input type="text" id="data" name="data" placeholder="Jaiotze Data UUUU-HH-EE" required><br>
 
-            <input type="text" id="email" name="email" placeholder="Email" required>
+            <input type="text" id="email" name="email" placeholder="Email" required><br>
 
-            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required>
+            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required><br>
 
-            <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required>
+            <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required><br>
 
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="register_submit">Erregistratu</button>
