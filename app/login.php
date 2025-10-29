@@ -33,35 +33,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="eu">
 <head>
     <meta charset="UTF-8">
-    <title>Sartu</title>
-    <link rel="stylesheet" href="style2.css">
-    <script>
-        function datuakEgiaztatu() {
-            var erabiltzailea = document.login_form.erabiltzailea.value;
-            var pasahitza = document.login_form.pasahitza.value;
-
-            if (erabiltzailea.length < 1) {
-                alert("Sartu erabiltzaile izena");
-                return false;
-            }
-            if (pasahitza.length < 1) {
-                alert("Sartu pasahitza");
-                return false;
-            }
-            return true;
-        }
-    </script>
+    <title>Saioa hasi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="wrapper" style="width: 20%">
         <h1>Sartu</h1><br>
+
+        <?php
+        if (isset($mezua) && $mezua !== "") {
+            echo "<p style='text-align:center; font-weight:bold; font-size:1.1em; color:#66ff66;'>$mezua</p>";
+        }
+        ?>
+
         <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <input type="text" id="erabiltzailea" name="erabiltzailea" style="width:100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; margin-bottom:0; box-sizing: border-box; border-bottom: 0px;" placeholder="Erabiltzailea" required> <br>
-            <input type="password" id="pasahitza" name="pasahitza" style="width:100%; border-top-left-radius: 0px; border-top-right-radius: 0px; margin-top: 0; box-sizing: border-box;"  placeholder="Pasahitza" required><br>
+            <input type="text" id="erabiltzailea" name="erabiltzailea"
+                style="width:100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;
+                margin-bottom:0; box-sizing: border-box; border-bottom: 0px;"
+                placeholder="Erabiltzailea" required><br>
+
+            <input type="password" id="pasahitza" name="pasahitza"
+                style="width:100%; border-top-left-radius: 0px; border-top-right-radius: 0px;
+                margin-top: 0; box-sizing: border-box;"
+                placeholder="Pasahitza" required><br>
 
             <div class="botoiak">
-                <button type="button" class="btn-primary" style="width:100%" id="login_submit">Sartu</button> <br>
-                <button type="button" class="btn-secondary" style="width:100%" onclick="window.location.href='index.php'">Atzera</button> <br>
+                <button type="submit" class="btn-primary" style="width:100%" id="login_submit">Sartu</button><br>
+                <button type="button" class="btn-secondary" style="width:100%" onclick="window.location.href='index.php'">Atzera</button><br>
                 <button type="button" class="btn-link" onclick="window.location.href='register.php'">Ez duzu konturik? Erregistratu</button>
             </div>
         </form>
