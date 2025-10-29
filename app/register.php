@@ -81,7 +81,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return false;
             }
 
-            var data = document.register_form.data.value;
+            // Normalize date input to ISO format YYYY-MM-DD so server and validation expect the same shape.
+            var dataField = document.register_form.data;
+            var data = dataField.value;
+            // If browser gives a Date object for the date input, use it to create yyyy-mm-dd string
+            if ((!data || data.indexOf('-') === -1) && dataField.valueAsDate) {
+                var dObjNorm = dataField.valueAsDate;
+                var yyyyN = dObjNorm.getFullYear();
+                var mmN = ('0' + (dObjNorm.getMonth() + 1)).slice(-2);
+                var ddN = ('0' + dObjNorm.getDate()).slice(-2);
+                data = yyyyN + '-' + mmN + '-' + ddN;
+                dataField.value = data; // ensure the field contains the normalized string
+            }
             var dataZatiak = data.split("-");
             if (data.length != 10 || dataZatiak.length != 3) {
                 alert("Data formatua okerra. Adibidea: 2024-12-20");
@@ -144,23 +155,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <input type="text" id="izena" name="izena" placeholder="Izena" required><br>
+            <input type="text" id="izena" name="izena" placeholder="Izena" required>
 
             <input type="text" id="nan" name="nan" placeholder="NAN" required><br>
 
-            <input type="text" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required><br>
+            <input type="tel" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required>
 
-            <input type="text" id="data" name="data" placeholder="Jaiotze Data UUUU-HH-EE" required><br>
+            <input type="text" id="data" name="data" placeholder="Jaiotza data: YYYY-MM-DD" title="Format: YYYY-MM-DD" required><br>
 
-            <input type="text" id="email" name="email" placeholder="Email" required><br>
+            <input type="text" id="email" name="email" placeholder="Email" style="width:100%" required><br>
 
-            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required><br>
+            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required>
 
             <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required><br>
 
             <div class="botoiak">
-                <button type="submit" class="btn-primary" id="register_submit">Erregistratu</button>
-                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
+                <button type="submit" class="btn-primary" id="register_submit" style="width:100%">Erregistratu</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'" style="width:100%">Atzera</button> <br>
+                <button type="button" class="btn-link" onclick="window.location.href='login.php'" style="">Iada baduzu kontua? Hasi Saioa</button>
             </div>
         </form>
     </div>

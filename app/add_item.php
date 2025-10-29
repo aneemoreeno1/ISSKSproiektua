@@ -120,22 +120,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-grid">
                 <div>
                     <label for="izena">Izena:</label><br>
-                    <input type="text" name="izena" required>
+                    <input type="text" name="izena" style="width: 100%;" required>
                 </div>             
 
                 <div>
                     <label for="urtea">Urtea:</label><br>
-                    <input type="number" name="urtea" value="<?php echo date('Y'); ?>">
+                    <input type="number" name="urtea" style="width: 100%" value="<?php echo date('Y'); ?>">
                 </div>
 
                 <div>
                     <label for="egilea">Egilea:</label><br>
-                    <input type="text" name="egilea">
+                    <input type="text" name="egilea" style="width: 100%;">
                 </div>
 
                 <div>
                     <label for="generoa">Generoa:</label><br>
-                    <input type="text" name="generoa">
+                    <input type="text" name="generoa" style="width: 100%;">
                 </div>
             </div>
 

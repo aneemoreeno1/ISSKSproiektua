@@ -19,11 +19,11 @@ body {
 .wrapper {
     background-color: rgba(255, 255, 255, 0.9);
     justify-items: left;
-    padding: 30px;
+    padding: 20px 30px;
     margin-bottom: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    width: 100%;
+    width: auto;
     max-width: 1000px;
     color: #000000;
 }
@@ -35,7 +35,7 @@ h1{
     font-weight: bold;
     justify-self: left;
     margin-bottom: 5px;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 h2{
     color: #000000;
@@ -73,6 +73,7 @@ form {
 form input[type="text"],
 form input[type="password"],
 form input[type="email"],
+form input[type="tel"],
 form input[type="date"],
 form input[type="number"],
 form textarea {
@@ -81,7 +82,7 @@ form textarea {
     margin-top: 5px;
     margin-bottom: 15px;
     border: 1px solid #7f0000;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: rgb(255, 255, 255);
     color:  #000000;
     box-sizing: border-box;
@@ -97,10 +98,13 @@ form textarea::placeholder {
 input[type="submit"],
 button {
     padding: 10px 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s, color 0.3s, border-color 0.3s;
     font-size: 0.9rem;
+    margin-top: 5px ;
+    margin-bottom: 5px;
+    border: 1px solid #7F0001;
    
 }
 
@@ -110,8 +114,9 @@ input[type="submit"].btn-primary,
 button.btn-primary {
     background-color: #7F0001;
     border: 1px solid #7F0001;
-    color: transparent;
+    color: white;
     border: none;
+    width: auto;
 }
 .btn-primary:hover {
     background-color: #5c0001;
@@ -123,6 +128,7 @@ button.btn-secondary {
     background-color: transparent;
     color: #7F0001;
     border: 1px solid #7F0001;
+    width: auto;
 }
 .btn-secondary:hover {
     background-color: rgba(127,0,1,0.06);
@@ -136,6 +142,7 @@ a.btn-link {
     color: #7F0001;
     padding: 10px 2px 5px 5px; 
     font-weight: normal;
+    
 }
 .btn-link:hover,
 a.btn-link:hover {
@@ -155,7 +162,7 @@ table {
     overflow: hidden;
 }
 
-th, td {
+td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #5c000237;
@@ -164,6 +171,8 @@ th, td {
 th {
     background-color: #7f00001b;
     font-weight: bold;
+    padding: 12px 15px;
+    text-align: left;
 }
 
 

@@ -53,15 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body>
-    <div class="wrapper">
-        <h1>Sartu</h1>
+    <div class="wrapper" style="width: 20%">
+        <h1>Sartu</h1><br>
         <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <input type="text" id="erabiltzailea" name="erabiltzailea" placeholder="Erabiltzailea" required> <br>
-            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required>
+            <input type="text" id="erabiltzailea" name="erabiltzailea" style="width:100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; margin-bottom:0; box-sizing: border-box; border-bottom: 0px;" placeholder="Erabiltzailea" required> <br>
+            <input type="password" id="pasahitza" name="pasahitza" style="width:100%; border-top-left-radius: 0px; border-top-right-radius: 0px; margin-top: 0; box-sizing: border-box;"  placeholder="Pasahitza" required><br>
 
             <div class="botoiak">
-                <button type="button" class="btn-primary" id="login_submit">Sartu</button>
-                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button> <br>
+                <button type="button" class="btn-primary" style="width:100%" id="login_submit">Sartu</button> <br>
+                <button type="button" class="btn-secondary" style="width:100%" onclick="window.location.href='index.php'">Atzera</button> <br>
                 <button type="button" class="btn-link" onclick="window.location.href='register.php'">Ez duzu konturik? Erregistratu</button>
             </div>
         </form>
