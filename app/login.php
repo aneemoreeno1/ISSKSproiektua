@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="password" id="pasahitza" name="pasahitza" style="width:100%; border-top-left-radius: 0px; border-top-right-radius: 0px; margin-top: 0; box-sizing: border-box;"  placeholder="Pasahitza" required><br>
 
             <div class="botoiak">
-                <button type="submit" class="btn-primary" style="width:100%" id="login_submit">Sartu</button> <br>
+                <button type="button" class="btn-primary" style="width:100%" id="login_submit">Sartu</button> <br>
                 <button type="button" class="btn-secondary" style="width:100%" onclick="window.location.href='index.php'">Atzera</button> <br>
                 <button type="button" class="btn-link" onclick="window.location.href='register.php'">Ez duzu konturik? Erregistratu</button>
             </div>
