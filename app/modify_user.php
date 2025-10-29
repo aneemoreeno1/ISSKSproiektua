@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $pasahitza = $_POST['pasahitza']; 
     
+    // NO permitir cambiar el NAN (DNI) aquí. Mantenerlo inmutable.
     $sql = "UPDATE usuarios 
             SET nombre = '$izena', 
-                nan = '$nan', 
                 telefonoa = '$telefonoa', 
                 jaiotze_data = '$data', 
                 email = '$email', 
@@ -175,30 +175,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>Erabiltzailearen datuak aldatu</h1>
 
         <form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <label for="izena">Izena:</label>
-            <input type="text" name="izena" value="<?= $erabiltzailea['nombre'] ?>" required>
+            <label for="izena">Izena:</label><br>
+            <input type="text" name="izena" style="width: 100%;" value="<?= $erabiltzailea['nombre'] ?>" required>
 
-            <label for="nan">NAN:</label>
-            <input type="text" name="nan" value="<?= $erabiltzailea['nan'] ?>" required>
+            <label for="nan">NAN:</label><br>
+            <!-- Mostrar el NAN como texto (no editable) y añadir un input hidden para preservar el valor en el POST -->
+            <div style="width: 100%; padding:8px; background:#f5f5f5; border-radius:8px; box-sizing:border-box;"><?= htmlspecialchars($erabiltzailea['nan']) ?></div>
+            <input type="hidden" name="nan" value="<?= htmlspecialchars($erabiltzailea['nan']) ?>">
 
-            <label for="telefonoa">Telefonoa:</label>
-            <input type="text" name="telefonoa" value="<?= $erabiltzailea['telefonoa'] ?>" required>
+            <label for="telefonoa">Telefonoa:</label><br>
+            <input type="text" name="telefonoa" style="width: 100%;" value="<?= $erabiltzailea['telefonoa'] ?>" required>
 
-            <label for="data">Jaiotze data:</label>
-            <input type="text" name="data" value="<?= $erabiltzailea['jaiotze_data'] ?>" required>
+            <label for="data">Jaiotze data:</label><br>
+            <input type="text" name="data" style="width: 100%;" value="<?= $erabiltzailea['jaiotze_data'] ?>" required>
 
-            <label for="email">Email:</label>
-            <input type="text" name="email" value="<?= $erabiltzailea['email'] ?>" required>
+            <label for="email">Email:</label><br>
+            <input type="text" name="email" style="width: 100%;" value="<?= $erabiltzailea['email'] ?>" required>
 
-            <label for="pasahitza">Pasahitza:</label>
-            <input type="password" name="pasahitza" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+            <label for="pasahitza">Pasahitza:</label><br>
+            <input type="password" name="pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
 
-            <label for="errep_pasahitza">Errepikatu pasahitza:</label>
-            <input type="password" name="errep_pasahitza" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+            <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
+            <input type="password" name="errep_pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
 
             <div class="botoiak">
-                <button type="submit" id="user_modify_submit">Datuak gorde</button>
-                <button type="button" onclick="window.location.href='index.php'">Atzera</button>
+                <button type="submit" class="btn-primary" id="user_modify_submit">Datuak gorde</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
             </div>
         </form>
     </div>

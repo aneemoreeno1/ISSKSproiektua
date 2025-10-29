@@ -29,7 +29,7 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
             <tr>
                 <th style="text-align:center; width: 20px;">ID</th>
                 <th>Izena</th>
-                <th style="text-align:right; width: 20px;"> </th>
+                <th style="text-align:right; width: 90px;"> </th>
             </tr>
 
             <?php while ($row = mysqli_fetch_array($query)) { ?>
@@ -39,7 +39,7 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
                     <td>
                         <a style="text-align:right" href="show_user.php?user=<?= $row['id'] ?>">Ikusi</a>
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?>
-                            | <a href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a>
+                            | <a style="text-align:right" href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a>
                         <?php } ?>
                     </td>
                 </tr>

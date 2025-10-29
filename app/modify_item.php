@@ -154,29 +154,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
             <div class="form-grid">
                 <div>
-                    <label for="izena">Izena:</label>
+                    <label for="izena">Izena:</label><br>
                     <input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required>
                 </div>
 
                 <div>
-                    <label for="urtea">Urtea:</label>
+                    <label for="urtea">Urtea:</label><br>
                     <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>">
                 </div>
 
                 <div>
-                    <label for="egilea">Egilea:</label>
+                    <label for="egilea">Egilea:</label><br>
                     <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>">
                 </div>
 
                 <div>
-                    <label for="generoa">Generoa:</label>
+                    <label for="generoa">Generoa:</label><br>
                     <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>">
                 </div>
             </div>
 
             <div class="full-width" style="margin-top:12px;">
-                <label for="deskribapena">Deskribapena:</label>
-                <textarea id="deskribapena" name="deskribapena" rows="4" cols="50"><?php echo $pelikula['deskribapena']; ?></textarea>
+                <label for="deskribapena">Deskribapena:</label><br>
+                <textarea id="deskribapena" name="deskribapena" rows="4" style="width: 100%; font-family: 'Segoe UI';"><?php echo $pelikula['deskribapena']; ?></textarea>
             </div>
 
             <div class="botoiak" style="margin-top:18px;">
