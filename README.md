@@ -24,11 +24,15 @@
 ```bash
   $ git checkout entrega_1
   ```
-4. _docker_compose_ komandoa erabiliz, zerbitzua altzatu:
+4. Web irudia sortu
+```bash
+$ docker build -t="web"
+  ```
+5. _docker_compose_ komandoa erabiliz, zerbitzua altzatu:
  ```bash
   $ docker-compose up -d
   ```
-5. Datu-basea behar bezala importatzeko *phpMyAdmin* erbili:
+6. Datu-basea behar bezala importatzeko *phpMyAdmin* erbili:
    - Nabigatzailea ireki eta hurrengo helbidean sartu:
      - http://localhost:8890/
 
@@ -44,7 +48,7 @@
            ``
             'database.usuarios doesn't exist'
             ``
-  6. Web-sisteman satu:
+  7. Web-sisteman satu:
      - Dena ondo eginez gero, hurrengo helbidean sartuz, pelikulak gordetzeko web sistema irekiko da:
        - http://localhost:81/
        
