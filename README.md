@@ -26,7 +26,7 @@
   ```
 4. Web irudia sortu:
 ```bash
-$ docker build -t="web"
+$ docker build -t="web" .
   ```
 5. _docker_compose_ komandoa erabiliz, zerbitzua altzatu:
  ```bash
