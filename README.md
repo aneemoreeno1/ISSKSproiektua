@@ -42,7 +42,7 @@
        - **OSO GARRANTZITSUA!** Bestela, honako errorea agertuko zaigu :
 
            ``
-            '_database.usuarios doesn't exist_'
+            'database.usuarios doesn't exist'
             ``
   6. Web-sisteman satu:
      - Dena ondo eginez gero, hurrengo helbidean sartuz, pelikulak gordetzeko web sistema irekiko da:
