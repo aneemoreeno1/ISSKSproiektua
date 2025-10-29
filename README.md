@@ -24,7 +24,7 @@
 ```bash
   $ git checkout entrega_1
   ```
-4. Web irudia sortu
+4. Web irudia sortu:
 ```bash
 $ docker build -t="web"
   ```
