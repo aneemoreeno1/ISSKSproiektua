@@ -7,49 +7,67 @@ $username = "admin";
 $password = "test";
 $db = "database";
 
+$mezua = ""; // Erabiltzaileari mezuak erakusteko aldagaia
+$mezua_type = ""; // "success" edo "error"
+
 // Datu-basearekin konexioa establetzeko
 $conn = mysqli_connect($hostname, $username, $password, $db);
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+
+// Handle connection failure gracefully so we can show the message in the page
+$db_available = true;
+if (!$conn) {
+    error_log("Database connection failed (register.php): " . mysqli_connect_error());
+    $mezua = "Ezin izan da datu-basearekin konektatu";
+    $mezua_type = "error";
+    $db_available = false;
 }
 
-// Erabiltzailea ondo sortu bada, mezua erakusteko
-if (isset($_GET['created']) && $mezua === "") {
+// Jadanik ondo gorde dela jakinarazten duen GET parametroa badago, erakutsi mezua
+if (isset($_GET['created']) && $_GET['created'] == '1') {
     $mezua = "Ondo gorde da!";
+    $mezua_type = "success";
 }
-
-$mezua = ""; // Erabiltzaileari mezuak erakusteko aldagaia
 
 // Formularioa bidali bada, datuak prozesatzeko
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Formularioko datuak garbitu eta eskuratu
-    $izena = mysqli_real_escape_string($conn, trim($_POST['izena'] ?? ''));
-    $nan = mysqli_real_escape_string($conn, trim($_POST['nan'] ?? ''));
-    $telefonoa = mysqli_real_escape_string($conn, trim($_POST['telefonoa'] ?? ''));
-    $data = mysqli_real_escape_string($conn, trim($_POST['data'] ?? ''));
-    $email = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
-    $pasahitza = mysqli_real_escape_string($conn, trim($_POST['pasahitza'] ?? ''));
+    // If DB isn't available, avoid calling mysqli_* and show an error message
+    if (!$db_available) {
+        $mezua = "Ezin izan da datu-basearekin konektatu";
+        $mezua_type = "error";
+    } else {
+        // Formularioko datuak garbitu eta eskuratu (using DB escaping)
+        $izena = mysqli_real_escape_string($conn, trim($_POST['izena'] ?? ''));
+        $nan = mysqli_real_escape_string($conn, trim($_POST['nan'] ?? ''));
+        $telefonoa = mysqli_real_escape_string($conn, trim($_POST['telefonoa'] ?? ''));
+        $data = mysqli_real_escape_string($conn, trim($_POST['data'] ?? ''));
+        $email = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
+        $pasahitza = mysqli_real_escape_string($conn, trim($_POST['pasahitza'] ?? ''));
 
-    // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
-    if ($nan !== '') {
-        $chk_sql = "SELECT id FROM usuarios WHERE nan = '$nan' LIMIT 1";
-        $chk_res = mysqli_query($conn, $chk_sql);
-        if ($chk_res && mysqli_num_rows($chk_res) > 0) {
-            $mezua = "Jadanik badago erabiltzaile batekin NAN hori (" . htmlspecialchars($nan) . ").";
+        // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
+        if ($nan !== '') {
+            $chk_sql = "SELECT id FROM usuarios WHERE nan = '$nan' LIMIT 1";
+            $chk_res = mysqli_query($conn, $chk_sql);
+            if ($chk_res && mysqli_num_rows($chk_res) > 0) {
+                $mezua = "Jada badago erabiltzaile bat NAN horrekin (" . htmlspecialchars($nan) . ").";
+                $mezua_type = "error";
+            }
         }
-    }
 
-    // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
-    if ($mezua === "") {
-        $sql = "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) 
-                VALUES ('$izena', '$nan', '$telefonoa', '$data', '$email', '$pasahitza')";
-        
-        // Datuak ondo gorde badira, berbideraketa egin
-        if (mysqli_query($conn, $sql)) {
-            header('Location: register.php?created=1');
-            exit();
-        } else {
-            $mezua = "Arazo bat egon da: " . mysqli_error($conn);
+        // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
+        if ($mezua === "") {
+            $sql = "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) 
+                    VALUES ('$izena', '$nan', '$telefonoa', '$data', '$email', '$pasahitza')";
+            
+            // Datuak ondo gorde badira, berbideraketa egin
+            if (mysqli_query($conn, $sql)) {
+                // Use PRG pattern: redirect to self with created flag
+                header('Location: register.php?created=1');
+                exit();
+            } else {
+                $mezua = "Arazo bat egon da datu-basean.";
+                error_log("Register insert error: " . mysqli_error($conn));
+                $mezua_type = "error";
+            }
         }
     }
 }
@@ -187,12 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="wrapper">
         <h1>Erregistratu</h1>
 
-        <?php if ($mezua !== ""): ?>
-            <!-- Errore mezua erakusteko -->
-            <p style="text-align:center; font-weight:bold; font-size:1.2em; color:#7f0000;">
-                <?php echo $mezua; ?>
-            </p>
-        <?php endif; ?>
+        <!-- Mezuak erakusteko toki berezia: formaren barruan botoien gainean agertuko da -->
 
         <!-- Erregistro formularioa -->
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
@@ -211,6 +224,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required><br>
             
             <!-- Formularioaren botoiak -->
+            <?php if ($mezua !== ""): ?>
+                <p style="text-align:center; font-size: 0.7em; margin-bottom:10px; <?php echo ($mezua_type === 'success') ? 'color: #1a6f1a;' : 'color: #7f0000ff;'; ?>">
+                    <?php echo htmlspecialchars($mezua); ?>
+                </p>
+            <?php endif; ?>
+
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="register_submit" style="width:100%">Erregistratu</button>
                 <button type="button" class="btn-secondary" onclick="window.location.href='index.php'" style="width:100%">Atzera</button> <br>
