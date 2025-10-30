@@ -46,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // Datuak ondo gorde badira, berbideraketa egin
         if (mysqli_query($conn, $sql)) {
-            // Redirigir tras una inserción correcta para evitar envíos duplicados
             header('Location: register.php?created=1');
             exit();
         } else {
@@ -116,16 +115,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Data lortu, egiaztatu eta formatua normalizatu
             var dataField = document.register_form.data;
             var data = dataField.value;
-            
-            // Navegadoreak Date objektua ematen badu, YYYY-MM-DD formatura bihurtu            
-            if ((!data || data.indexOf('-') === -1) && dataField.valueAsDate) {
+
+            // Navegadoreak Date objektua ematen badu, YYYY-MM-DD formatura bihurtu gu Text erabiltzen ari gara
+            /*if ((!data || data.indexOf('-') === -1) && dataField.valueAsDate) {
                 var dObjNorm = dataField.valueAsDate;
                 var yyyyN = dObjNorm.getFullYear();
                 var mmN = ('0' + (dObjNorm.getMonth() + 1)).slice(-2);
                 var ddN = ('0' + dObjNorm.getDate()).slice(-2);
                 data = yyyyN + '-' + mmN + '-' + ddN;
                 dataField.value = data; // Eremuan formatu normalizatua gorde
-            }
+            }*/
             var dataZatiak = data.split("-");
             if (data.length != 10 || dataZatiak.length != 3) {
                 alert("Data formatua okerra. Adibidea: 2024-12-20");
@@ -165,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return false;
             }
 
-            // Pasahitza egiaztatu
+            // Pasahitza egiaztatu, ez dugu hash a egiten
             var pasahitza = document.register_form.pasahitza.value;
             var errep_pasahitza = document.register_form.errep_pasahitza.value;
             if (pasahitza != errep_pasahitza) {

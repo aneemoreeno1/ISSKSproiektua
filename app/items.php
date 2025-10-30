@@ -32,6 +32,7 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
                     <th>Izena</th>
                     <th>Ekintzak</th>
                 </tr>
+                <!-- Pelikula bakoitzeko datuak erakusteko -->
                 <?php while ($row = mysqli_fetch_array($query)): ?>
                     <tr>
                         <td><?= $row['id'] ?></td>

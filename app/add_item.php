@@ -1,5 +1,7 @@
 <?php
-// add_item.php - Pelikula berria gehitu
+
+//____________________________Pelikula berria gehitu_________________________________________________
+
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -10,7 +12,7 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-$mezua = ""; // Mezua erakusteko variablea
+$mezua = ""; // Mezua erakusteko textu hutsa (aldagaia)
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $izena = $_POST['izena'];
@@ -29,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="eu">
 <head>
@@ -38,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script>
 
         function bakarrikLetrak(testua) {
-            return /^[A-Za-zÑñ\s]+$/.test(testua);
+            return /^[A-Za-zÑñ\s]+$/.test(testua); 
         }
         function bakarrikZenbakiak(testua) {
             return /^[0-9]+$/.test(testua);
