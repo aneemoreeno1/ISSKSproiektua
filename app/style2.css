@@ -1,0 +1,178 @@
+/* ===== ESTILO OROKORRA ===== */
+body {
+    background-image: url(kortinak.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI';
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ===== OROKORRA ===== */
+.wrapper {
+    background-color: rgba(255, 255, 255, 0.9);
+    justify-items: left;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    width: auto;
+    max-width: 1000px;
+    color: #000000;
+}
+
+/* ===== IZENBURUAK ETA TESTUAK ===== */
+h1{
+    color: #000000;
+    font-size: 1.7rem;
+    font-weight: bold;
+    justify-self: left;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+h2{
+    color: #000000;
+    font-size: 1.3rem;
+    font-weight: bold;
+    justify-self: left;
+    margin-bottom: 15px;
+}
+
+h3{
+    color: #000000;
+    font-size: 1.1rem;
+    font-weight: bold;
+    justify-self: left;
+    margin-bottom: 10px;
+}
+p, label, a, th, td {
+    color: #000000;
+    font-size: 0.9rem;
+    justify-self: left;
+}
+
+
+
+
+/* ===== FORMULARIOAK ===== */
+form {
+    background-color: transparent; /* ya lo da el wrapper */
+    
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="tel"],
+form input[type="date"],
+form input[type="number"],
+form textarea {
+    width: auto;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #7f0000;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color:  #000000;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: #696969;
+}
+
+/* ===== BOTONAK OROKORRA ===== */
+input[type="submit"],
+button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    font-size: 0.9rem;
+    margin-top: 5px ;
+    margin-bottom: 5px;
+    border: 1px solid #7F0001;
+   
+}
+
+/* Botoi Nagusia */
+.btn-primary,
+input[type="submit"].btn-primary,
+button.btn-primary {
+    background-color: #7F0001;
+    border: 1px solid #7F0001;
+    color: white;
+    border: none;
+    width: auto;
+}
+.btn-primary:hover {
+    background-color: #5c0001;
+}
+
+/* Botoi Sekundarioa*/
+.btn-secondary,
+button.btn-secondary {
+    background-color: transparent;
+    color: #7F0001;
+    border: 1px solid #7F0001;
+    width: auto;
+}
+.btn-secondary:hover {
+    background-color: rgba(127,0,1,0.06);
+}
+
+/* Botoia Link */
+.btn-link,
+a.btn-link {
+    background: transparent;
+    border: none;
+    color: #7F0001;
+    padding: 10px 2px 5px 5px; 
+    font-weight: normal;
+    
+}
+.btn-link:hover,
+a.btn-link:hover {
+    text-decoration: underline;
+    color: #5c0001;
+}
+
+
+/* ===== TAULAK ===== */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px auto;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #5c000237;
+}
+
+th {
+    background-color: #7f00001b;
+    font-weight: bold;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+
