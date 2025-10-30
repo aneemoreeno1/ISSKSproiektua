@@ -41,6 +41,7 @@ $ docker build -t="web" .
      - Password: **test**
      
    - Datu-basea inportatu:
+     - _database_ datubasean sakatu (ezkerraldean dago)
      - _import_ atalean sakatu
      - Gure _entrega_1_ adarraren barruan dagoen *_database.sql_* fitxategia inportatu
        - **OSO GARRANTZITSUA!** Bestela, honako errorea agertuko zaigu :
