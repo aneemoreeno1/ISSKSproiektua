@@ -1,4 +1,5 @@
 <?php
+//Datu-basearekin konekxioa ezartzeko
 session_start();
 $hostname = "db";
 $username = "admin";
@@ -6,17 +7,19 @@ $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
+//Konekzioa ez bada ezarri, errorea bistaratu
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //Erabiltzailearen sarrrera-datuak eskuratu   
     $erabiltzailea = $_POST['erabiltzailea'];
     $pasahitza = $_POST['pasahitza'];
-
+    //Erabiltzailea eta pasahitza datu-basean bilatu
     $sql = "SELECT * FROM usuarios WHERE nombre='$erabiltzailea' AND pasahitza='$pasahitza'";
     $result = mysqli_query($conn, $sql);
-
+//Egiaztatu erabiltzailea existitzen den eta saioa hasi
     if ($result && mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
         $_SESSION['user_id'] = $row['id'];
@@ -24,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: index.php");
         exit;
     } else {
+        //errore kasuan, mezua erakutsi
         echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Sartutako erabiltzailea edo pasahitza ez da zuzena</p>";
     }
 }
