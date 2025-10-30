@@ -193,7 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="wrapper">
         <h1>Erabiltzailearen datuak aldatu</h1>
-
+        
+        <!-- Erabiltzailearen datuak aldatzeko formularioa -->
         <form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
             <label for="izena">Izena:</label><br>
             <input type="text" name="izena" style="width: 100%;" value="<?= $erabiltzailea['nombre'] ?>" required>
@@ -217,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
             <input type="password" name="errep_pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
-
+            
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="user_modify_submit">Datuak gorde</button>
                 <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
