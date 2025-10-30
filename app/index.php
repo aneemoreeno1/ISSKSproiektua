@@ -1,17 +1,22 @@
 <?php
+// Saioa hasi: erabiltzailearen datuak gordetzeko
 session_start();
 
-
+// Datu-basearekin konexioa egiteko konfigurazioa
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
+// Datu-basearen konexioa establetzeko
 $conn = mysqli_connect($hostname, $username, $password, $db);
+
+// Konexioak huts egiten badu,errorea erakutsi
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
+// Erabiltzaile guztien datuak datu-baseatik eskuratzeko  
 $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn));
 ?>
 
