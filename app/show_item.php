@@ -1,13 +1,17 @@
 <?php
+//Datu basearekin konexioa ezartzeko
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
-if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
+//Konekzioa ez bada ezarri, errorea bistaratu
 
+if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
+//GET parametro bidez, jasotako pelikularen IDa hartu
 $item_id = $_GET['item'];
+//Pelikula horren datuak datu-basean bilatu
 $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
 $emaitza = mysqli_query($conn, $sql);
 $pelikula = mysqli_fetch_array($emaitza);
