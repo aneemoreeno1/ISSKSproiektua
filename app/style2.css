@@ -63,7 +63,7 @@ p, label, a, th, td {
 
 /* ===== FORMULARIOAK ===== */
 form {
-    background-color: transparent; /* ya lo da el wrapper */
+    background-color: transparent;
     
     width: 100%;
     margin: 0 auto;
@@ -94,7 +94,7 @@ form textarea::placeholder {
     color: #696969;
 }
 
-/* ===== BOTONAK OROKORRA ===== */
+/* ===== BOTOIAK OROKORRA ===== */
 input[type="submit"],
 button {
     padding: 10px 15px;
@@ -122,7 +122,7 @@ button.btn-primary {
     background-color: #5c0001;
 }
 
-/* Botoi Sekundarioa*/
+/* Bigarren Mailako Botoia */
 .btn-secondary,
 button.btn-secondary {
     background-color: transparent;
