@@ -1,13 +1,14 @@
 <?php
 
 //____________________________Pelikula berria gehitu_________________________________________________
-
+//Datu basearekin konexioa ezartzeko
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
+//Konekzioa ez bada ezarri, errorea bistaratu
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
@@ -15,12 +16,13 @@ if ($conn->connect_error) {
 $mezua = ""; // Mezua erakusteko textu hutsa (aldagaia)
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //Formulariorako datuak eskuratu
     $izena = $_POST['izena'];
     $deskribapena = $_POST['deskribapena'];
     $urtea = $_POST['urtea'];
     $egilea = $_POST['egilea'];
     $generoa = $_POST['generoa'];
-
+    //Pelikula gehitu datu basera
     $sql = "INSERT INTO pelikulak (izena, deskribapena, urtea, egilea, generoa)
             VALUES ('$izena', '$deskribapena', '$urtea', '$egilea', '$generoa')";
     if (mysqli_query($conn, $sql)) {
