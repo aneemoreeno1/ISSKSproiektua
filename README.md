@@ -32,7 +32,7 @@ $ docker build -t web .
  ```bash
   $ docker-compose up -d
   ```
-6. Datu-basea behar bezala importatzeko *phpMyAdmin* erbili:
+6. Datu-basea behar bezala inportatzeko *phpMyAdmin* erbili:
    - Nabigatzailea ireki eta hurrengo helbidean sartu:
      - http://localhost:8890/
 
@@ -75,7 +75,7 @@ $ docker build -t web .
           - Pelikuen web sisteman sartu:
              - http://localhost:81/
                
-  8. Edukiontziak itzaili eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
+  8. Edukiontziak itzali eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
   ```bash
   $ docker-compose down
   ```
