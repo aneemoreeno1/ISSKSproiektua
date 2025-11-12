@@ -9,6 +9,7 @@ services:
         - db
       volumes:
         - ./app:/var/www/html/
+        - ./no-expose.ini:/usr/local/etc/php/conf.d/99-no-expose.ini
 
    db:
      image: mariadb:10.8.2
