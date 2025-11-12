@@ -1,16 +1,53 @@
 <?php
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => '',
+    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    'httponly' => true, 
+    'samesite' => 'Strict' // 'Strict' edo 'Lax' izan daiteke
+]);
+
+session_start();
+
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+if(!isset($_SESSION['user_id'])){
+    http_response_code(401);
+    echo "Errorea: saioa hasi behar duzu";
+    exit;
+}
+
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
-if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
+if(!$conn){
+    http_response_code(500);
+    error_log("DB connection error: " .mysqli_connect_error());
+    echo "Zerbitzari akatsa";
+    exit;
+}
+$user_id=(int) $_SESSION['user_id'];
 
-$user_id = $_GET['user'];
-$sql = "SELECT * FROM usuarios WHERE id = $user_id";
-$emaitza = mysqli_query($conn, $sql);
-$erabiltzailea = mysqli_fetch_array($emaitza);
+if ($stmt = $conn->prepare("SELECT id, nombre, nan, telefonoa, jaiotze_data, email FROM usuarios WHERE id = ? LIMIT 1")) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $erabiltzailea = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    error_log("DB prepare failed: " . $conn->error);
+    http_response_code(500);
+    echo "Zerbitzari akatsa.";
+    mysqli_close($conn);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
