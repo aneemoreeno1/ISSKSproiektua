@@ -158,8 +158,11 @@ table {
     margin: 20px auto;
     background-color: transparent;
     color: #fff;
-    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     overflow: hidden;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 td {
@@ -173,6 +176,8 @@ th {
     font-weight: bold;
     padding: 12px 15px;
     text-align: left;
+    border-radius: 0px;
 }
 
 
+/* Icon/button CSS removed — icons are now inserted as inline <img> elements per user request */

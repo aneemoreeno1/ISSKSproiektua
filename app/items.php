@@ -28,19 +28,21 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
         <?php if ($query && mysqli_num_rows($query) > 0): ?>
             <table>
                 <tr>
-                    <th>ID</th>
                     <th>Izena</th>
+                    <th>Urtea</th>
+                    <th>Generoa</th>
                     <th>Ekintzak</th>
                 </tr>
                 <!-- Pelikula bakoitzeko datuak erakusteko -->
                 <?php while ($row = mysqli_fetch_array($query)): ?>
                     <tr>
-                        <td><?= $row['id'] ?></td>
                         <td><?= $row['izena'] ?></td>
+                        <td><?= $row['urtea'] ?></td>
+                        <td><?= $row['generoa'] ?></td>
                         <td>
-                            <a href="show_item.php?item=<?= $row['id'] ?>">Ikusi</a> | 
-                            <a href="modify_item.php?item=<?= $row['id'] ?>">Editatu</a> | 
-                            <a href="delete_item.php?item=<?= $row['id'] ?>">Ezabatu</a>
+                            <a href="show_item.php?item=<?= $row['id'] ?>" title="Ikusi" aria-label="Ikusi"><img src="irudiak/view.svg" alt="Ikusi" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a> 
+                            <a href="modify_item.php?item=<?= $row['id'] ?>" title="Editatu" aria-label="Editatu"><img src="irudiak/edit.svg" alt="Editatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a> 
+                            <a href="delete_item.php?item=<?= $row['id'] ?>" title="Ezabatu" aria-label="Ezabatu" onclick="return confirm('Benetan ezabatu?');"><img src="irudiak/zakarrontzia.svg" alt="Ezabatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
