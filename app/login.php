@@ -14,18 +14,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $erabiltzailea = $_POST['erabiltzailea'];
     $pasahitza = $_POST['pasahitza'];
 
-    $sql = "SELECT * FROM usuarios WHERE nombre='$erabiltzailea' AND pasahitza='$pasahitza'";
-    $result = mysqli_query($conn, $sql);
+    // Use prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT id, nombre FROM usuarios WHERE nombre = ? AND pasahitza = ?");
+    $stmt->bind_param("ss", $erabiltzailea, $pasahitza);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($result && mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
+    if ($result && $result->num_rows == 1) {
+        $row = $result->fetch_assoc();
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_name'] = $row['nombre'];
+        $stmt->close();
         header("Location: index.php");
         exit;
     } else {
         echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Sartutako erabiltzailea edo pasahitza ez da zuzena</p>";
     }
+    $stmt->close();
 }
 ?>
 

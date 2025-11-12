@@ -12,10 +12,12 @@ if ($conn->connect_error) {
 
 // Formularioa bidali bada (ezabaketa baieztatu)
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
-    $item_id = $_POST['item_id'];
+    $item_id = intval($_POST['item_id']);
 
-    $sql = "DELETE FROM pelikulak WHERE id = $item_id";
-    mysqli_query($conn, $sql);
+    $stmt = $conn->prepare("DELETE FROM pelikulak WHERE id = ?");
+    $stmt->bind_param("i", $item_id);
+    $stmt->execute();
+    $stmt->close();
     
     header("Location: items.php");
     exit;
@@ -23,11 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
 
 // GET bidez item ID-a jaso bada (ezabaketa orria erakusteko)
 if (isset($_GET['item'])) {
-    $item_id = $_GET['item'];
+    $item_id = intval($_GET['item']);
 
-    $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-    $result = mysqli_query($conn, $sql);
-    $pelikula = mysqli_fetch_assoc($result);
+    $stmt = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
+    $stmt->bind_param("i", $item_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $pelikula = $result->fetch_assoc();
+    $stmt->close();
 }
 ?>
 

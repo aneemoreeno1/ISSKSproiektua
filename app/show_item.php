@@ -7,10 +7,13 @@ $db = "database";
 $conn = mysqli_connect($hostname, $username, $password, $db);
 if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
 
-$item_id = $_GET['item'];
-$sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-$emaitza = mysqli_query($conn, $sql);
-$pelikula = mysqli_fetch_array($emaitza);
+$item_id = intval($_GET['item']);
+$stmt = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
+$stmt->bind_param("i", $item_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$pelikula = $result->fetch_array();
+$stmt->close();
 ?>
 
 <!DOCTYPE html>

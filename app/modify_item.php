@@ -12,17 +12,20 @@ if ($conn->connect_error) {
 }
 
 // ID lortu GET bidez
-$item_id = $_GET['item'];
+$item_id = intval($_GET['item']);
 
-// Pelikularen datuak kargatu
-$sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-$emaitza = mysqli_query($conn, $sql);
+// Pelikularen datuak kargatu using prepared statement
+$stmt = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
+$stmt->bind_param("i", $item_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($emaitza->num_rows > 0) {
-    $pelikula = mysqli_fetch_array($emaitza);
+if ($result->num_rows > 0) {
+    $pelikula = $result->fetch_array();
 } else {
     die("Pelikula ez da existitzen.");
 }
+$stmt->close();
 
 // Formularioa bidali bada
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -32,26 +35,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $egilea = $_POST['egilea'];
     $generoa = $_POST['generoa'];
     
-    // Datuak eguneratu
-    $sql = "UPDATE pelikulak 
-            SET izena = '$izena', 
-                deskribapena = '$deskribapena', 
-                urtea = '$urtea', 
-                egilea = '$egilea', 
-                generoa = '$generoa'
-            WHERE id = $item_id";
+    // Datuak eguneratu using prepared statement
+    $stmt = $conn->prepare("UPDATE pelikulak SET izena = ?, deskribapena = ?, urtea = ?, egilea = ?, generoa = ? WHERE id = ?");
+    $stmt->bind_param("ssissi", $izena, $deskribapena, $urtea, $egilea, $generoa, $item_id);
     
-    $emaitza = mysqli_query($conn, $sql);
+    $emaitza = $stmt->execute();
     
     if ($emaitza) {
         echo "<script>alert('Datuak eguneratuak!');</script>";
         // Datuak berriro kargatu
-        $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-        $emaitza = mysqli_query($conn, $sql);
-        $pelikula = mysqli_fetch_array($emaitza);
+        $stmt_reload = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
+        $stmt_reload->bind_param("i", $item_id);
+        $stmt_reload->execute();
+        $result = $stmt_reload->get_result();
+        $pelikula = $result->fetch_array();
+        $stmt_reload->close();
     } else {
-        echo "Errorea: " . mysqli_error($conn);
+        echo "Errorea: " . $stmt->error;
     }
+    $stmt->close();
 }
 ?>
 

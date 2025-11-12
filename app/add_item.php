@@ -21,13 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $egilea = $_POST['egilea'];
     $generoa = $_POST['generoa'];
 
-    $sql = "INSERT INTO pelikulak (izena, deskribapena, urtea, egilea, generoa)
-            VALUES ('$izena', '$deskribapena', '$urtea', '$egilea', '$generoa')";
-    if (mysqli_query($conn, $sql)) {
+    // Use prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("INSERT INTO pelikulak (izena, deskribapena, urtea, egilea, generoa) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssiss", $izena, $deskribapena, $urtea, $egilea, $generoa);
+    
+    if ($stmt->execute()) {
         $mezua = "Pelikula ondo gehitu da!";
     } else {
-        $mezua = "Arazo bat egon da: " . mysqli_error($conn);
+        $mezua = "Arazo bat egon da: " . $stmt->error;
     }
+    $stmt->close();
 }
 ?>
 

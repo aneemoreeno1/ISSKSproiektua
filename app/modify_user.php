@@ -23,18 +23,21 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Erabiltzailearen IDa lortu
-$user_id = $_SESSION['user_id'];
+$user_id = intval($_SESSION['user_id']);
 
-// Datu-baseatik erabiltzailearen datuak kargatu 
-$sql = "SELECT * FROM usuarios WHERE id = $user_id";
-$emaitza = mysqli_query($conn, $sql);
+// Datu-baseatik erabiltzailearen datuak kargatu using prepared statement
+$stmt = $conn->prepare("SELECT * FROM usuarios WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Erabiltzailea existitzen dela egiaztatu
-if ($emaitza->num_rows > 0) {
-    $erabiltzailea = mysqli_fetch_array($emaitza);
+if ($result->num_rows > 0) {
+    $erabiltzailea = $result->fetch_array();
 } else {
     die("Erabiltzailea ez da existitzen. Lehenengo erabiltzailea sortu.");
 }
+$stmt->close();
 
 // Formularioa bidali bada, datuak prozesatu
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -46,27 +49,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $pasahitza = $_POST['pasahitza']; 
     
-    // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta
-    $sql = "UPDATE usuarios 
-            SET nombre = '$izena', 
-                telefonoa = '$telefonoa', 
-                jaiotze_data = '$data', 
-                email = '$email', 
-                pasahitza = '$pasahitza'
-            WHERE id = $user_id";
+    // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta using prepared statement
+    $stmt = $conn->prepare("UPDATE usuarios SET nombre = ?, telefonoa = ?, jaiotze_data = ?, email = ?, pasahitza = ? WHERE id = ?");
+    $stmt->bind_param("sssssi", $izena, $telefonoa, $data, $email, $pasahitza, $user_id);
     
     // Kontsulta exekutatu eta emaitza egiaztatu
-    $emaitza = mysqli_query($conn, $sql);
+    $emaitza = $stmt->execute();
     
     if ($emaitza) {
         echo "<script>alert('Datuak eguneratuak!');</script>";
         // Datuak berriro kargatu formularioan erakusteko
-        $sql = "SELECT * FROM usuarios WHERE id = $user_id";
-        $emaitza = mysqli_query($conn, $sql);
-        $erabiltzailea = mysqli_fetch_array($emaitza);
+        $stmt_reload = $conn->prepare("SELECT * FROM usuarios WHERE id = ?");
+        $stmt_reload->bind_param("i", $user_id);
+        $stmt_reload->execute();
+        $result = $stmt_reload->get_result();
+        $erabiltzailea = $result->fetch_array();
+        $stmt_reload->close();
     } else {
-        echo "Errorea: " . mysqli_error($conn);
+        echo "Errorea: " . $stmt->error;
     }
+    $stmt->close();
 }
 ?>
 
@@ -205,19 +207,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="hidden" name="nan" value="<?= htmlspecialchars($erabiltzailea['nan']) ?>">
 
             <label for="telefonoa">Telefonoa:</label><br>
-            <input type="text" name="telefonoa" style="width: 100%;" value="<?= $erabiltzailea['telefonoa'] ?>" required>
+            <input type="text" name="telefonoa" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['telefonoa']) ?>" required>
 
             <label for="data">Jaiotze data:</label><br>
-            <input type="text" name="data" style="width: 100%;" value="<?= $erabiltzailea['jaiotze_data'] ?>" required>
+            <input type="text" name="data" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['jaiotze_data']) ?>" required>
 
             <label for="email">Email:</label><br>
-            <input type="text" name="email" style="width: 100%;" value="<?= $erabiltzailea['email'] ?>" required>
+            <input type="text" name="email" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['email']) ?>" required>
 
             <label for="pasahitza">Pasahitza:</label><br>
-            <input type="password" name="pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+            <input type="password" name="pasahitza" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['pasahitza']) ?>" required>
 
             <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
-            <input type="password" name="errep_pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+            <input type="password" name="errep_pasahitza" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['pasahitza']) ?>" required>
             
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="user_modify_submit">Datuak gorde</button>
