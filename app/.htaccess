@@ -1,24 +1,31 @@
 # Security Headers (only if mod_headers is available)
 <IfModule mod_headers.c>
-    # Apply security headers to ALL files
+    # Comprehensive security headers for ALL files
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     
-    # Feature-Policy for older browsers
-    Header always set Feature-Policy "geolocation 'self'; microphone 'none'; camera 'none'"
+    # Cross-Origin headers for Spectre protection
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Cross-Origin-Embedder-Policy "require-corp"
+    Header always set Cross-Origin-Resource-Policy "same-origin"
     
-    # Content Security Policy for all files
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
+    # Permissions Policy (replaces Feature-Policy)
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self), sync-xhr=()"
     
-    # Cache control for static files
-    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico)$">
+    # Comprehensive Content Security Policy without unsafe-inline
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'self'; frame-src 'self'; worker-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; manifest-src 'self'"
+    
+    # Cache control for static files with security headers
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|otf)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
         Header always set X-Content-Type-Options "nosniff"
+        Header always set Cross-Origin-Resource-Policy "cross-origin"
     </FilesMatch>
     
-    # Cache control for PHP files
+    # Cache control and security for PHP files
     <FilesMatch "\.(php)$">
         Header set Cache-Control "no-cache, no-store, must-revalidate, private"
         Header set Pragma "no-cache"
