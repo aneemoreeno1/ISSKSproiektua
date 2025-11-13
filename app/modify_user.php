@@ -4,20 +4,19 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\'; font-src \'self\'; connect-src \'self\'; frame-ancestors \'self\';');
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';");
 
-// modify_user.php - Erabiltzailearen datuak aldatzeko orria
+if (!isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] == '81') {
+    $_SERVER['HTTPS'] = 'on'; 
+}
 
-session_set_cookie_params( [
-   'lifetime' => 0,        
-   'path' => '/',
-   'secure' => true,       
-   'httponly' => true,     
-   'samesite' => 'Strict'
+session_start([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => true,    
+    'httponly' => true,  
+    'samesite' => 'Strict' 
 ]);
-
-//Saioa hasi
-session_start();
 
 if (!isset($_SESSION['initiated'])) {
     session_regenerate_id(true);
@@ -29,6 +28,12 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
     session_unset();
     session_destroy();
     header("Location: login.php?timeout=1");
+    exit;
+}
+$_SESSION['last_activity'] = time();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
     exit;
 }
 

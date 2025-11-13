@@ -4,22 +4,22 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\'; font-src \'self\'; connect-src \'self\'; frame-ancestors \'self\';');
-
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => '',
-    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-    'httponly' => true, 
-    'samesite' => 'Strict' // 'Strict' edo 'Lax' izan daiteke
-]);
-
-session_start();
-
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 header("Expires: 0");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';");
+
+if (!isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] == '81') {
+    $_SERVER['HTTPS'] = 'on'; 
+}
+
+session_start([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => true,      
+    'httponly' => true,    
+    'samesite' => 'Strict' 
+]);
 
 if(!isset($_SESSION['user_id'])){
     http_response_code(401);
