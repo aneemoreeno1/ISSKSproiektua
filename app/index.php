@@ -1,12 +1,20 @@
 <?php
-session_set_cookie_params( [
-   'lifetime' => 0,        
+// Security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+
+// Secure session configuration
+session_set_cookie_params([
+   'lifetime' => 0,
    'path' => '/',
-   'secure' => true,       
-   'httponly' => true,     
+   'secure' => true,
+   'httponly' => true,
    'samesite' => 'Strict'
 ]);
-// Saioa hasi: erabiltzailearen datuak gordetzeko
 session_start();
 
 if (!isset($_SESSION['initiated'])) {
@@ -14,26 +22,31 @@ if (!isset($_SESSION['initiated'])) {
     $_SESSION['initiated'] = true;
 }
 
-$timeout = 60; // 1min
+// Session timeout - 15 minutes
+$timeout = 900;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
     session_unset();
     session_destroy();
 }
 $_SESSION['last_activity'] = time();
 
-// Datu-basearekin konexioa egiteko konfigurazioa
+// Safe output function
+function safe_output($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+// Database connection
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
-// Datu-basearen konexioa sortzeko
 $conn = mysqli_connect($hostname, $username, $password, $db);
-
-// Konexioak huts egiten badu, errorea erakutsi
 if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+    error_log("Database connection failed: " . $conn->connect_error);
+    die("Database connection error");
 }
+mysqli_set_charset($conn, 'utf8');
 
 // Erabiltzaile guztien datuak datu-baseatik eskuratzeko  
 $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn));
@@ -58,12 +71,12 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
 
             <?php while ($row = mysqli_fetch_array($query)) { ?>
                 <tr>
-                    <td style="text-align:center; width: 20px;"><?= $row['id'] ?></td>
-                    <td><?= $row['nombre'] ?></td>
+                    <td style="text-align:center; width: 20px;"><?= safe_output($row['id']) ?></td>
+                    <td><?= safe_output($row['nombre']) ?></td>
                     <td>
-                        <a href="show_user.php?user=<?= $row['id'] ?>" title="Ikusi" aria-label="Ikusi"><img src="irudiak/view.svg" alt="Ikusi" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
+                        <a href="show_user.php?user=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi"><img src="irudiak/view.svg" alt="Ikusi" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?> <!-- erabiltzailearen saioa irekita badago orduan erabiltzaileak bere datuak editatu dezake horregatik sesion-->
-                        <a href="modify_user.php?user=<?= $row['id'] ?>" title="Editatu" aria-label="Editatu"><img src="irudiak/edit.svg" alt="Editatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
+                        <a href="modify_user.php?user=<?= urlencode($row['id']) ?>" title="Editatu" aria-label="Editatu"><img src="irudiak/edit.svg" alt="Editatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
                         <?php } ?>
                     </td>
                 </tr>

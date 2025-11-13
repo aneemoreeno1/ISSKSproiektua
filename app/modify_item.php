@@ -1,6 +1,50 @@
 <?php
 // modify_item.php - Pelikularen datuak aldatu
 
+// Security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+
+// Secure session configuration
+session_set_cookie_params([
+   'lifetime' => 0,
+   'path' => '/',
+   'secure' => true,
+   'httponly' => true,
+   'samesite' => 'Strict'
+]);
+session_start();
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+// Security functions
+function safe_output($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+function generate_csrf_token() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verify_csrf_token($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
+function validate_year($year) {
+    $current_year = date('Y');
+    return is_numeric($year) && $year >= 1888 && $year <= ($current_year + 5);
+}
+
+// Database connection
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -8,11 +52,16 @@ $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
 if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+    error_log("Database connection failed: " . $conn->connect_error);
+    die("Database connection error");
 }
+mysqli_set_charset($conn, 'utf8');
 
-// ID lortu GET bidez
-$item_id = intval($_GET['item']);
+// ID lortu GET bidez with validation
+$item_id = filter_var($_GET['item'] ?? 0, FILTER_VALIDATE_INT);
+if (!$item_id) {
+    die("ID baliogabea.");
+}
 
 // Pelikularen datuak kargatu using prepared statement
 $stmt = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
@@ -27,33 +76,49 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 
+$success_message = "";
+$error_message = "";
+
 // Formularioa bidali bada
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $izena = $_POST['izena'];
-    $deskribapena = $_POST['deskribapena'];
-    $urtea = $_POST['urtea'];
-    $egilea = $_POST['egilea'];
-    $generoa = $_POST['generoa'];
-    
-    // Datuak eguneratu using prepared statement
-    $stmt = $conn->prepare("UPDATE pelikulak SET izena = ?, deskribapena = ?, urtea = ?, egilea = ?, generoa = ? WHERE id = ?");
-    $stmt->bind_param("ssissi", $izena, $deskribapena, $urtea, $egilea, $generoa, $item_id);
-    
-    $emaitza = $stmt->execute();
-    
-    if ($emaitza) {
-        echo "<script>alert('Datuak eguneratuak!');</script>";
-        // Datuak berriro kargatu
-        $stmt_reload = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
-        $stmt_reload->bind_param("i", $item_id);
-        $stmt_reload->execute();
-        $result = $stmt_reload->get_result();
-        $pelikula = $result->fetch_array();
-        $stmt_reload->close();
+    // Verify CSRF token
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        $error_message = "Segurtasun errorea. Mesedez, saiatu berriro.";
     } else {
-        echo "Errorea: " . $stmt->error;
+        $izena = trim(htmlspecialchars($_POST['izena'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $deskribapena = trim(htmlspecialchars($_POST['deskribapena'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $urtea = filter_var($_POST['urtea'] ?? '', FILTER_VALIDATE_INT);
+        $egilea = trim(htmlspecialchars($_POST['egilea'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $generoa = trim(htmlspecialchars($_POST['generoa'] ?? '', ENT_QUOTES, 'UTF-8'));
+        
+        // Server-side validation
+        if (empty($izena) || strlen($izena) > 100) {
+            $error_message = "Izen baliogabea.";
+        } elseif (strlen($deskribapena) > 500) {
+            $error_message = "Deskribapena luzeegia da.";
+        } elseif ($urtea && !validate_year($urtea)) {
+            $error_message = "Urte baliogabea.";
+        } else {
+            // Datuak eguneratu using prepared statement
+            $stmt = $conn->prepare("UPDATE pelikulak SET izena = ?, deskribapena = ?, urtea = ?, egilea = ?, generoa = ? WHERE id = ?");
+            $stmt->bind_param("ssissi", $izena, $deskribapena, $urtea, $egilea, $generoa, $item_id);
+            
+            if ($stmt->execute() && $stmt->affected_rows > 0) {
+                $success_message = "Datuak eguneratuak!";
+                // Datuak berriro kargatu
+                $stmt_reload = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
+                $stmt_reload->bind_param("i", $item_id);
+                $stmt_reload->execute();
+                $result = $stmt_reload->get_result();
+                $pelikula = $result->fetch_array();
+                $stmt_reload->close();
+            } else {
+                $error_message = "Arazo bat egon da datuak eguneratzean.";
+                error_log("Modify item error: " . $stmt->error);
+            }
+            $stmt->close();
+        }
     }
-    $stmt->close();
 }
 ?>
 
@@ -152,33 +217,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="wrapper">
         <h1>Pelikularen datuak aldatu</h1>
+        
+        <?php if ($success_message): ?>
+            <p style="color:#66ff66; text-align:center; margin-bottom:15px;"><?= safe_output($success_message) ?></p>
+        <?php endif; ?>
+        <?php if ($error_message): ?>
+            <p style="color:#ff6666; text-align:center; margin-bottom:15px;"><?= safe_output($error_message) ?></p>
+        <?php endif; ?>
 
         <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
             <div class="form-grid">
                 <div>
                     <label for="izena">Izena:</label><br>
-                    <input type="text" id="izena" name="izena" value="<?php echo $pelikula['izena']; ?>" required>
+                    <input type="text" id="izena" name="izena" value="<?php echo safe_output($pelikula['izena']); ?>" required maxlength="100">
                 </div>
 
                 <div>
                     <label for="urtea">Urtea:</label><br>
-                    <input type="number" id="urtea" name="urtea" value="<?php echo $pelikula['urtea']; ?>">
+                    <input type="number" id="urtea" name="urtea" value="<?php echo safe_output($pelikula['urtea']); ?>" min="1888" max="<?php echo date('Y') + 5; ?>">
                 </div>
 
                 <div>
                     <label for="egilea">Egilea:</label><br>
-                    <input type="text" id="egilea" name="egilea" value="<?php echo $pelikula['egilea']; ?>">
+                    <input type="text" id="egilea" name="egilea" value="<?php echo safe_output($pelikula['egilea']); ?>" maxlength="100">
                 </div>
 
                 <div>
                     <label for="generoa">Generoa:</label><br>
-                    <input type="text" id="generoa" name="generoa" value="<?php echo $pelikula['generoa']; ?>">
+                    <input type="text" id="generoa" name="generoa" value="<?php echo safe_output($pelikula['generoa']); ?>" maxlength="50">
                 </div>
             </div>
 
             <div class="full-width" style="margin-top:12px;">
                 <label for="deskribapena">Deskribapena:</label><br>
-                <textarea id="deskribapena" name="deskribapena" rows="4" style="width: 100%; font-family: 'Segoe UI';"><?php echo $pelikula['deskribapena']; ?></textarea>
+                <textarea id="deskribapena" name="deskribapena" rows="4" style="width: 100%; font-family: 'Segoe UI';" maxlength="500"><?php echo safe_output($pelikula['deskribapena']); ?></textarea>
             </div>
 
             <div class="botoiak" style="margin-top:18px;">

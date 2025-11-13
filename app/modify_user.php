@@ -1,15 +1,21 @@
 <?php
 // modify_user.php - Erabiltzailearen datuak aldatzeko orria
 
-session_set_cookie_params( [
-   'lifetime' => 0,        
+// Security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+
+// Secure session configuration
+session_set_cookie_params([
+   'lifetime' => 0,
    'path' => '/',
-   'secure' => true,       
-   'httponly' => true,     
+   'secure' => true,
+   'httponly' => true,
    'samesite' => 'Strict'
 ]);
-
-//Saioa hasi
 session_start();
 
 if (!isset($_SESSION['initiated'])) {
@@ -17,25 +23,52 @@ if (!isset($_SESSION['initiated'])) {
     $_SESSION['initiated'] = true;
 }
 
-$timeout = 60;
+// Session timeout
+$timeout = 900;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
     session_unset();
     session_destroy();
     header("Location: login.php?timeout=1");
     exit;
 }
+$_SESSION['last_activity'] = time();
 
-// Datu-basearekin konexioa egiteko konfigurazioa
+// Security functions
+function safe_output($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+function generate_csrf_token() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verify_csrf_token($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
+function validate_email($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+function validate_phone($phone) {
+    return preg_match('/^[0-9]{9}$/', $phone);
+}
+
+// Database connection
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
-// Datu-basearekin konexioa establetzeko
 $conn = mysqli_connect($hostname, $username, $password, $db);
 if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+    error_log("Database connection failed: " . $conn->connect_error);
+    die("Database connection error");
 }
+mysqli_set_charset($conn, 'utf8');
 
 // Erabiltzailea saioa hasita dagoen egiaztatu
 if (!isset($_SESSION['user_id'])) {
@@ -60,42 +93,58 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 
+$success_message = "";
+$error_message = "";
+
 // Formularioa bidali bada, datuak prozesatu
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Formulariotik datuak eskuratu
-    $izena = $_POST['izena'];
-    $nan = $_POST['nan'];
-    $telefonoa = $_POST['telefonoa'];
-    $data = $_POST['data'];
-    $email = $_POST['email'];
-    $pasahitza = $_POST['pasahitza']; 
-    
-    // Hash the password before storing
-    $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
-    
-    // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta using prepared statement
-    $stmt = $conn->prepare("UPDATE usuarios SET nombre = ?, telefonoa = ?, jaiotze_data = ?, email = ?, pasahitza = ? WHERE id = ?");
-    $stmt->bind_param("sssssi", $izena, $telefonoa, $data, $email, $hashed_password, $user_id);
-    
-    // Kontsulta exekutatu eta emaitza egiaztatu
-    $emaitza = $stmt->execute();
-    
-    // Kontsulta exekutatu eta emaitza egiaztatu
-    $emaitza = $stmt->execute();
-    
-    if ($emaitza) {
-        echo "<script>alert('Datuak eguneratuak!');</script>";
-        // Datuak berriro kargatu formularioan erakusteko
-        $stmt_reload = $conn->prepare("SELECT * FROM usuarios WHERE id = ?");
-        $stmt_reload->bind_param("i", $user_id);
-        $stmt_reload->execute();
-        $result = $stmt_reload->get_result();
-        $erabiltzailea = $result->fetch_array();
-        $stmt_reload->close();
+    // Verify CSRF token
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        $error_message = "Segurtasun errorea. Mesedez, saiatu berriro.";
     } else {
-        echo "Errorea: " . $stmt->error;
+        // Formulariotik datuak eskuratu
+        $izena = sanitize_input($_POST['izena'] ?? '');
+        $nan = sanitize_input($_POST['nan'] ?? '');
+        $telefonoa = sanitize_input($_POST['telefonoa'] ?? '');
+        $data = sanitize_input($_POST['data'] ?? '');
+        $email = sanitize_input($_POST['email'] ?? '');
+        $pasahitza = $_POST['pasahitza'] ?? '';
+        
+        // Server-side validation
+        if (empty($izena) || !preg_match('/^[A-Za-zÑñ\s]{1,50}$/', $izena)) {
+            $error_message = "Izen baliogabea.";
+        } elseif (!validate_phone($telefonoa)) {
+            $error_message = "Telefono zenbaki baliogabea.";
+        } elseif (!validate_email($email)) {
+            $error_message = "Email helbide baliogabea.";
+        } elseif (strlen($pasahitza) < 8 || !preg_match('/[0-9]/', $pasahitza) || !preg_match('/[!@#$%^&*()_+\-=\[\]{};\':"\\|,.<>\/?]/', $pasahitza)) {
+            $error_message = "Pasahitza ez da segurua. Gutxienez 8 karaktere, zenbaki bat eta karaktere berezi bat izan behar ditu.";
+        } else {
+            // Hash the password before storing
+            $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
+            
+            // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta using prepared statement
+            $stmt = $conn->prepare("UPDATE usuarios SET nombre = ?, telefonoa = ?, jaiotze_data = ?, email = ?, pasahitza = ? WHERE id = ?");
+            $stmt->bind_param("sssssi", $izena, $telefonoa, $data, $email, $hashed_password, $user_id);
+            
+            if ($stmt->execute() && $stmt->affected_rows > 0) {
+                $success_message = "Datuak eguneratuak!";
+                // Update session data
+                $_SESSION['user_name'] = $izena;
+                // Datuak berriro kargatu formularioan erakusteko
+                $stmt_reload = $conn->prepare("SELECT * FROM usuarios WHERE id = ?");
+                $stmt_reload->bind_param("i", $user_id);
+                $stmt_reload->execute();
+                $result = $stmt_reload->get_result();
+                $erabiltzailea = $result->fetch_array();
+                $stmt_reload->close();
+            } else {
+                $error_message = "Arazo bat egon da datuak eguneratzean.";
+                error_log("Modify user error: " . $stmt->error);
+            }
+            $stmt->close();
+        }
     }
-    $stmt->close();
 }
 ?>
 
@@ -223,30 +272,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="wrapper">
         <h1>Erabiltzailearen datuak aldatu</h1>
         
+        <?php if ($success_message): ?>
+            <p style="color:#66ff66; text-align:center; margin-bottom:15px;"><?= safe_output($success_message) ?></p>
+        <?php endif; ?>
+        <?php if ($error_message): ?>
+            <p style="color:#ff6666; text-align:center; margin-bottom:15px;"><?= safe_output($error_message) ?></p>
+        <?php endif; ?>
+        
         <!-- Erabiltzailearen datuak aldatzeko formularioa -->
         <form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
+            <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
             <label for="izena">Izena:</label><br>
-            <input type="text" name="izena" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['nombre']) ?>" required>
+            <input type="text" name="izena" style="width: 100%;" value="<?= safe_output($erabiltzailea['nombre']) ?>" required maxlength="50">
 
             <label for="nan">NAN:</label><br>
             <!-- Mostrar el NAN como texto (no editable) y añadir un input hidden para preservar el valor en el POST -->
-            <div style="width: 100%; padding:8px; background:#f5f5f5; border-radius:8px; box-sizing:border-box;"><?= htmlspecialchars($erabiltzailea['nan']) ?></div>
-            <input type="hidden" name="nan" value="<?= htmlspecialchars($erabiltzailea['nan']) ?>">
+            <div style="width: 100%; padding:8px; background:#f5f5f5; border-radius:8px; box-sizing:border-box;"><?= safe_output($erabiltzailea['nan']) ?></div>
+            <input type="hidden" name="nan" value="<?= safe_output($erabiltzailea['nan']) ?>">
 
             <label for="telefonoa">Telefonoa:</label><br>
-            <input type="text" name="telefonoa" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['telefonoa']) ?>" required>
+            <input type="tel" name="telefonoa" style="width: 100%;" value="<?= safe_output($erabiltzailea['telefonoa']) ?>" required maxlength="9" pattern="[0-9]{9}">
 
             <label for="data">Jaiotze data:</label><br>
-            <input type="text" name="data" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['jaiotze_data']) ?>" required>
+            <input type="text" name="data" style="width: 100%;" value="<?= safe_output($erabiltzailea['jaiotze_data']) ?>" required maxlength="10" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}">
 
             <label for="email">Email:</label><br>
-            <input type="text" name="email" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['email']) ?>" required>
+            <input type="email" name="email" style="width: 100%;" value="<?= safe_output($erabiltzailea['email']) ?>" required maxlength="100">
 
             <label for="pasahitza">Pasahitza berria:</label><br>
-            <input type="password" name="pasahitza" style="width: 100%;" placeholder="Sartu pasahitza berria" required>
+            <input type="password" name="pasahitza" style="width: 100%;" placeholder="Sartu pasahitza berria" required maxlength="255">
 
             <label for="errep_pasahitza">Errepikatu pasahitza berria:</label><br>
-            <input type="password" name="errep_pasahitza" style="width: 100%;" placeholder="Errepikatu pasahitza berria" required>
+            <input type="password" name="errep_pasahitza" style="width: 100%;" placeholder="Errepikatu pasahitza berria" required maxlength="255">
             
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="user_modify_submit">Datuak gorde</button>

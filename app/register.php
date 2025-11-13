@@ -1,24 +1,113 @@
 <?php
 // register.php - Erabiltzaile berria gehitu
 
-// Datu-basearen konexiorako konfigurazioa
+// Security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+
+// Secure session configuration
+session_set_cookie_params([
+   'lifetime' => 0,
+   'path' => '/',
+   'secure' => true,
+   'httponly' => true,
+   'samesite' => 'Strict'
+]);
+session_start();
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+// Security functions
+function safe_output($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+function generate_csrf_token() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verify_csrf_token($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
+function check_rate_limit($action, $max_attempts = 3, $time_window = 300) {
+    $client_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $key = $action . '_' . $client_ip;
+    
+    if (!isset($_SESSION['rate_limit'])) {
+        $_SESSION['rate_limit'] = [];
+    }
+    
+    $now = time();
+    
+    foreach ($_SESSION['rate_limit'] as $k => $v) {
+        if ($v['time'] < ($now - $time_window)) {
+            unset($_SESSION['rate_limit'][$k]);
+        }
+    }
+    
+    if (!isset($_SESSION['rate_limit'][$key])) {
+        $_SESSION['rate_limit'][$key] = ['count' => 0, 'time' => $now];
+    }
+    
+    if ($_SESSION['rate_limit'][$key]['count'] >= $max_attempts) {
+        return false;
+    }
+    
+    $_SESSION['rate_limit'][$key]['count']++;
+    $_SESSION['rate_limit'][$key]['time'] = $now;
+        
+    return true;
+}
+
+function validate_email($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+function validate_nan($nan) {
+    if (!preg_match('/^[0-9]{8}-[A-Za-z]$/', $nan)) {
+        return false;
+    }
+    
+    $numbers = substr($nan, 0, 8);
+    $letter = strtoupper(substr($nan, 9, 1));
+    $valid_letters = "TRWAGMYFPDXBNJZSQVHLCKET";
+    $expected_letter = $valid_letters[intval($numbers) % 23];
+    
+    return $letter === $expected_letter;
+}
+
+function validate_phone($phone) {
+    return preg_match('/^[0-9]{9}$/', $phone);
+}
+
+$mezua = ""; // Erabiltzaileari mezuak erakusteko aldagaia
+$mezua_type = ""; // "success" edo "error"
+
+// Database connection
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
-$mezua = ""; // Erabiltzaileari mezuak erakusteko aldagaia
-$mezua_type = ""; // "success" edo "error"
-
-// Datu-basearekin konexioa establetzeko
 $conn = mysqli_connect($hostname, $username, $password, $db);
-
 $db_available = true;
 if (!$conn) {
     error_log("Database connection failed (register.php): " . mysqli_connect_error());
     $mezua = "Ezin izan da datu-basearekin konektatu";
     $mezua_type = "error";
     $db_available = false;
+} else {
+    mysqli_set_charset($conn, 'utf8');
 }
 
 // Jadanik ondo gorde dela jakinarazten duen GET parametroa badago, erakutsi mezua
@@ -29,50 +118,67 @@ if (isset($_GET['created']) && $_GET['created'] == '1') {
 
 // Formularioa bidali bada, datuak prozesatzeko
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // If DB isn't available, avoid calling mysqli_* and show an error message
-    if (!$db_available) {
+    // Check rate limiting for registration
+    if (!check_rate_limit('register', 3, 300)) {
+        $mezua = "Gehiegitan saiatu zara. Mesedez, itxaron 5 minutu.";
+        $mezua_type = "error";
+    } elseif (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        $mezua = "Segurtasun errorea. Mesedez, saiatu berriro.";
+        $mezua_type = "error";
+    } elseif (!$db_available) {
         $mezua = "Ezin izan da datu-basearekin konektatu";
         $mezua_type = "error";
     } else {
-        // Formularioko datuak garbitu eta eskuratu (using DB escaping)
-        $izena = mysqli_real_escape_string($conn, trim($_POST['izena'] ?? ''));
-        $nan = mysqli_real_escape_string($conn, trim($_POST['nan'] ?? ''));
-        $telefonoa = mysqli_real_escape_string($conn, trim($_POST['telefonoa'] ?? ''));
-        $data = mysqli_real_escape_string($conn, trim($_POST['data'] ?? ''));
-        $email = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
-        $pasahitza = mysqli_real_escape_string($conn, trim($_POST['pasahitza'] ?? ''));
+        // Formularioko datuak garbitu eta eskuratu
+        $izena = sanitize_input($_POST['izena'] ?? '');
+        $nan = sanitize_input($_POST['nan'] ?? '');
+        $telefonoa = sanitize_input($_POST['telefonoa'] ?? '');
+        $data = sanitize_input($_POST['data'] ?? '');
+        $email = sanitize_input($_POST['email'] ?? '');
+        $pasahitza = $_POST['pasahitza'] ?? '';
 
-        // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
-        if ($nan !== '') {
-            $stmt = $conn->prepare("SELECT id FROM usuarios WHERE nan = ? LIMIT 1");
-            $stmt->bind_param("s", $nan);
+        // Server-side validation
+        if (empty($izena) || !preg_match('/^[A-Za-zÑñ\s]{1,50}$/', $izena)) {
+            $mezua = "Izen baliogabea.";
+            $mezua_type = "error";
+        } elseif (!validate_nan($nan)) {
+            $mezua = "NAN formatua okerra.";
+            $mezua_type = "error";
+        } elseif (!validate_phone($telefonoa)) {
+            $mezua = "Telefono zenbaki baliogabea.";
+            $mezua_type = "error";
+        } elseif (!validate_email($email)) {
+            $mezua = "Email helbide baliogabea.";
+            $mezua_type = "error";
+        } elseif (strlen($pasahitza) < 8 || !preg_match('/[0-9]/', $pasahitza) || !preg_match('/[!@#$%^&*()_+\-=\[\]{};\':"\\|,.<>\/?]/', $pasahitza)) {
+            $mezua = "Pasahitza ez da segurua. Gutxienez 8 karaktere, zenbaki bat eta karaktere berezi bat izan behar ditu.";
+            $mezua_type = "error";
+        } else {
+            // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
+            $stmt = $conn->prepare("SELECT id FROM usuarios WHERE nan = ? OR email = ? LIMIT 1");
+            $stmt->bind_param("ss", $nan, $email);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($result && $result->num_rows > 0) {
-                $mezua = "Jada badago erabiltzaile bat NAN horrekin (" . htmlspecialchars($nan) . ").";
+                $mezua = "Jada badago erabiltzaile bat NAN edo email horrekin.";
                 $mezua_type = "error";
-            }
-            $stmt->close();
-        }
-
-        // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
-        if ($mezua === "") {
-            // Hash the password before storing
-            $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
-            
-            $stmt = $conn->prepare("INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssss", $izena, $nan, $telefonoa, $data, $email, $hashed_password);
-            
-            // Datuak ondo gorde badira, berbideraketa egin
-            if ($stmt->execute()) {
-                $stmt->close();
-                // Use PRG pattern: redirect to self with created flag
-                header('Location: register.php?created=1');
-                exit();
             } else {
-                $mezua = "Arazo bat egon da datu-basean.";
-                error_log("Register insert error: " . $stmt->error);
-                $mezua_type = "error";
+                // 2) Erabiltzailea datu-basean gorde
+                $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
+                
+                $stmt_insert = $conn->prepare("INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt_insert->bind_param("ssssss", $izena, $nan, $telefonoa, $data, $email, $hashed_password);
+                
+                if ($stmt_insert->execute()) {
+                    $stmt_insert->close();
+                    header('Location: register.php?created=1');
+                    exit();
+                } else {
+                    $mezua = "Arazo bat egon da datu-basean.";
+                    error_log("Register insert error: " . $stmt_insert->error);
+                    $mezua_type = "error";
+                }
+                $stmt_insert->close();
             }
             $stmt->close();
         }
@@ -215,24 +321,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <!-- Erregistro formularioa -->
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
-            <input type="text" id="izena" name="izena" placeholder="Izena" required>
+            <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
+            <input type="text" id="izena" name="izena" placeholder="Izena" required maxlength="50">
 
-            <input type="text" id="erabiltzaileIzena" name="nan" placeholder="NAN: 12345678-Z" required><br>
+            <input type="text" id="erabiltzaileIzena" name="nan" placeholder="NAN: 12345678-Z" required maxlength="10" pattern="[0-9]{8}-[A-Za-z]"><br>
 
-            <input type="tel" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required>
+            <input type="tel" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required maxlength="9" pattern="[0-9]{9}">
 
-            <input type="text" id="data" name="data" placeholder="Jaiotza data: YYYY-MM-DD" title="Format: YYYY-MM-DD" required><br>
+            <input type="text" id="data" name="data" placeholder="Jaiotza data: YYYY-MM-DD" title="Format: YYYY-MM-DD" required maxlength="10" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"><br>
 
-            <input type="text" id="email" name="email" placeholder="Email" style="width:100%" required><br>
+            <input type="email" id="email" name="email" placeholder="Email" style="width:100%" required maxlength="100"><br>
 
-            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required>
+            <input type="password" id="pasahitza" name="pasahitza" placeholder="Pasahitza" required maxlength="255">
 
-            <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required><br>
+            <input type="password" id="errep_pasahitza" name="errep_pasahitza" placeholder="Errepikatu Pasahitza" required maxlength="255"><br>
             
             <!-- Formularioaren botoiak -->
             <?php if ($mezua !== ""): ?>
                 <p style="text-align:center; font-size: 0.7em; margin-bottom:10px; <?php echo ($mezua_type === 'success') ? 'color: #1a6f1a;' : 'color: #7f0000ff;'; ?>">
-                    <?php echo htmlspecialchars($mezua); ?>
+                    <?php echo safe_output($mezua); ?>
                 </p>
             <?php endif; ?>
 

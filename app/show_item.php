@@ -1,19 +1,55 @@
 <?php
+// Security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+
+// Secure session configuration
+session_set_cookie_params([
+   'lifetime' => 0,
+   'path' => '/',
+   'secure' => true,
+   'httponly' => true,
+   'samesite' => 'Strict'
+]);
+session_start();
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+// Security functions
+function safe_output($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+// Database connection
 $hostname = "db";
 $username = "admin";
 $password = "test";
 $db = "database";
 
 $conn = mysqli_connect($hostname, $username, $password, $db);
-if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
+if ($conn->connect_error) {
+    error_log("Database connection failed: " . $conn->connect_error);
+    die("Database connection error");
+}
+mysqli_set_charset($conn, 'utf8');
 
-$item_id = intval($_GET['item']);
-$stmt = $conn->prepare("SELECT * FROM pelikulak WHERE id = ?");
-$stmt->bind_param("i", $item_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$pelikula = $result->fetch_array();
-$stmt->close();
+$item_id = filter_var($_GET['item'] ?? 0, FILTER_VALIDATE_INT);
+$pelikula = null;
+
+if ($item_id) {
+    $stmt = $conn->prepare("SELECT * FROM pelikulak WHERE id = ? LIMIT 1");
+    $stmt->bind_param("i", $item_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $pelikula = $result->fetch_array();
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,12 +63,12 @@ $stmt->close();
   <div class="wrapper">
       <?php if ($pelikula): ?>
           <h1>Pelikularen datuak</h1>
-          <p><b>ID:</b> <?php echo $pelikula['id']; ?></p>
-          <p><b>Izena:</b> <?php echo $pelikula['izena']; ?></p>
-          <p><b>Deskribapena:</b> <?php echo $pelikula['deskribapena']; ?></p>
-          <p><b>Urtea:</b> <?php echo $pelikula['urtea']; ?></p>
-          <p><b>Egilea:</b> <?php echo $pelikula['egilea']; ?></p>
-          <p><b>Generoa:</b> <?php echo $pelikula['generoa']; ?></p>
+          <p><b>ID:</b> <?php echo safe_output($pelikula['id']); ?></p>
+          <p><b>Izena:</b> <?php echo safe_output($pelikula['izena']); ?></p>
+          <p><b>Deskribapena:</b> <?php echo safe_output($pelikula['deskribapena']); ?></p>
+          <p><b>Urtea:</b> <?php echo safe_output($pelikula['urtea']); ?></p>
+          <p><b>Egilea:</b> <?php echo safe_output($pelikula['egilea']); ?></p>
+          <p><b>Generoa:</b> <?php echo safe_output($pelikula['generoa']); ?></p>
           <button class="btn-secondary" onclick="history.back()">Atzera</button>
       <?php else: ?>
           <p>Pelikula ez da existitzen</p>
