@@ -52,7 +52,7 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
         </table>
 
         <div class="botoiak">
-                <button type="button" class="btn-primary" style="width:100%" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>     <!-- hauek botoiak dira, primario sekundairio eta linkak, hauekin hierarkia mantenitzen da, erabiltzaileak botoi nagusiena erraz identifikatzen du-->
+                <button type="button" class="btn-primary" style="width:100%" onclick="window.location.href='items.php'"><b> Pelikulak Ikusi</b></button>     <!-- hauek botoiak dira, primario sekundairio eta linkak, hauekin hierarkia mantenitzen da, erabiltzaileak botoi nagusiena erraz identifikatzen du-->
                 <button type="button" class="btn-link" style="padding: 5px 2px 5px 140px;" onclick="window.location.href='login.php'"> Saioa Hasi</button> | 
                 <button type="button" class="btn-link" onclick="window.location.href='register.php'">Erregistratu</button>
             </div>

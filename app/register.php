@@ -37,37 +37,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Formularioko datuak garbitu eta eskuratu (using DB escaping)
         $izena = mysqli_real_escape_string($conn, trim($_POST['izena'] ?? ''));
-        $nan = mysqli_real_escape_string($conn, trim($_POST['nan'] ?? ''));
+        $erabiltzaileIzena = mysqli_real_escape_string($conn, trim($_POST['erabiltzaileIzena'] ?? ''));
         $telefonoa = mysqli_real_escape_string($conn, trim($_POST['telefonoa'] ?? ''));
         $data = mysqli_real_escape_string($conn, trim($_POST['data'] ?? ''));
         $email = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
         $pasahitza = mysqli_real_escape_string($conn, trim($_POST['pasahitza'] ?? ''));
 
-        // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
-        if ($nan !== '') {
-            $chk_sql = "SELECT id FROM usuarios WHERE nan = '$nan' LIMIT 1";
-            $chk_res = mysqli_query($conn, $chk_sql);
-            if ($chk_res && mysqli_num_rows($chk_res) > 0) {
-                $mezua = "Jada badago erabiltzaile bat NAN horrekin (" . htmlspecialchars($nan) . ").";
+        // 1) Username hori duen erabiltzailea jadanik badagoen egiaztatu
+        if ($erabiltzaileIzena !== '') {
+            $stmt = $conn->prepare("SELECT id FROM usuarios WHERE erabiltzaileIzena = ? LIMIT 1");
+            $stmt->bind_param("s", $erabiltzaileIzena);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                $mezua = "Jada badago erabiltzaile bat username horrekin (" . htmlspecialchars($erabiltzaileIzena) . ").";
                 $mezua_type = "error";
             }
+            $stmt->close();
         }
 
-        // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
+        // 2) Username bikoizturik ez badago, erabiltzailea datu-basean gorde
         if ($mezua === "") {
-            $sql = "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) 
-                    VALUES ('$izena', '$nan', '$telefonoa', '$data', '$email', '$pasahitza')";
+            $stmt = $conn->prepare("INSERT INTO usuarios (nombre, erabiltzaileIzena, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $izena, $erabiltzaileIzena, $telefonoa, $data, $email, $pasahitza);
             
             // Datuak ondo gorde badira, berbideraketa egin
-            if (mysqli_query($conn, $sql)) {
+            if ($stmt->execute()) {
+                $stmt->close();
                 // Use PRG pattern: redirect to self with created flag
                 header('Location: register.php?created=1');
                 exit();
             } else {
                 $mezua = "Arazo bat egon da datu-basean.";
-                error_log("Register insert error: " . mysqli_error($conn));
+                error_log("Register insert error: " . $stmt->error);
                 $mezua_type = "error";
             }
+            $stmt->close();
         }
     }
 }
@@ -91,10 +96,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return /^[0-9]+$/.test(testua);
         }
         
-        // NAN-aren letra kalkulatzeko funtzioa
-        function kalkulatuNanLetra(nanZenbakiak) {
-            var kate = "TRWAGMYFPDXBNJZSQVHLCKET";
-            return kate[parseInt(nanZenbakiak) % 23];
+        // Username validation: letters, numbers, underscore, hyphen (3-20 characters)
+        function erabiltzaileIzenaBaliozkoa(testua) {
+            return /^[A-Za-z0-9_-]{3,20}$/.test(testua);
         }
 
         // Emailaren formatua zuzena den egiaztatzeko funtzioa
@@ -111,15 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return false;
             }
 
-            // NAN lortu eta egiaztatu
-            var nan = document.register_form.nan.value;
-            var nanZatiak = nan.split("-");
-            if (nanZatiak.length != 2 || nanZatiak[0].length != 8 || !bakarrikZenbakiak(nanZatiak[0]) || nanZatiak[1].length != 1) {
-                alert("NAN formatua okerra. Adibidea: 12345678-Z");
-                return false;
-            }
-            if (kalkulatuNanLetra(nanZatiak[0]).toLowerCase() != nanZatiak[1].toLowerCase()) {
-                alert("NAN idatzita dagoena ez da zuzena");
+            // Username lortu eta egiaztatu
+            var erabiltzaileIzena = document.register_form.erabiltzaileIzena.value;
+            if (!erabiltzaileIzenaBaliozkoa(erabiltzaileIzena)) {
+                alert("Username-ak 3-20 karaktere izan behar ditu eta soilik letrak, zenbakiak, _ eta - izan behar ditu");
                 return false;
             }
 
@@ -211,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
             <input type="text" id="izena" name="izena" placeholder="Izena" required>
 
-            <input type="text" id="nan" name="nan" placeholder="NAN" required><br>
+            <input type="text" id="erabiltzaileIzena" name="erabiltzaileIzena" placeholder="Username" required><br>
 
             <input type="tel" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required>
 
