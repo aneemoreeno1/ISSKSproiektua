@@ -13,6 +13,11 @@
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';"
 </IfModule>
 
+<IfModule mod_headers.c>
+    # Cache-Control goiburua gehitu
+    Header set Cache-Control "public, max-age=604800, immutable"
+</IfModule>
+
 
 RewriteEngine On
 
