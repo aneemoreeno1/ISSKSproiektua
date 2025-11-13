@@ -6,16 +6,28 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+// Remove server information
+header("Server: ");
+header_remove("X-Powered-By");
 
-// Secure session configuration
+// Secure session configuration with all security flags
 session_set_cookie_params([
    'lifetime' => 0,
    'path' => '/',
+   'domain' => '',
    'secure' => true,
    'httponly' => true,
    'samesite' => 'Strict'
 ]);
+
+// Set additional cookie security
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Strict');
 session_start();
 
 if (!isset($_SESSION['initiated'])) {

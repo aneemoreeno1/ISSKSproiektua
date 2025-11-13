@@ -6,16 +6,28 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+// Remove server information
+header("Server: ");
+header_remove("X-Powered-By");
 
-// Secure session configuration
+// Secure session configuration with all security flags
 session_set_cookie_params([
    'lifetime' => 0,
    'path' => '/',
+   'domain' => '',
    'secure' => true,
    'httponly' => true,
    'samesite' => 'Strict'
 ]);
+
+// Set additional cookie security
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Strict');
 session_start();
 
 if (!isset($_SESSION['initiated'])) {
@@ -103,11 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error_message = "Segurtasun errorea. Mesedez, saiatu berriro.";
     } else {
         // Formulariotik datuak eskuratu
-        $izena = sanitize_input($_POST['izena'] ?? '');
-        $nan = sanitize_input($_POST['nan'] ?? '');
-        $telefonoa = sanitize_input($_POST['telefonoa'] ?? '');
-        $data = sanitize_input($_POST['data'] ?? '');
-        $email = sanitize_input($_POST['email'] ?? '');
+        $izena = trim(htmlspecialchars($_POST['izena'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $nan = trim(htmlspecialchars($_POST['nan'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $telefonoa = trim(htmlspecialchars($_POST['telefonoa'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $data = trim(htmlspecialchars($_POST['data'] ?? '', ENT_QUOTES, 'UTF-8'));
+        $email = trim(htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8'));
         $pasahitza = $_POST['pasahitza'] ?? '';
         
         // Server-side validation
