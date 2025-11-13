@@ -1,7 +1,7 @@
 # Security Headers (only if mod_headers is available)
 <IfModule mod_headers.c>
     # Header X-Frame-Options
-    Header set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Frame-Options "SAMEORIGIN"
     
     # Header X-Content-Type-Options
     Header always set X-Content-Type-Options "nosniff"
