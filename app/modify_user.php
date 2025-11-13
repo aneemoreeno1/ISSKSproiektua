@@ -42,11 +42,6 @@ if (session_id()) {
     ]);
 }
 
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
-
 // Session timeout
 $timeout = 900;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
