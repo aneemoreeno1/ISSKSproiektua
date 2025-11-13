@@ -11,4 +11,11 @@ RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf \
 
 RUN echo "ErrorDocument 404 /errorea.html" >> /etc/apache2/apache2.conf
 
+RUN a2enmod ssl
+
+COPY ssl/localhost.crt /etc/ssl/certs/
+COPY ssl/localhost.key /etc/ssl/private/
+
+COPY ssl-config.conf /etc/apache2/sites-available/000-default.conf
+
 COPY no-expose.ini /usr/local/etc/php/conf.d/99-no-expose.ini

@@ -5,6 +5,7 @@ services:
         - ALLOW_OVERRIDE=true
       ports:
         - "81:80"
+        - "8443:443"
       links:
         - db
       volumes:
