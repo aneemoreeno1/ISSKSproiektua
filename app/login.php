@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 
 session_set_cookie_params( [
    'lifetime' => 0,        

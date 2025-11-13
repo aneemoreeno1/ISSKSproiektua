@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 // modify_user.php - Erabiltzailearen datuak aldatzeko orria
 
 session_set_cookie_params( [

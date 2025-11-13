@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 // delete_item.php - Pelikula ezabatu
 $hostname = "db";
 $username = "admin";

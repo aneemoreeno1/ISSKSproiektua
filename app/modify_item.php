@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 // modify_item.php - Pelikularen datuak aldatu
 
 $hostname = "db";

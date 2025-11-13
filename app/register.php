@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 // register.php - Erabiltzaile berria gehitu
 
 // Datu-basearen konexiorako konfigurazioa

@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 
 //____________________________Pelikula berria gehitu_________________________________________________
 
