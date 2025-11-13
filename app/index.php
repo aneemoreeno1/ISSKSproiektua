@@ -1,4 +1,11 @@
 <?php
+session_set_cookie_params( [
+   'lifetime' => 0,        
+   'path' => '/',
+   'secure' => true,       
+   'httponly' => true,     
+   'samesite' => 'Strict'
+]);
 // Saioa hasi: erabiltzailearen datuak gordetzeko
 session_start();
 
