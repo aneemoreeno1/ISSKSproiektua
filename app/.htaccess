@@ -14,11 +14,13 @@
 </IfModule>
 
 # Fitxategi dinamikoetarako cachea desgaitu
+<IfModule mod_headers.c>
 <FilesMatch "\.(php)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate, private"
     Header set Pragma "no-cache"
     Header set Expires "0"
 </FilesMatch>
+</IfModule>
 
 
 RewriteEngine On
