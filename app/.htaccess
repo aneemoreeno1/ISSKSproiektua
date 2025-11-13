@@ -1,44 +1,50 @@
-# Security Headers (only if mod_headers is available)
 <IfModule mod_headers.c>
-    # Apply security headers to ALL files
-    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    # Anti-Clickjacking
     Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Evitar MIME sniffing
     Header always set X-Content-Type-Options "nosniff"
+
+    # Protección XSS
     Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # Feature-Policy for older browsers
-    Header always set Feature-Policy "geolocation 'self'; microphone 'none'; camera 'none'"
-    
-    # Content Security Policy for all files
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
-    
-    # Cache control for static files
-    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico)$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-        Header always set X-Content-Type-Options "nosniff"
-    </FilesMatch>
-    
-    # Cache control for PHP files
-    <FilesMatch "\.(php)$">
-        Header set Cache-Control "no-cache, no-store, must-revalidate, private"
-        Header set Pragma "no-cache"
-        Header set Expires "0"
-        Header always set X-Content-Type-Options "nosniff"
-    </FilesMatch>
+
+    # Content Security Policy segura
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
+
+    # HSTS (HTTPS)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Permissions Policy (Feature Policy moderno)
+    Header always set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
 </IfModule>
 
+# Cache control para archivos estáticos
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Cache control para PHP
+<FilesMatch "\.(php)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, private"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
+
+# Rewrite rules existentes
 RewriteEngine On
 
-# /index edo /index.php-ra sartzen bada, /-era birbideratu
+# /index o /index.php a /
 RewriteCond %{THE_REQUEST} /index(\.php)? [NC]
 RewriteRule ^index(\.php)?$ / [R=301,L]
 
-# Beste PHP fitxategien luzapena ezkutatu (.php ez ikusi URL-an)
+# Ocultar extensión .php
 RewriteCond %{THE_REQUEST} \s/([^\s]+?)\.php[?\s] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# URL garbiak .php fitxategietara birbideratu
+# Redirigir URLs limpias a .php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
