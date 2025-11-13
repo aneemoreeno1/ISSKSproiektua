@@ -40,11 +40,6 @@ if (session_id()) {
     ]);
 }
 
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
-
 // Session timeout
 $timeout = 900;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
@@ -141,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (password_verify($pasahitza, $row['pasahitza'])) {
                     // Regenerate session ID on successful login
                     session_regenerate_id(true);
+                    $_SESSION['initiated'] = true;
                     $_SESSION['user_id'] = $row['id'];
                     $_SESSION['user_name'] = $row['nombre'];
                     $_SESSION['login_time'] = time();
