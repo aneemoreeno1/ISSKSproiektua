@@ -101,9 +101,9 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
                         <td><?= safe_output($row['urtea']) ?></td>
                         <td><?= safe_output($row['generoa']) ?></td>
                         <td>
-                            <a href="show_item.php?item=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi"><img src="irudiak/view.svg" alt="Ikusi" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a> 
-                            <a href="modify_item.php?item=<?= urlencode($row['id']) ?>" title="Editatu" aria-label="Editatu"><img src="irudiak/edit.svg" alt="Editatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a> 
-                            <a href="delete_item.php?item=<?= urlencode($row['id']) ?>" title="Ezabatu" aria-label="Ezabatu" onclick="return confirm('Benetan ezabatu?');"><img src="irudiak/zakarrontzia.svg" alt="Ezabatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
+                            <a href="show_item.php?item=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi">Ikusi</a> 
+                            <a href="modify_item.php?item=<?= urlencode($row['id']) ?>" title="Editatu" aria-label="Editatu">Editatu</a> 
+                            <a href="delete_item.php?item=<?= urlencode($row['id']) ?>" title="Ezabatu" aria-label="Ezabatu" onclick="return confirm('Benetan ezabatu?');">Ezabatu</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

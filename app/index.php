@@ -97,9 +97,9 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
                     <td style="text-align:center; width: 20px;"><?= safe_output($row['id']) ?></td>
                     <td><?= safe_output($row['nombre']) ?></td>
                     <td>
-                        <a href="show_user.php?user=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi"><img src="irudiak/view.svg" alt="Ikusi" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
+                        <a href="show_user.php?user=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi">ikusi</a>
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?> <!-- erabiltzailearen saioa irekita badago orduan erabiltzaileak bere datuak editatu dezake horregatik sesion-->
-                        <a href="modify_user.php?user=<?= urlencode($row['id']) ?>" title="Editatu" aria-label="Editatu"><img src="irudiak/edit.svg" alt="Editatu" style="width:18px;height:18px;vertical-align:middle; color: #7F0001;"></a>
+                        <a href="modify_user.php?user=<?= urlencode($row['id']) ?>" title="Editatu" aria-label="Editatu">Editatu</a>
                         <?php } ?>
                     </td>
                 </tr>
