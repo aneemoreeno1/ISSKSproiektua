@@ -1,32 +1,4 @@
 <?php
-// Security headers
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: SAMEORIGIN');
-header('X-XSS-Protection: 1; mode=block');
-header('Referrer-Policy: strict-origin-when-cross-origin');
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\'; font-src \'self\'; connect-src \'self\'; frame-ancestors \'self\';');
-
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => '',
-    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-    'httponly' => true, 
-    'samesite' => 'Strict' // 'Strict' edo 'Lax' izan daiteke
-]);
-
-session_start();
-
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Pragma: no-cache");
-header("Expires: 0");
-
-if(!isset($_SESSION['user_id'])){
-    http_response_code(401);
-    echo "Errorea: saioa hasi behar duzu";
-    exit;
-}
-
 $hostname = "db";
 $username = "admin";
 $password = "test";
@@ -39,7 +11,7 @@ if(!$conn){
     echo "Zerbitzari akatsa";
     exit;
 }
-$user_id=(int) $_SESSION['user_id'];
+$user_id = $_GET['user'];
 
 if ($stmt = $conn->prepare("SELECT id, nombre, nan, telefonoa, jaiotze_data, email FROM usuarios WHERE id = ? LIMIT 1")) {
     $stmt->bind_param("i", $user_id);
