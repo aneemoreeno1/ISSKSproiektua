@@ -1,3 +1,6 @@
+# ===============================
+# Seguridad Headers
+# ===============================
 <IfModule mod_headers.c>
     # Anti-Clickjacking
     Header always set X-Frame-Options "SAMEORIGIN"
@@ -5,38 +8,41 @@
     # Evitar MIME sniffing
     Header always set X-Content-Type-Options "nosniff"
 
-    # Protección XSS
+    # Protección XSS básica
     Header always set X-XSS-Protection "1; mode=block"
 
     # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-    # Content Security Policy segura
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
+    # Content Security Policy mínima (inline scripts y estilos permitidos para no romper el sitio)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
 
-    # HSTS (HTTPS)
+    # HSTS (HTTPS obligatorio)
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
-    # Permissions Policy (Feature Policy moderno)
+    # Feature/Permissions Policy
     Header always set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
 </IfModule>
 
-# Cache control para archivos estáticos
+# ===============================
+# Cache control
+# ===============================
 <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
 </FilesMatch>
 
-# Cache control para PHP
 <FilesMatch "\.(php)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate, private"
     Header set Pragma "no-cache"
     Header set Expires "0"
 </FilesMatch>
 
-# Rewrite rules existentes
+# ===============================
+# Rewrites existentes
+# ===============================
 RewriteEngine On
 
-# /index o /index.php a /
+# /index o /index.php -> /
 RewriteCond %{THE_REQUEST} /index(\.php)? [NC]
 RewriteRule ^index(\.php)?$ / [R=301,L]
 
@@ -44,7 +50,7 @@ RewriteRule ^index(\.php)?$ / [R=301,L]
 RewriteCond %{THE_REQUEST} \s/([^\s]+?)\.php[?\s] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# Redirigir URLs limpias a .php
+# URLs limpias
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
