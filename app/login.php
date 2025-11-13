@@ -1,5 +1,36 @@
 <?php
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Content-Security-Policy: default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\'; font-src \'self\'; connect-src \'self\'; frame-ancestors \'self\';');
+
+session_set_cookie_params( [
+   'lifetime' => 0,        
+   'path' => '/',
+   'secure' => true,       
+   'httponly' => true,     
+   'samesite' => 'Strict'
+]);
+
 session_start();
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+$timeout = 60;
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php?timeout=1");
+    exit;
+}
+
+$_SESSION['last_activity'] = time();
+
 $hostname = "db";
 $username = "admin";
 $password = "test";

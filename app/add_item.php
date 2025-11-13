@@ -1,4 +1,24 @@
 <?php
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
+session_start();
+
+// Saio-Kontrola: Erabiltzailea autentifikatuta ez badago, saioa hasteko orrira bidali
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Content-Security-Policy: default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\'; font-src \'self\'; connect-src \'self\'; frame-ancestors \'self\';');
 
 //____________________________Pelikula berria gehitu_________________________________________________
 
