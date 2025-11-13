@@ -13,7 +13,6 @@ $mezua_type = ""; // "success" edo "error"
 // Datu-basearekin konexioa establetzeko
 $conn = mysqli_connect($hostname, $username, $password, $db);
 
-// Handle connection failure gracefully so we can show the message in the page
 $db_available = true;
 if (!$conn) {
     error_log("Database connection failed (register.php): " . mysqli_connect_error());
@@ -37,29 +36,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Formularioko datuak garbitu eta eskuratu (using DB escaping)
         $izena = mysqli_real_escape_string($conn, trim($_POST['izena'] ?? ''));
-        $erabiltzaileIzena = mysqli_real_escape_string($conn, trim($_POST['erabiltzaileIzena'] ?? ''));
+        $nan = mysqli_real_escape_string($conn, trim($_POST['nan'] ?? ''));
         $telefonoa = mysqli_real_escape_string($conn, trim($_POST['telefonoa'] ?? ''));
         $data = mysqli_real_escape_string($conn, trim($_POST['data'] ?? ''));
         $email = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
         $pasahitza = mysqli_real_escape_string($conn, trim($_POST['pasahitza'] ?? ''));
 
-        // 1) Username hori duen erabiltzailea jadanik badagoen egiaztatu
-        if ($erabiltzaileIzena !== '') {
-            $stmt = $conn->prepare("SELECT id FROM usuarios WHERE erabiltzaileIzena = ? LIMIT 1");
-            $stmt->bind_param("s", $erabiltzaileIzena);
+        // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
+        if ($nan !== '') {
+            $stmt = $conn->prepare("SELECT id FROM usuarios WHERE nan = ? LIMIT 1");
+            $stmt->bind_param("s", $nan);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($result && $result->num_rows > 0) {
-                $mezua = "Jada badago erabiltzaile bat username horrekin (" . htmlspecialchars($erabiltzaileIzena) . ").";
+                $mezua = "Jada badago erabiltzaile bat NAN horrekin (" . htmlspecialchars($nan) . ").";
                 $mezua_type = "error";
             }
             $stmt->close();
         }
 
-        // 2) Username bikoizturik ez badago, erabiltzailea datu-basean gorde
+        // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
         if ($mezua === "") {
-            $stmt = $conn->prepare("INSERT INTO usuarios (nombre, erabiltzaileIzena, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssss", $izena, $erabiltzaileIzena, $telefonoa, $data, $email, $pasahitza);
+            // Hash the password before storing
+            $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
+            
+            $stmt = $conn->prepare("INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $izena, $nan, $telefonoa, $data, $email, $hashed_password);
             
             // Datuak ondo gorde badira, berbideraketa egin
             if ($stmt->execute()) {
@@ -96,7 +98,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return /^[0-9]+$/.test(testua);
         }
         
-        // Username validation: letters, numbers, underscore, hyphen (3-20 characters)
+        // NAN-aren letra kalkulatzeko funtzioa
+        function kalkulatuNanLetra(nanZenbakiak) {
+            var kate = "TRWAGMYFPDXBNJZSQVHLCKET";
+            var zenbakiak = parseInt(nanZenbakiak);
+            var posizioa = zenbakiak % 23;
+            return kate[posizioa];
+        }
+        
+        // Erabiltzaile balidazioa bakarrik textua
         function erabiltzaileIzenaBaliozkoa(testua) {
             return /^[A-Za-z0-9_-]{3,20}$/.test(testua);
         }
@@ -115,10 +125,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return false;
             }
 
-            // Username lortu eta egiaztatu
+            // NAN lortu eta egiaztatu
             var erabiltzaileIzena = document.register_form.erabiltzaileIzena.value;
-            if (!erabiltzaileIzenaBaliozkoa(erabiltzaileIzena)) {
-                alert("Username-ak 3-20 karaktere izan behar ditu eta soilik letrak, zenbakiak, _ eta - izan behar ditu");
+            var nanZatiak = erabiltzaileIzena.split("-");
+            if (nanZatiak.length != 2 || nanZatiak[0].length != 8 || !bakarrikZenbakiak(nanZatiak[0])) {
+                alert("NAN formatua okerra. Adibidea: 12345678-Z");
+                return false;
+            }
+            if (kalkulatuNanLetra(nanZatiak[0]).toLowerCase() != nanZatiak[1].toLowerCase()) {
+                alert("NAN ez da zuzena");
                 return false;
             }
 
@@ -133,15 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             var dataField = document.register_form.data;
             var data = dataField.value;
 
-            // Navegadoreak Date objektua ematen badu, YYYY-MM-DD formatura bihurtu gu Text erabiltzen ari gara
-            /*if ((!data || data.indexOf('-') === -1) && dataField.valueAsDate) {
-                var dObjNorm = dataField.valueAsDate;
-                var yyyyN = dObjNorm.getFullYear();
-                var mmN = ('0' + (dObjNorm.getMonth() + 1)).slice(-2);
-                var ddN = ('0' + dObjNorm.getDate()).slice(-2);
-                data = yyyyN + '-' + mmN + '-' + ddN;
-                dataField.value = data; // Eremuan formatu normalizatua gorde
-            }*/
+            
             var dataZatiak = data.split("-");
             if (data.length != 10 || dataZatiak.length != 3) {
                 alert("Data formatua okerra. Adibidea: 2024-12-20");
@@ -181,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return false;
             }
 
-            // Pasahitza egiaztatu, ez dugu hash a egiten
+            // Pasahitza egiaztatu
             var pasahitza = document.register_form.pasahitza.value;
             var errep_pasahitza = document.register_form.errep_pasahitza.value;
             if (pasahitza != errep_pasahitza) {
@@ -210,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id="register_form" name="register_form" method="POST" onsubmit="return datuakEgiaztatu()">
             <input type="text" id="izena" name="izena" placeholder="Izena" required>
 
-            <input type="text" id="erabiltzaileIzena" name="erabiltzaileIzena" placeholder="Username" required><br>
+            <input type="text" id="erabiltzaileIzena" name="nan" placeholder="NAN: 12345678-Z" required><br>
 
             <input type="tel" id="telefonoa" name="telefonoa" placeholder="Telefonoa" required>
 

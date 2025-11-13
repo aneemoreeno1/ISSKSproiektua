@@ -49,9 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $pasahitza = $_POST['pasahitza']; 
     
+    // Hash the password before storing
+    $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
+    
     // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta using prepared statement
     $stmt = $conn->prepare("UPDATE usuarios SET nombre = ?, telefonoa = ?, jaiotze_data = ?, email = ?, pasahitza = ? WHERE id = ?");
-    $stmt->bind_param("sssssi", $izena, $telefonoa, $data, $email, $pasahitza, $user_id);
+    $stmt->bind_param("sssssi", $izena, $telefonoa, $data, $email, $hashed_password, $user_id);
+    
+    // Kontsulta exekutatu eta emaitza egiaztatu
+    $emaitza = $stmt->execute();
     
     // Kontsulta exekutatu eta emaitza egiaztatu
     $emaitza = $stmt->execute();
@@ -199,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Erabiltzailearen datuak aldatzeko formularioa -->
         <form id="user_modify_form" name="user_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
             <label for="izena">Izena:</label><br>
-            <input type="text" name="izena" style="width: 100%;" value="<?= $erabiltzailea['nombre'] ?>" required>
+            <input type="text" name="izena" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['nombre']) ?>" required>
 
             <label for="nan">NAN:</label><br>
             <!-- Mostrar el NAN como texto (no editable) y añadir un input hidden para preservar el valor en el POST -->
@@ -215,11 +221,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="email">Email:</label><br>
             <input type="text" name="email" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['email']) ?>" required>
 
-            <label for="pasahitza">Pasahitza:</label><br>
-            <input type="password" name="pasahitza" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['pasahitza']) ?>" required>
+            <label for="pasahitza">Pasahitza berria:</label><br>
+            <input type="password" name="pasahitza" style="width: 100%;" placeholder="Sartu pasahitza berria" required>
 
-            <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
-            <input type="password" name="errep_pasahitza" style="width: 100%;" value="<?= htmlspecialchars($erabiltzailea['pasahitza']) ?>" required>
+            <label for="errep_pasahitza">Errepikatu pasahitza berria:</label><br>
+            <input type="password" name="errep_pasahitza" style="width: 100%;" placeholder="Errepikatu pasahitza berria" required>
             
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="user_modify_submit">Datuak gorde</button>
