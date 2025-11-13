@@ -1,8 +1,29 @@
 <?php
 // modify_user.php - Erabiltzailearen datuak aldatzeko orria
 
+session_set_cookie_params( [
+   'lifetime' => 0,        
+   'path' => '/',
+   'secure' => true,       
+   'httponly' => true,     
+   'samesite' => 'Strict'
+]);
+
 //Saioa hasi
 session_start();
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+$timeout = 60;
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php?timeout=1");
+    exit;
+}
 
 // Datu-basearekin konexioa egiteko konfigurazioa
 $hostname = "db";

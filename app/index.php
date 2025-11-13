@@ -9,6 +9,18 @@ session_set_cookie_params( [
 // Saioa hasi: erabiltzailearen datuak gordetzeko
 session_start();
 
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+$timeout = 60; // 1min
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+}
+$_SESSION['last_activity'] = time();
+
 // Datu-basearekin konexioa egiteko konfigurazioa
 $hostname = "db";
 $username = "admin";
