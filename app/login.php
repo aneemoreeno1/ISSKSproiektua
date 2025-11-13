@@ -9,11 +9,6 @@ session_set_cookie_params( [
 
 session_start();
 
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
-
 $timeout = 60;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
     session_unset();
@@ -48,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $row = $result->fetch_assoc();
         // Pasahitza berrikusi -> password_verify()
         if (password_verify($pasahitza, $row['pasahitza'])) {
+            session_regenerate_id(true);
+            $_SESSION['initiated'] = true;
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['user_name'] = $row['nombre'];
             $stmt->close();
