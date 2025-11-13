@@ -20,7 +20,7 @@ COPY ssl-config.conf /etc/apache2/sites-available/000-default.conf
 COPY app/ /var/www/html/
 
 # Copiar configuración PHP segura
-COPY php-conf/99-no-expose.ini /usr/local/etc/php/conf.d/
+#COPY php-conf/99-no-expose.ini /usr/local/etc/php/conf.d/
 
 # Exponer puerto HTTPS
 EXPOSE 443
