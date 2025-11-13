@@ -1,6 +1,7 @@
 # Security Headers (only if mod_headers is available)
 <IfModule mod_headers.c>
     # Apply security headers to ALL files
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
