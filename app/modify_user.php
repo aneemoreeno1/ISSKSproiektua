@@ -12,11 +12,6 @@ session_set_cookie_params( [
 //Saioa hasi
 session_start();
 
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
-
 $timeout = 60;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
     session_unset();
