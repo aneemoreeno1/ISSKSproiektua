@@ -13,10 +13,12 @@
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';"
 </IfModule>
 
-<IfModule mod_headers.c>
-    # Cache-Control goiburua gehitu
-    Header set Cache-Control "public, max-age=604800, immutable"
-</IfModule>
+# Fitxategi dinamikoetarako cachea desgaitu
+<FilesMatch "\.(php)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, private"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
 
 
 RewriteEngine On
