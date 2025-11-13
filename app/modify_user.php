@@ -75,9 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Kontsulta exekutatu eta emaitza egiaztatu
     $emaitza = $stmt->execute();
     
-    // Kontsulta exekutatu eta emaitza egiaztatu
-    $emaitza = $stmt->execute();
-    
     if ($emaitza) {
         echo "<script>alert('Datuak eguneratuak!');</script>";
         // Datuak berriro kargatu formularioan erakusteko
