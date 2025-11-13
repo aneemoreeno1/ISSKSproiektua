@@ -1,14 +1,17 @@
-# Header X-Frame-Options
-Header set X-Frame-Options "SAMEORIGIN"
-
-# Header X-Content-Type-Options
-Header always set X-Content-Type-Options "nosniff"
-
-# Header Feature-Policy
-Header always set Feature-Policy "geolocation 'self'; microphone 'none'; camera 'none'"
-
-# Header Content-Security-Policy (CSP)
-Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';"
+# Security Headers (only if mod_headers is available)
+<IfModule mod_headers.c>
+    # Header X-Frame-Options
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Header X-Content-Type-Options
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Header Feature-Policy
+    Header always set Feature-Policy "geolocation 'self'; microphone 'none'; camera 'none'"
+    
+    # Header Content-Security-Policy (CSP)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';"
+</IfModule>
 
 
 RewriteEngine On
