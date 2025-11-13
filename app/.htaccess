@@ -9,8 +9,8 @@
     # Header Feature-Policy
     Header always set Feature-Policy "geolocation 'self'; microphone 'none'; camera 'none'"
     
-    # Header Content-Security-Policy (CSP)
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';"
+    # Header Content-Security-Policy (CSP) - Updated to allow inline styles and scripts
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
     
     # Fitxategi dinamikoetarako cachea desgaitu
     Header set Cache-Control "no-cache, no-store, must-revalidate, private"
