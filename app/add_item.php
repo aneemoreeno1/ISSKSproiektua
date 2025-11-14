@@ -41,76 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Pelikula berria gehitu</title>
     <link rel="stylesheet" href="style2.css">
-    <script>
-
-        function bakarrikLetrak(testua) {
-            return /^[A-Za-zÑñ\s]+$/.test(testua); 
-        }
-        function bakarrikZenbakiak(testua) {
-            return /^[0-9]+$/.test(testua);
-        }
-        function bakarrikLetrakEtaZenbakiak(testua) {
-            return /^[A-Za-zÑñ0-9\s.,!?¡¿()-]+$/.test(testua);
-        }
-        function gutxienezLetraBat(testua) {
-            return /[A-Za-zÑñ]/.test(testua);
-        }
-
-        function datuakEgiaztatu() {
-            var izena = document.item_add_form.izena.value;
-            if (izena.length < 1) {
-                alert("Izenak ezin du hutsik egon");
-                return false;
-            } else if (!bakarrikLetrakEtaZenbakiak(izena)) {
-                alert("Izenak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                return false;
-            }
-
-            var deskribapena = document.item_add_form.deskribapena.value;
-            if (deskribapena.length > 500) {
-                alert("Deskribapenak ezin du 500 karaktere baino gehiago izan");
-                return false;
-            }
-
-            var urtea = document.item_add_form.urtea.value;
-            if (urtea !== "") {
-                if (!bakarrikZenbakiak(urtea)) {
-                    alert("Urteak zenbaki osoa izan behar du");
-                    return false;
-                }
-                var urteZenbakia = parseInt(urtea);
-                var gaurkoUrtea = new Date().getFullYear();
-                if (urteZenbakia < 1888) {
-                    alert("Urtea ez da egokia. 1888 baino handiagoa izan behar da");
-                    return false;
-                }
-                if (urteZenbakia > gaurkoUrtea + 5) {
-                    alert("Urtea ez da egokia. Ezin da etorkizuneko 5 urte baino gehiago izan");
-                    return false;
-                }
-            }
-
-            var egilea = document.item_add_form.egilea.value;
-            if (egilea !== "" && !bakarrikLetrakEtaZenbakiak(egilea)) {
-                alert("Egileak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                return false;
-            } else if (egilea !== "" && !gutxienezLetraBat(egilea)) {
-                alert("Egileak gutxienez letra bat izan behar du");
-                return false;
-            }
-
-            var generoa = document.item_add_form.generoa.value;
-            if (generoa !== "" && !bakarrikLetrak(generoa)) {
-                alert("Generoak soilik letrak izan behar ditu");
-                return false;
-            } else if (generoa !== "" && !gutxienezLetraBat(generoa)) {
-                alert("Generoak gutxienez letra bat izan behar du");
-                return false;
-            }
-
-            return true;
-        }
-    </script>
+    <script src="js/common.js" defer></script>
+    <script src="js/items.js" defer></script>
 </head>
 <body>
     <div class="wrapper">
@@ -122,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </p>
         <?php endif; ?>
 
-        <form id="item_add_form" name="item_add_form" method="POST" onsubmit="return datuakEgiaztatu()">
+        <form id="item_add_form" name="item_add_form" method="POST">
             <div class="form-grid">
                 <div>
                     <label for="izena">Izena:</label><br>
@@ -152,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="botoiak" style="margin-top:18px;">
                 <button id="item_add_submit" type="submit" class="btn-primary">Gehitu</button>
-                <button type="button" class="btn-secondary" onclick="window.location.href='items.php'">Atzera</button>
+                <button type="button" class="btn-secondary" data-navigate="items.php">Atzera</button>
             </div>
         </form>
     </div>

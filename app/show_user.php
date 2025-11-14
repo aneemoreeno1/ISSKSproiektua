@@ -9,8 +9,11 @@ $conn = mysqli_connect($hostname, $username, $password, $db);
 //Konekzioa ez bada ezarri, errorea bistaratu
 if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_error); }
 
-//user ID lortu GET bidez
-$user_id = $_GET['user'];
+//user ID lortu GET bidez eta balidatu
+if (!isset($_GET['user']) || !is_numeric($_GET['user'])) {
+    die("Invalid user ID");
+}
+$user_id = (int)$_GET['user'];
 
 // Erabiltzailearen datuak kargatu
 $stmt = mysqli_prepare($conn, "SELECT * FROM usuarios WHERE id = ?");
@@ -27,6 +30,7 @@ mysqli_stmt_close($stmt);
 <meta charset="UTF-8">
 <title>Erabiltzailearen datuak</title>
 <link rel="stylesheet" href="style2.css">
+<script src="js/common.js" defer></script>
 </head>
 <body>
   <div class="wrapper">
@@ -38,7 +42,7 @@ mysqli_stmt_close($stmt);
           <p><b>Telefonoa:</b> <?php echo $erabiltzailea['telefonoa']; ?></p>
           <p><b>Jaiotze data:</b> <?php echo $erabiltzailea['jaiotze_data']; ?></p>
           <p><b>Email:</b> <?php echo $erabiltzailea['email']; ?></p>
-          <button class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
+          <button class="btn-secondary" data-navigate="index.php">Atzera</button>
       <?php else: ?>
           <p>Erabiltzailea ez da existitzen</p>
       <?php endif; ?>

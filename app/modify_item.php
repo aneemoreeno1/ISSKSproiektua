@@ -11,8 +11,11 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-// ID lortu GET bidez
-$item_id = $_GET['item'];
+// ID lortu GET bidez eta balidatu
+if (!isset($_GET['item']) || !is_numeric($_GET['item'])) {
+    die("Invalid item ID");
+}
+$item_id = (int)$_GET['item'];
 
 // Pelikularen datuak kargatu
 $stmt = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
@@ -42,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);
-        echo "<script>alert('Datuak eguneratuak!');</script>";
         // Datuak berriro kargatu
         $stmt2 = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
         mysqli_stmt_bind_param($stmt2, "i", $item_id);
@@ -63,91 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Pelikularen datuak aldatu</title>
     <link rel="stylesheet" href="style2.css">
-    <script>
-        function bakarrikLetrak(testua) {
-            var patroia = /^[A-Za-zÑñ\s]+$/;
-            return patroia.test(testua);
-        }
-
-        function bakarrikZenbakiak(testua) {
-            var patroia = /^[0-9]+$/;
-            return patroia.test(testua);
-        }
-
-        function gutxienezLetraBat(testua) {
-            var patroia = /[A-Za-zÑñ]/;
-            return patroia.test(testua);
-        }
-
-        function karaktereArruntaK(testua) {
-            var patroia = /^[A-Za-zÑñ0-9\s.,!?¡¿()-]+$/;
-            return patroia.test(testua);
-        }
-
-        function datuakEgiaztatu() {
-            // Izena
-            var izena = document.item_modify_form.izena.value;
-            if (izena.length < 1) {
-                alert("Izenak ezin du hutsik egon");
-                return false;
-            } else if (!karaktereArruntaK(izena)) {
-                alert("Izenak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                return false;
-            }
-
-            // Deskribapena
-            var deskribapena = document.item_modify_form.deskribapena.value;
-            if (deskribapena.length > 500) {
-                alert("Deskribapenak ezin du 500 karaktere baino gehiago izan");
-                return false;
-            }
-
-            // Urtea
-            var urtea = document.item_modify_form.urtea.value;
-            if (urtea !== "") {
-                if (!bakarrikZenbakiak(urtea)) {
-                    alert("Urteak zenbaki osoa izan behar du");
-                    return false;
-                }
-                var urteZenbakia = parseInt(urtea);
-                var gaurkoUrtea = new Date().getFullYear();
-                if (urteZenbakia < 1888) {
-                    alert("Urtea ez da egokia. 1888 baino handiagoa izan behar da");
-                    return false;
-                }
-                if (urteZenbakia > gaurkoUrtea + 5) {
-                    alert("Urtea ez da egokia. Ezin da etorkizuneko 5 urte baino gehiago izan");
-                    return false;
-                }
-            }
-
-            // Egilea
-            var egilea = document.item_modify_form.egilea.value;
-            if (egilea !== "") {
-                if (!karaktereArruntaK(egilea)) {
-                    alert("Egileak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                    return false;
-                } 
-            }
-
-            // Generoa
-            var generoa = document.item_modify_form.generoa.value;
-            if (generoa !== "") {
-        	if (!karaktereArruntaK(egilea)) {
-                    alert("Generoak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                    return false;
-                } 
-            }
-
-            return true;
-        }
-    </script>
+    <script src="js/common.js" defer></script>
+    <script src="js/items.js" defer></script>
 </head>
 <body>
     <div class="wrapper">
         <h1>Pelikularen datuak aldatu</h1>
 
-        <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
+        <form id="item_modify_form" name="item_modify_form" method="POST">
             <div class="form-grid">
                 <div>
                     <label for="izena">Izena:</label><br>
@@ -177,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="botoiak" style="margin-top:18px;">
                 <button type="submit" id="item_modify_submit" class="btn-primary">Datuak gorde</button>
-                <button type="button" id="items_back" class="btn-secondary" onclick="window.location.href='items.php'">Atzera</button>
+                <button type="button" id="items_back" class="btn-secondary" data-navigate="items.php">Atzera</button>
             </div>
         </form>
     </div>

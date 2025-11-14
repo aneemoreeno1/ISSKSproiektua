@@ -25,7 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
 
 // GET bidez item ID-a jaso bada (ezabaketa orria erakusteko)
 if (isset($_GET['item'])) {
-    $item_id = $_GET['item'];
+    if (!is_numeric($_GET['item'])) {
+        die("Invalid item ID");
+    }
+    $item_id = (int)$_GET['item'];
 
     $stmt = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
     mysqli_stmt_bind_param($stmt, "i", $item_id);
@@ -42,6 +45,7 @@ if (isset($_GET['item'])) {
     <meta charset="UTF-8">
     <title>Ezabatu Pelikula</title>
     <link rel="stylesheet" href="style2.css">
+    <script src="js/common.js" defer></script>
 </head>
 <body>
     <div class="wrapper">
@@ -55,7 +59,7 @@ if (isset($_GET['item'])) {
             <form method="post">
                 <input type="hidden" name="item_id" value="<?php echo $pelikula['id']; ?>">
                 <button id="item_delete_submit" type="submit" class="btn-primary">Ezabatu</button>
-                <button type="button" class="btn-secondary" onclick="window.location.href='items.php'">Bueltatu</button>
+                <button type="button" class="btn-secondary" data-navigate="items.php">Bueltatu</button>
             </form>
                
         <?php else: ?>

@@ -20,6 +20,7 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
     <meta charset="UTF-8">
     <title>Pelikulak</title>
     <link rel="stylesheet" href="style2.css">
+    <script src="js/common.js" defer></script>
 </head>
 <body>
     <div class="wrapper">
@@ -52,8 +53,8 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
         <?php endif; ?>
 
         <div class="botoiak">
-            <button type="button" class="btn-primary" onclick="window.location.href='add_item.php'">+</button>
-            <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Hasierara Bueltatu</button>
+            <button type="button" class="btn-primary" data-navigate="add_item.php">+</button>
+            <button type="button" class="btn-secondary" data-navigate="index.php">Hasierara Bueltatu</button>
         </div>
     </div>
 </body>

@@ -1,6 +1,6 @@
 <?php
 // Saioa hasi: erabiltzailearen datuak gordetzeko
-session_start();
+require_once 'includes/session.php';
 
 // Datu-basearekin konexioa egiteko konfigurazioa
 $hostname = "db";
@@ -23,9 +23,10 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
 <!DOCTYPE html>
 <html lang="eu">
 <head>
-    <link rel="stylesheet" href="style2.css"> <!-- lerro hau style2 fitxategiarekin konektatzeko da, eta guztietan kopiatu eta itatsi behar da -->
+    <link rel="stylesheet" href="style2.css">
     <meta charset="UTF-8">
     <title>Erabiltzaileak</title>
+    <script src="js/common.js" defer></script>
 </head>
 <body>
     <div class="wrapper" > <!-- hau orri guztietan errepikatuko da, erdiko karratu txuria da, style2 orrialdean dago zehaztuta nolakoa izango den-->
@@ -52,9 +53,9 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
         </table>
 
         <div class="botoiak">
-                <button type="button" class="btn-primary" style="width:100%" onclick="window.location.href='items.php'">Pelikulak Ikusi</button>     <!-- hauek botoiak dira, primario sekundairio eta linkak, hauekin hierarkia mantenitzen da, erabiltzaileak botoi nagusiena erraz identifikatzen du-->
-                <button type="button" class="btn-link" style="padding: 5px 2px 5px 140px;" onclick="window.location.href='login.php'"> Saioa Hasi</button> | 
-                <button type="button" class="btn-link" onclick="window.location.href='register.php'">Erregistratu</button>
+                <button type="button" class="btn-primary" data-navigate="items.php">Pelikulak Ikusi</button>
+                <button type="button" class="btn-link" data-navigate="login.php"> Saioa Hasi</button> | 
+                <button type="button" class="btn-link" data-navigate="register.php">Erregistratu</button>
             </div>
         </div>
     </div>
