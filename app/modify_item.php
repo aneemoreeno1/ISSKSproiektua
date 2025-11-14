@@ -15,12 +15,16 @@ if ($conn->connect_error) {
 $item_id = $_GET['item'];
 
 // Pelikularen datuak kargatu
-$sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-$emaitza = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $item_id);
+mysqli_stmt_execute($stmt);
+$emaitza = mysqli_stmt_get_result($stmt);
 
 if ($emaitza->num_rows > 0) {
     $pelikula = mysqli_fetch_array($emaitza);
+    mysqli_stmt_close($stmt);
 } else {
+    mysqli_stmt_close($stmt);
     die("Pelikula ez da existitzen.");
 }
 
@@ -33,24 +37,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $generoa = $_POST['generoa'];
     
     // Datuak eguneratu
-    $sql = "UPDATE pelikulak 
-            SET izena = '$izena', 
-                deskribapena = '$deskribapena', 
-                urtea = '$urtea', 
-                egilea = '$egilea', 
-                generoa = '$generoa'
-            WHERE id = $item_id";
+    $stmt = mysqli_prepare($conn, "UPDATE pelikulak SET izena = ?, deskribapena = ?, urtea = ?, egilea = ?, generoa = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "ssissi", $izena, $deskribapena, $urtea, $egilea, $generoa, $item_id);
     
-    $emaitza = mysqli_query($conn, $sql);
-    
-    if ($emaitza) {
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
         echo "<script>alert('Datuak eguneratuak!');</script>";
         // Datuak berriro kargatu
-        $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-        $emaitza = mysqli_query($conn, $sql);
+        $stmt2 = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
+        mysqli_stmt_bind_param($stmt2, "i", $item_id);
+        mysqli_stmt_execute($stmt2);
+        $emaitza = mysqli_stmt_get_result($stmt2);
         $pelikula = mysqli_fetch_array($emaitza);
+        mysqli_stmt_close($stmt2);
     } else {
-        echo "Errorea: " . mysqli_error($conn);
+        echo "Errorea: " . mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
     }
 }
 ?>

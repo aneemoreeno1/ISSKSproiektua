@@ -12,9 +12,12 @@ if ($conn->connect_error) { die("Database connection failed: " . $conn->connect_
 //GET parametro bidez, jasotako pelikularen IDa hartu
 $item_id = $_GET['item'];
 //Pelikula horren datuak datu-basean bilatu
-$sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-$emaitza = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $item_id);
+mysqli_stmt_execute($stmt);
+$emaitza = mysqli_stmt_get_result($stmt);
 $pelikula = mysqli_fetch_array($emaitza);
+mysqli_stmt_close($stmt);
 ?>
 
 <!DOCTYPE html>

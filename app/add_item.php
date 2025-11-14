@@ -23,13 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $egilea = $_POST['egilea'];
     $generoa = $_POST['generoa'];
     //Pelikula gehitu datu basera
-    $sql = "INSERT INTO pelikulak (izena, deskribapena, urtea, egilea, generoa)
-            VALUES ('$izena', '$deskribapena', '$urtea', '$egilea', '$generoa')";
-    if (mysqli_query($conn, $sql)) {
+    $stmt = mysqli_prepare($conn, "INSERT INTO pelikulak (izena, deskribapena, urtea, egilea, generoa) VALUES (?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "ssiss", $izena, $deskribapena, $urtea, $egilea, $generoa);
+    if (mysqli_stmt_execute($stmt)) {
         $mezua = "Pelikula ondo gehitu da!";
     } else {
-        $mezua = "Arazo bat egon da: " . mysqli_error($conn);
+        $mezua = "Arazo bat egon da: " . mysqli_stmt_error($stmt);
     }
+    mysqli_stmt_close($stmt);
 }
 ?>
 

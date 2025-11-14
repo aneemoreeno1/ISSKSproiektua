@@ -26,13 +26,17 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Datu-baseatik erabiltzailearen datuak kargatu 
-$sql = "SELECT * FROM usuarios WHERE id = $user_id";
-$emaitza = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM usuarios WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $user_id);
+mysqli_stmt_execute($stmt);
+$emaitza = mysqli_stmt_get_result($stmt);
 
 // Erabiltzailea existitzen dela egiaztatu
 if ($emaitza->num_rows > 0) {
     $erabiltzailea = mysqli_fetch_array($emaitza);
+    mysqli_stmt_close($stmt);
 } else {
+    mysqli_stmt_close($stmt);
     die("Erabiltzailea ez da existitzen. Lehenengo erabiltzailea sortu.");
 }
 
@@ -47,25 +51,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pasahitza = $_POST['pasahitza']; 
     
     // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta
-    $sql = "UPDATE usuarios 
-            SET nombre = '$izena', 
-                telefonoa = '$telefonoa', 
-                jaiotze_data = '$data', 
-                email = '$email', 
-                pasahitza = '$pasahitza'
-            WHERE id = $user_id";
+    $stmt = mysqli_prepare($conn, "UPDATE usuarios SET nombre = ?, telefonoa = ?, jaiotze_data = ?, email = ?, pasahitza = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "sssssi", $izena, $telefonoa, $data, $email, $pasahitza, $user_id);
     
     // Kontsulta exekutatu eta emaitza egiaztatu
-    $emaitza = mysqli_query($conn, $sql);
-    
-    if ($emaitza) {
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
         echo "<script>alert('Datuak eguneratuak!');</script>";
         // Datuak berriro kargatu formularioan erakusteko
-        $sql = "SELECT * FROM usuarios WHERE id = $user_id";
-        $emaitza = mysqli_query($conn, $sql);
+        $stmt2 = mysqli_prepare($conn, "SELECT * FROM usuarios WHERE id = ?");
+        mysqli_stmt_bind_param($stmt2, "i", $user_id);
+        mysqli_stmt_execute($stmt2);
+        $emaitza = mysqli_stmt_get_result($stmt2);
         $erabiltzailea = mysqli_fetch_array($emaitza);
+        mysqli_stmt_close($stmt2);
     } else {
-        echo "Errorea: " . mysqli_error($conn);
+        echo "Errorea: " . mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
     }
 }
 ?>

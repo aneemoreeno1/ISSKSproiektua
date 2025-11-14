@@ -14,8 +14,10 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
     $item_id = $_POST['item_id'];
 
-    $sql = "DELETE FROM pelikulak WHERE id = $item_id";
-    mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, "DELETE FROM pelikulak WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $item_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
     
     header("Location: items.php");
     exit;
@@ -25,9 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['item_id'])) {
 if (isset($_GET['item'])) {
     $item_id = $_GET['item'];
 
-    $sql = "SELECT * FROM pelikulak WHERE id = $item_id";
-    $result = mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, "SELECT * FROM pelikulak WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $item_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     $pelikula = mysqli_fetch_assoc($result);
+    mysqli_stmt_close($stmt);
 }
 ?>
 

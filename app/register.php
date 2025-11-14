@@ -35,39 +35,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mezua = "Ezin izan da datu-basearekin konektatu";
         $mezua_type = "error";
     } else {
-        // Formularioko datuak garbitu eta eskuratu (using DB escaping)
-        $izena = mysqli_real_escape_string($conn, trim($_POST['izena'] ?? ''));
-        $nan = mysqli_real_escape_string($conn, trim($_POST['nan'] ?? ''));
-        $telefonoa = mysqli_real_escape_string($conn, trim($_POST['telefonoa'] ?? ''));
-        $data = mysqli_real_escape_string($conn, trim($_POST['data'] ?? ''));
-        $email = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
-        $pasahitza = mysqli_real_escape_string($conn, trim($_POST['pasahitza'] ?? ''));
+        // Formularioko datuak eskuratu
+        $izena = trim($_POST['izena'] ?? '');
+        $nan = trim($_POST['nan'] ?? '');
+        $telefonoa = trim($_POST['telefonoa'] ?? '');
+        $data = trim($_POST['data'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $pasahitza = trim($_POST['pasahitza'] ?? '');
 
         // 1) NAN hori duen erabiltzailea jadanik badagoen egiaztatu
         if ($nan !== '') {
-            $chk_sql = "SELECT id FROM usuarios WHERE nan = '$nan' LIMIT 1";
-            $chk_res = mysqli_query($conn, $chk_sql);
+            $chk_stmt = mysqli_prepare($conn, "SELECT id FROM usuarios WHERE nan = ? LIMIT 1");
+            mysqli_stmt_bind_param($chk_stmt, "s", $nan);
+            mysqli_stmt_execute($chk_stmt);
+            $chk_res = mysqli_stmt_get_result($chk_stmt);
             if ($chk_res && mysqli_num_rows($chk_res) > 0) {
                 $mezua = "Jada badago erabiltzaile bat NAN horrekin (" . htmlspecialchars($nan) . ").";
                 $mezua_type = "error";
             }
+            mysqli_stmt_close($chk_stmt);
         }
 
         // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
         if ($mezua === "") {
-            $sql = "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) 
-                    VALUES ('$izena', '$nan', '$telefonoa', '$data', '$email', '$pasahitza')";
+            $stmt = mysqli_prepare($conn, "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "ssssss", $izena, $nan, $telefonoa, $data, $email, $pasahitza);
             
             // Datuak ondo gorde badira, berbideraketa egin
-            if (mysqli_query($conn, $sql)) {
+            if (mysqli_stmt_execute($stmt)) {
                 // Use PRG pattern: redirect to self with created flag
+                mysqli_stmt_close($stmt);
                 header('Location: register.php?created=1');
                 exit();
             } else {
                 $mezua = "Arazo bat egon da datu-basean.";
-                error_log("Register insert error: " . mysqli_error($conn));
+                error_log("Register insert error: " . mysqli_stmt_error($stmt));
                 $mezua_type = "error";
             }
+            mysqli_stmt_close($stmt);
         }
     }
 }

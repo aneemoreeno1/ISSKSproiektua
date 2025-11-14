@@ -17,8 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $erabiltzailea = $_POST['erabiltzailea'];
     $pasahitza = $_POST['pasahitza'];
     //Erabiltzailea eta pasahitza datu-basean bilatu
-    $sql = "SELECT * FROM usuarios WHERE nombre='$erabiltzailea' AND pasahitza='$pasahitza'";
-    $result = mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, "SELECT * FROM usuarios WHERE nombre=? AND pasahitza=?");
+    mysqli_stmt_bind_param($stmt, "ss", $erabiltzailea, $pasahitza);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 //Egiaztatu erabiltzailea existitzen den eta saioa hasi
     if ($result && mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
@@ -30,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //errore kasuan, mezua erakutsi
         echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Sartutako erabiltzailea edo pasahitza ez da zuzena</p>";
     }
+    mysqli_stmt_close($stmt);
 }
 ?>
 
