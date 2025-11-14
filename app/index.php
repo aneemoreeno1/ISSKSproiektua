@@ -28,8 +28,18 @@ ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_samesite', 'Strict');
 session_start();
 
-// Explicitly set session cookie with all security attributes
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+// Force session cookie regeneration with all security attributes
+// This ensures the SameSite attribute is properly applied
 if (session_id()) {
+    // Delete any existing session cookie first
+    setcookie(session_name(), '', time() - 3600, '/', '', true, true);
+    
+    // Set new session cookie with all security attributes
     setcookie(session_name(), session_id(), [
         'expires' => 0,
         'path' => '/',
