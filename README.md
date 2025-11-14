@@ -22,7 +22,7 @@
   ```
 3.  Entregaren adarrera aldatu (Kasu honetan _entrega_1_ adarra):
 ```bash
-  $ git checkout entrega_1
+  $ git checkout entrega_3
   ```
 4. Web irudia sortu:
 ```bash
