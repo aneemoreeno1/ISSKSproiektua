@@ -13,30 +13,8 @@ header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 header("Server: ");
 header_remove("X-Powered-By");
 
-// Set session cookie parameters BEFORE starting session - this is critical for SameSite
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.name', 'SECURE_SESSID');
-
-// Set session parameters before session_start
-session_set_cookie_params([
-   'lifetime' => 0,
-   'path' => '/',
-   'domain' => '',
-   'secure' => true,
-   'httponly' => true,
-   'samesite' => 'Strict'
-]);
-
-// Now start session with proper parameters already set
+// Simple session start
 session_start();
-
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
 
 if (!isset($_SESSION['initiated'])) {
     session_regenerate_id(true);
