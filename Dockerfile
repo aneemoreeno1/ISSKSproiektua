@@ -1,11 +1,4 @@
 FROM php:7.2.2-apache
-# Segurtasun goiburuak gehitu
-RUN echo "Header always set X-Content-Type-Options \"nosniff\"" \
- && echo "Header unset X-Powered-By" \
- && echo "Header always set X-Frame-Options \"SAMEORIGIN\"" \
- && echo "Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains; preload\"" \
- && echo "Header always set Content-Security-Policy \"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; frame-ancestors 'self';\"" \
- >> /etc/apache2/conf-enabled/security.conf
 
 # Instalatu mysqli eta berbideralketa ahalbideratu
 RUN docker-php-ext-install mysqli \
@@ -13,6 +6,16 @@ RUN docker-php-ext-install mysqli \
  && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
  && echo '<Directory /var/www/html/>\n\tAllowOverride All\n</Directory>' >> /etc/apache2/apache2.conf
  
+ RUN a2enmod headers
+ # Segurtasun goiburuak gehitu
+ RUN echo "Header always set X-Content-Type-Options \"nosniff\"" \
+ && echo "Header unset X-Powered-By" \
+ && echo "Header always set X-Frame-Options \"SAMEORIGIN\"" \
+ && echo "Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains; preload\"" \
+ && echo "Header always set Content-Security-Policy \"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; frame-ancestors 'self';\"" \
+ >> /etc/apache2/conf-enabled/security.conf
+
+
 RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf \
  && echo "ServerSignature Off" >> /etc/apache2/apache2.conf
 
