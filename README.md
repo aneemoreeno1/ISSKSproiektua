@@ -74,8 +74,15 @@ $ docker build -t web .
             ```
           - Pelikuen web sisteman sartu:
              - http://localhost:81/
+             - 
+  8. Web sisteman sartzean alerta mezua agertuko da '_Advertencia: riesgo potencial de seguridad a continuación_'
+          - **Avanzado...** botoia sakatu behar da.
+             - Jarraian **Aceptar el riego y continuar** botoia hautatu.
+              - Nahi izanez gero, ziurtagiria ikusteko aukera egongo da '_Ver certificado_' botoian sakatuz.
+     
+  10. **Aceptar el riego** botoia sakatzean zuzenan web sistemako hasierako orrialdera bistaratuko da ( https://localhost:8443/ -en).
                
-  8. Edukiontziak itzali eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
+  11. Edukiontziak itzali eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
   ```bash
   $ docker-compose down
   ```
