@@ -43,9 +43,10 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
                     <td style="text-align:center; width: 20px;"><?= $row['id'] ?></td>
                     <td><?= $row['nombre'] ?></td>
                     <td>
-                        <a style="text-align:right" href="show_user.php?user=<?= $row['id'] ?>">Ikusi</a>
+                        
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['id']) { ?> <!-- erabiltzailearen saioa irekita badago orduan erabiltzaileak bere datuak editatu dezake horregatik sesion-->
-                            | <a style="text-align:right" href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a>
+                              <a style="text-align:right" href="modify_user.php?user=<?= $row['id'] ?>">Editatu</a> |
+                              <a style="text-align:right" href="show_user.php?user=<?= $row['id'] ?>">Ikusi</a>
                         <?php } ?>
                     </td>
                 </tr>
