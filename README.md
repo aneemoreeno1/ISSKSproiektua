@@ -51,7 +51,7 @@ $ docker build -t web .
             ``
   7. Web-sisteman satu:
      - Dena ondo eginez gero, hurrengo helbidean sartuz, pelikulak gordetzeko web sistema irekiko da:
-       - http://localhost:81/
+       - http://localhost:81/ edo https://localhost:8443/
        
           - Baldin eta web sisteman sartzean _Internal Server Error_ errorea ematen bada, hurrengoa egin beharko litzateke:
             - Edukiontzi barruan sartu:
@@ -73,16 +73,43 @@ $ docker build -t web .
             $ docker-compose up -d
             ```
           - Pelikuen web sisteman sartu:
-             - http://localhost:81/
-             - 
-  8. Web sisteman sartzean alerta mezua agertuko da '_Advertencia: riesgo potencial de seguridad a continuación_'
-          - **Avanzado...** botoia sakatu behar da.
-             - Jarraian **Aceptar el riego y continuar** botoia hautatu.
-              - Nahi izanez gero, ziurtagiria ikusteko aukera egongo da '_Ver certificado_' botoian sakatuz.
-     
-  10. **Aceptar el riego** botoia sakatzean zuzenan web sistemako hasierako orrialdera bistaratuko da ( https://localhost:8443/ -en).
+             - http://localhost:81/ edo https://localhost:8443/
                
-  11. Edukiontziak itzali eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
+  8. Web sisteman sartzean alerta mezua agertuko da '_Advertencia: riesgo potencial de seguridad a continuación_'
+
+     - '**Avanzado...**' botoia sakatu behar da.
+
+        - Jarraian '**Aceptar el riego y continuar**' botoia hautatu.
+
+          - Nahi izanez gero, ziurtagiria ikusteko aukera egongo da '_Ver certificado_' botoian sakatuz.
+     
+  10. '**Aceptar el riego**' botoia sakatzean dena ondo badoa zuzenan web sistemako hasierako orrialdera bistaratuko da ( http://localhost:81/ -n edo https://localhost:8443/ -en).
+
+        - Web-sisteman sartzen saiatzean sistema ez bada ondo abiatzen edo erroreak agertzen badira, hurrengo urratsak jarraitu:
+          
+            - Edukiontziak gelditu:
+            ```bash
+             $ docker-compose down
+            ```
+            - MySQL karpeta ezabatu:
+              ```bash
+              sudo rm -rf mysql/
+              ```
+            - Web zerbitzuaren irudia ezabatu:
+              ```bash
+              docker rmi web
+              ```
+            - Irudia berriro eraiki:
+              ```bash
+              docker build -t web .
+              ```
+            - Zerbitzuak berriro altxatu:
+              ```bash
+              docker-compose up -d
+              ```
+          - Zerbitzuak berriro altxatzean, dena ondo dagoela egiaztatzeko Web-sistemaren hasierako  orrian sartu
+              - https://localhost:8443/  edo http://localhost:81/
+  1. Edukiontziak itzali eta ezabatzeko (ez ditu fitxategiak ezabatzen, ezta datu-basea ere, edukiontzitik kanpo gordeta daudelako):
   ```bash
   $ docker-compose down
   ```
