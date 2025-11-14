@@ -3,7 +3,7 @@ FROM php:7.2.2-apache
 RUN echo "Header always set X-Content-Type-Options \"nosniff\"" >> /etc/apache2/conf-enabled/security.conf
 RUN echo "Header unset X-Powered-By" >> /etc/apache2/conf-enabled/security.conf
 RUN echo "Header always set X-Frame-Options \"SAMEORIGIN\"" >> /etc/apache2/conf-enabled/security.conf
-RUN echo "Header always set Content-Security-Policy \"default-src 'self'; script-src 'self' https://localhost:81/; style-src 'self'; img-src 'self';\"" >> /etc/apache2/conf-enabled/security.conf
+RUN echo "Header always set Content-Security-Policy \"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';"" >> /etc/apache2/conf-enabled/security.conf
 RUN echo "Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains; preload\"" >> /etc/apache2/conf-enabled/security.conf
 
 
