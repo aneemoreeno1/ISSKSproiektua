@@ -18,9 +18,6 @@ RUN echo "Header always set Strict-Transport-Security \"max-age=31536000; includ
 RUN echo "Header always set X-Content-Type-Options \"nosniff\"" >> /etc/apache2/conf-enabled/security.conf
 
 
-RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf \
- && echo "ServerSignature Off" >> /etc/apache2/apache2.conf
-
 RUN echo "ErrorDocument 404 /errorea.html" >> /etc/apache2/apache2.conf
 
 RUN a2enmod ssl
