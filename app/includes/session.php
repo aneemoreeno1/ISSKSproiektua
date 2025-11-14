@@ -14,6 +14,19 @@ if (!headers_sent()) {
     // Start session
     session_start();
     
+    $timeout = 60; // Denbora-muga 1 min
+
+    // Denbora-muga egiaztatu
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+        session_unset(); // Saioaren aldagai guztiak garbitu
+        session_destroy();  // Saioa amaitu
+        header("Location: login.php?timeout=1"); // Loginera bideratu
+        exit;
+    }
+    
+    // Azken aktibitatearen denbora eguneratu
+    $_SESSION['last_activity'] = time();
+    
     // Get the session cookie name
     $sessionName = session_name();
     $sessionId = session_id();

@@ -12,6 +12,8 @@ RUN docker-php-ext-install mysqli \
  && echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf \
  && echo 'ServerSignature Off' >> /etc/apache2/apache2.conf
  
+RUN echo "ErrorDocument 404 /errorea.html" >> /etc/apache2/apache2.conf 
+
 RUN a2enmod ssl
 
 COPY ssl/localhost.crt /etc/ssl/certs/

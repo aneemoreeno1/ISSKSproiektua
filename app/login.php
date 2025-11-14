@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $row = mysqli_fetch_assoc($result);
         // Verify hashed password
         if (password_verify($pasahitza, $row['pasahitza'])) {
+	    session_regenerate_id(true);
+            $_SESSION['initiated'] = true;
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['user_name'] = $row['nombre'];
             header("Location: index.php");
