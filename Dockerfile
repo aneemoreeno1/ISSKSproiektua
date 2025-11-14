@@ -2,6 +2,9 @@ FROM php:7.2.2-apache
 
 # Copy PHP security configuration
 COPY app/php-security.ini /usr/local/etc/php/conf.d/security.ini
+COPY ssl/localhost.crt /etc/ssl/certs/
+COPY ssl/localhost.key /etc/ssl/private/
+COPY ssl-config.conf /etc/apache2/sites-available/000-default.conf
 
 # Instalatu mysqli eta berbideralketa ahalbideratu
 RUN docker-php-ext-install mysqli \

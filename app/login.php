@@ -16,20 +16,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Erabiltzailearen sarrrera-datuak eskuratu   
     $erabiltzailea = $_POST['erabiltzailea'];
     $pasahitza = $_POST['pasahitza'];
-    //Erabiltzailea eta pasahitza datu-basean bilatu
-    $stmt = mysqli_prepare($conn, "SELECT * FROM usuarios WHERE nombre=? AND pasahitza=?");
-    mysqli_stmt_bind_param($stmt, "ss", $erabiltzailea, $pasahitza);
+    
+    //Erabiltzailea datu-basean bilatu
+    $stmt = mysqli_prepare($conn, "SELECT * FROM usuarios WHERE nombre=?");
+    mysqli_stmt_bind_param($stmt, "s", $erabiltzailea);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-//Egiaztatu erabiltzailea existitzen den eta saioa hasi
+    
+    //Egiaztatu erabiltzailea existitzen den eta pasahitza zuzena den
     if ($result && mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
-        $_SESSION['user_id'] = $row['id'];
-        $_SESSION['user_name'] = $row['nombre'];
-        header("Location: index.php");
-        exit;
+        // Verify hashed password
+        if (password_verify($pasahitza, $row['pasahitza'])) {
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['user_name'] = $row['nombre'];
+            header("Location: index.php");
+            exit;
+        } else {
+            //pasahitza okerra
+            echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Sartutako erabiltzailea edo pasahitza ez da zuzena</p>";
+        }
     } else {
-        //errore kasuan, mezua erakutsi
+        //erabiltzailea ez da existitzen
         echo "<p style='color:#ff6666; text-align:center; margin-bottom:15px;'>Sartutako erabiltzailea edo pasahitza ez da zuzena</p>";
     }
     mysqli_stmt_close($stmt);

@@ -58,8 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // 2) NAN bikoizturik ez badago, erabiltzailea datu-basean gorde
         if ($mezua === "") {
+            // Hash password before storing
+            $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
+            
             $stmt = mysqli_prepare($conn, "INSERT INTO usuarios (nombre, nan, telefonoa, jaiotze_data, email, pasahitza) VALUES (?, ?, ?, ?, ?, ?)");
-            mysqli_stmt_bind_param($stmt, "ssssss", $izena, $nan, $telefonoa, $data, $email, $pasahitza);
+            mysqli_stmt_bind_param($stmt, "ssssss", $izena, $nan, $telefonoa, $data, $email, $hashed_password);
             
             // Datuak ondo gorde badira, berbideraketa egin
             if (mysqli_stmt_execute($stmt)) {

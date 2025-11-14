@@ -48,11 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $telefonoa = $_POST['telefonoa'];
     $data = $_POST['data'];
     $email = $_POST['email'];
-    $pasahitza = $_POST['pasahitza']; 
+    $pasahitza = $_POST['pasahitza'];
+    
+    // Hash password before updating
+    $hashed_password = password_hash($pasahitza, PASSWORD_DEFAULT);
     
     // NAN ezin da aldatu, beraz datu-basean eguneraketa egiteko kontsulta
     $stmt = mysqli_prepare($conn, "UPDATE usuarios SET nombre = ?, telefonoa = ?, jaiotze_data = ?, email = ?, pasahitza = ? WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "sssssi", $izena, $telefonoa, $data, $email, $pasahitza, $user_id);
+    mysqli_stmt_bind_param($stmt, "sssssi", $izena, $telefonoa, $data, $email, $hashed_password, $user_id);
     
     // Kontsulta exekutatu eta emaitza egiaztatu
     if (mysqli_stmt_execute($stmt)) {
@@ -103,11 +106,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="email">Email:</label><br>
             <input type="text" name="email" style="width: 100%;" value="<?= $erabiltzailea['email'] ?>" required>
 
-            <label for="pasahitza">Pasahitza:</label><br>
-            <input type="password" name="pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+            <label for="pasahitza">Pasahitza berria:</label><br>
+            <input type="password" name="pasahitza" style="width: 100%;" placeholder="Sartu pasahitza berria" required>
 
             <label for="errep_pasahitza">Errepikatu pasahitza:</label><br>
-            <input type="password" name="errep_pasahitza" style="width: 100%;" value="<?= $erabiltzailea['pasahitza'] ?>" required>
+            <input type="password" name="errep_pasahitza" style="width: 100%;" placeholder="Errepikatu pasahitza berria" required>
             
             <div class="botoiak">
                 <button type="submit" class="btn-primary" id="user_modify_submit">Datuak gorde</button>
