@@ -1,4 +1,4 @@
-<?php
+	<?php
 // modify_item.php - Pelikularen datuak aldatu
 
 $hostname = "db";
@@ -125,22 +125,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!karaktereArruntaK(egilea)) {
                     alert("Egileak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
                     return false;
-                } else if (!gutxienezLetraBat(egilea)) {
-                    alert("Egileak gutxienez letra bat izan behar du");
-                    return false;
-                }
+                } 
             }
 
             // Generoa
             var generoa = document.item_modify_form.generoa.value;
             if (generoa !== "") {
-                if (!bakarrikLetrak(generoa)) {
-                    alert("Generoak soilik letrak izan behar ditu");
+        	if (!karaktereArruntaK(egilea)) {
+                    alert("Generoak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
                     return false;
-                } else if (!gutxienezLetraBat(generoa)) {
-                    alert("Generoak gutxienez letra bat izan behar du");
-                    return false;
-                }
+                } 
             }
 
             return true;
