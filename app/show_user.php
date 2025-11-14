@@ -11,37 +11,7 @@ header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 header("Server: ");
 header_remove("X-Powered-By");
 
-// Set session cookie parameters BEFORE starting session - this is critical for SameSite
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.name', 'SECURE_SESSID');
-
-// Set session parameters before session_start
-session_set_cookie_params([
-   'lifetime' => 0,
-   'path' => '/',
-   'domain' => '',
-   'secure' => true,
-   'httponly' => true,
-   'samesite' => 'Strict'
-]);
-
-// Now start session with proper parameters already set
-session_start();
-
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
-
-if (!isset($_SESSION['initiated'])) {
-    session_regenerate_id(true);
-    $_SESSION['initiated'] = true;
-}
-
-// Security functions
+// Security function for XSS protection
 function safe_output($data) {
     return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
@@ -59,25 +29,21 @@ if(!$conn){
     echo "Zerbitzari akatsa";
     exit;
 }
-mysqli_set_charset($conn, 'utf8');
 
-$user_id = filter_var($_GET['user'] ?? 0, FILTER_VALIDATE_INT);
-$erabiltzailea = null;
+$user_id = $_GET['user'];
 
-if ($user_id) {
-    if ($stmt = $conn->prepare("SELECT id, nombre, nan, telefonoa, jaiotze_data, email FROM usuarios WHERE id = ? LIMIT 1")) {
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $erabiltzailea = $result->fetch_assoc();
-        $stmt->close();
-    } else {
-        error_log("DB prepare failed: " . $conn->error);
-        http_response_code(500);
-        echo "Zerbitzari akatsa.";
-        mysqli_close($conn);
-        exit;
-    }
+if ($stmt = $conn->prepare("SELECT id, nombre, nan, telefonoa, jaiotze_data, email FROM usuarios WHERE id = ? LIMIT 1")) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $erabiltzailea = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    error_log("DB prepare failed: " . $conn->error);
+    http_response_code(500);
+    echo "Zerbitzari akatsa.";
+    mysqli_close($conn);
+    exit;
 }
 ?>
 
