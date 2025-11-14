@@ -1,16 +1,11 @@
 <?php
 
 include('session_config.php');
-// Saioa hasi: erabiltzailearen datuak gordetzeko
-session_start();
 
 if (!isset($_SESSION['initiated'])) {
     session_regenerate_id(true);
     $_SESSION['initiated'] = true;
 }
-
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self';");
-
 
 $timeout = 60; // 1min
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
