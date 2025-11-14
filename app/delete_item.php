@@ -6,7 +6,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -136,8 +136,8 @@ if (isset($_GET['item'])) {
             <form method="post">
                 <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
                 <input type="hidden" name="item_id" value="<?php echo safe_output($pelikula['id']); ?>">
-                <button id="item_delete_submit" type="submit" class="btn-primary" onclick="return confirm('Benetan ezabatu nahi duzu?')">Ezabatu</button>
-                <button type="button" class="btn-secondary" onclick="window.location.href='items.php'">Bueltatu</button>
+                <button id="item_delete_submit" type="submit" class="btn-primary">Ezabatu</button>
+                <a href="items.php" class="btn-secondary">Bueltatu</a>
             </form>
                
         <?php else: ?>

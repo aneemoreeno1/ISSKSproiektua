@@ -1,11 +1,63 @@
 <?php
 // logout.php - Secure logout functionality
 
-// Include security utilities
-require_once 'security.php';
+// Security headers
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+// Remove server information
+header("Server: ");
+header_remove("X-Powered-By");
 
-// Start secure session
-start_secure_session();
+// Secure session configuration with all security flags
+session_set_cookie_params([
+   'lifetime' => 0,
+   'path' => '/',
+   'domain' => '',
+   'secure' => true,
+   'httponly' => true,
+   'samesite' => 'Strict'
+]);
+
+// Set additional cookie security
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Strict');
+session_start();
+
+// Explicitly set session cookie with all security attributes
+if (session_id()) {
+    setcookie(session_name(), session_id(), [
+        'expires' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => true,
+        'httponly' => true,
+        'samesite' => 'Strict'
+    ]);
+}
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+// CSRF token functions
+function generate_csrf_token() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verify_csrf_token($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
 
 // Verify CSRF token for logout
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,15 +94,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <link rel="stylesheet" href="style2.css">
     </head>
     <body>
-        <div class="wrapper" style="width: 20%">
+        <div class="wrapper small-wrapper">
             <h1>Saioa Itxi</h1>
             <p>Ziur zaude saioa itxi nahi duzula?</p>
             
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
                 <div class="botoiak">
-                    <button type="submit" class="btn-primary" style="width:100%">Bai, Itxi Saioa</button>
-                    <button type="button" class="btn-secondary" style="width:100%" onclick="history.back()">Ezeztatu</button>
+                    <button type="submit" class="btn-primary full-width">Bai, Itxi Saioa</button>
+                    <a href="index.php" class="btn-secondary full-width">Ezeztatu</a>
                 </div>
             </form>
         </div>

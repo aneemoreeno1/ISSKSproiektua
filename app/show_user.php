@@ -4,7 +4,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -102,7 +102,7 @@ if ($user_id) {
           <p><b>Telefonoa:</b> <?php echo safe_output($erabiltzailea['telefonoa']); ?></p>
           <p><b>Jaiotze data:</b> <?php echo safe_output($erabiltzailea['jaiotze_data']); ?></p>
           <p><b>Email:</b> <?php echo safe_output($erabiltzailea['email']); ?></p>
-          <button class="btn-secondary" onclick="window.location.href='index.php'">Atzera</button>
+          <a href="index.php" class="btn-secondary">Atzera</a>
       <?php else: ?>
           <p>Erabiltzailea ez da existitzen</p>
       <?php endif; ?>

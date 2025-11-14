@@ -4,7 +4,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -82,14 +82,14 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
         <h1>Erabiltzaileak</h1>
         <table>
             <tr>
-                <th style="text-align:center; width: 20px;">ID</th> <!--Id textua erdian jartzeko erabilita, zenbakiak direnez eskuinean edo ezkerrean ez zen ongi ikusten -->
+                <th class="text-center id-column">ID</th> <!--Id textua erdian jartzeko erabilita, zenbakiak direnez eskuinean edo ezkerrean ez zen ongi ikusten -->
                 <th>Izena</th>
-                <th style="text-align:right; width: 90px;"> </th>
+                <th class="text-right actions-column"> </th>
             </tr>
 
             <?php while ($row = mysqli_fetch_array($query)) { ?>
                 <tr>
-                    <td style="text-align:center; width: 20px;"><?= safe_output($row['id']) ?></td>
+                    <td class="text-center id-column"><?= safe_output($row['id']) ?></td>
                     <td><?= safe_output($row['nombre']) ?></td>
                     <td>
                         <a href="show_user.php?user=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi">ikusi</a>
@@ -102,9 +102,9 @@ $query = mysqli_query($conn, "SELECT * FROM usuarios") or die(mysqli_error($conn
         </table>
 
         <div class="botoiak">
-                <button type="button" class="btn-primary" style="width:100%" onclick="window.location.href='items.php'"><b> Pelikulak Ikusi</b></button>     <!-- hauek botoiak dira, primario sekundairio eta linkak, hauekin hierarkia mantenitzen da, erabiltzaileak botoi nagusiena erraz identifikatzen du-->
-                <button type="button" class="btn-link" style="padding: 5px 2px 5px 140px;" onclick="window.location.href='login.php'"> Saioa Hasi</button> | 
-                <button type="button" class="btn-link" onclick="window.location.href='register.php'">Erregistratu</button>
+                <a href="items.php" class="btn-primary full-width"><b> Pelikulak Ikusi</b></a>     <!-- hauek botoiak dira, primario sekundairio eta linkak, hauekin hierarkia mantenitzen da, erabiltzaileak botoi nagusiena erraz identifikatzen du-->
+                <a href="login.php" class="btn-link login-padding"> Saioa Hasi</a> | 
+                <a href="register.php" class="btn-link">Erregistratu</a>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -93,7 +93,7 @@ if ($item_id) {
           <p><b>Urtea:</b> <?php echo safe_output($pelikula['urtea']); ?></p>
           <p><b>Egilea:</b> <?php echo safe_output($pelikula['egilea']); ?></p>
           <p><b>Generoa:</b> <?php echo safe_output($pelikula['generoa']); ?></p>
-          <button class="btn-secondary" onclick="history.back()">Atzera</button>
+          <a href=\"items.php\" class=\"btn-secondary\">Atzera</a>
       <?php else: ?>
           <p>Pelikula ez da existitzen</p>
       <?php endif; ?>

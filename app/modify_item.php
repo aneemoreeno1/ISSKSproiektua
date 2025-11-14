@@ -6,7 +6,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -152,104 +152,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Pelikularen datuak aldatu</title>
     <link rel="stylesheet" href="style2.css">
-    <script>
-        function bakarrikLetrak(testua) {
-            var patroia = /^[A-Za-zÑñ\s]+$/;
-            return patroia.test(testua);
-        }
-
-        function bakarrikZenbakiak(testua) {
-            var patroia = /^[0-9]+$/;
-            return patroia.test(testua);
-        }
-
-        function gutxienezLetraBat(testua) {
-            var patroia = /[A-Za-zÑñ]/;
-            return patroia.test(testua);
-        }
-
-        function karaktereArruntaK(testua) {
-            var patroia = /^[A-Za-zÑñ0-9\s.,!?¡¿()-]+$/;
-            return patroia.test(testua);
-        }
-
-        function datuakEgiaztatu() {
-            // Izena
-            var izena = document.item_modify_form.izena.value;
-            if (izena.length < 1) {
-                alert("Izenak ezin du hutsik egon");
-                return false;
-            } else if (!karaktereArruntaK(izena)) {
-                alert("Izenak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                return false;
-            }
-
-            // Deskribapena
-            var deskribapena = document.item_modify_form.deskribapena.value;
-            if (deskribapena.length > 500) {
-                alert("Deskribapenak ezin du 500 karaktere baino gehiago izan");
-                return false;
-            }
-
-            // Urtea
-            var urtea = document.item_modify_form.urtea.value;
-            if (urtea !== "") {
-                if (!bakarrikZenbakiak(urtea)) {
-                    alert("Urteak zenbaki osoa izan behar du");
-                    return false;
-                }
-                var urteZenbakia = parseInt(urtea);
-                var gaurkoUrtea = new Date().getFullYear();
-                if (urteZenbakia < 1888) {
-                    alert("Urtea ez da egokia. 1888 baino handiagoa izan behar da");
-                    return false;
-                }
-                if (urteZenbakia > gaurkoUrtea + 5) {
-                    alert("Urtea ez da egokia. Ezin da etorkizuneko 5 urte baino gehiago izan");
-                    return false;
-                }
-            }
-
-            // Egilea
-            var egilea = document.item_modify_form.egilea.value;
-            if (egilea !== "") {
-                if (!karaktereArruntaK(egilea)) {
-                    alert("Egileak soilik letrak, zenbakiak eta karaktere arruntak izan behar ditu");
-                    return false;
-                } else if (!gutxienezLetraBat(egilea)) {
-                    alert("Egileak gutxienez letra bat izan behar du");
-                    return false;
-                }
-            }
-
-            // Generoa
-            var generoa = document.item_modify_form.generoa.value;
-            if (generoa !== "") {
-                if (!bakarrikLetrak(generoa)) {
-                    alert("Generoak soilik letrak izan behar ditu");
-                    return false;
-                } else if (!gutxienezLetraBat(generoa)) {
-                    alert("Generoak gutxienez letra bat izan behar du");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    </script>
 </head>
 <body>
     <div class="wrapper">
         <h1>Pelikularen datuak aldatu</h1>
         
         <?php if ($success_message): ?>
-            <p style="color:#66ff66; text-align:center; margin-bottom:15px;"><?= safe_output($success_message) ?></p>
+            <p class="success-text"><?= safe_output($success_message) ?></p>
         <?php endif; ?>
         <?php if ($error_message): ?>
-            <p style="color:#ff6666; text-align:center; margin-bottom:15px;"><?= safe_output($error_message) ?></p>
+            <p class="error-text"><?= safe_output($error_message) ?></p>
         <?php endif; ?>
 
-        <form id="item_modify_form" name="item_modify_form" method="POST" onsubmit="return datuakEgiaztatu()">
+        <form id="item_modify_form" name="item_modify_form" method="POST">
             <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
             <div class="form-grid">
                 <div>
@@ -273,14 +188,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
 
-            <div class="full-width" style="margin-top:12px;">
+            <div class="full-width">
                 <label for="deskribapena">Deskribapena:</label><br>
-                <textarea id="deskribapena" name="deskribapena" rows="4" style="width: 100%; font-family: 'Segoe UI';" maxlength="500"><?php echo safe_output($pelikula['deskribapena']); ?></textarea>
+                <textarea id="deskribapena" name="deskribapena" rows="4" class="full-width-textarea" maxlength="500"><?php echo safe_output($pelikula['deskribapena']); ?></textarea>
             </div>
 
-            <div class="botoiak" style="margin-top:18px;">
+            <div class="botoiak">
                 <button type="submit" id="item_modify_submit" class="btn-primary">Datuak gorde</button>
-                <button type="button" id="items_back" class="btn-secondary" onclick="window.location.href='items.php'">Atzera</button>
+                <a href="items.php" class="btn-secondary">Atzera</a>
             </div>
         </form>
     </div>

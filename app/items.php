@@ -4,7 +4,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -103,18 +103,18 @@ $query = mysqli_query($conn, "SELECT * FROM pelikulak") or die(mysqli_error($con
                         <td>
                             <a href="show_item.php?item=<?= urlencode($row['id']) ?>" title="Ikusi" aria-label="Ikusi">Ikusi</a> 
                             <a href="modify_item.php?item=<?= urlencode($row['id']) ?>" title="Editatu" aria-label="Editatu">Editatu</a> 
-                            <a href="delete_item.php?item=<?= urlencode($row['id']) ?>" title="Ezabatu" aria-label="Ezabatu" onclick="return confirm('Benetan ezabatu?');">Ezabatu</a>
+                            <a href="delete_item.php?item=<?= urlencode($row['id']) ?>" title="Ezabatu" aria-label="Ezabatu" class="delete-link">Ezabatu</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </table>
         <?php else: ?>
-            <p style="text-align:center;">Ez daude pelikularik.</p>
+            <p class="info-message">Ez daude pelikularik.</p>
         <?php endif; ?>
 
         <div class="botoiak">
-            <button type="button" class="btn-primary" onclick="window.location.href='add_item.php'">+</button>
-            <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Hasierara Bueltatu</button>
+            <a href="add_item.php" class="btn-primary">+</a>
+            <a href="index.php" class="btn-secondary">Hasierara Bueltatu</a>
         </div>
     </div>
 </body>

@@ -4,7 +4,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Remove server information
@@ -161,40 +161,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Sartu</title>
     <link rel="stylesheet" href="style2.css">
-    <script>
-        function datuakEgiaztatu() {
-            var erabiltzailea = document.login_form.erabiltzailea.value;
-            var pasahitza = document.login_form.pasahitza.value;
-
-            if (erabiltzailea.length < 1) {
-                alert("Sartu erabiltzaile izena");
-                return false;
-            }
-            if (pasahitza.length < 1) {
-                alert("Sartu pasahitza");
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
-    <div class="wrapper" style="width: 20%">
+    <div class="wrapper small-wrapper">
         <h1>Sartu</h1><br>
         <?php if ($error_message): ?>
-            <p style="color:#ff6666; text-align:center; margin-bottom:15px;"><?= safe_output($error_message) ?></p>
+            <p class="error-text"><?= safe_output($error_message) ?></p>
         <?php endif; ?>
         
-        <form id="login_form" name="login_form" method="POST" onsubmit="return datuakEgiaztatu()">
+        <form id="login_form" name="login_form" method="POST">
             <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
              <!-- erabiltzaile eta pasahitz kutxak biak batera "sentitzeko" baten bottom border radius eta bestearen top border radius 0ra jarri dira eta margin top 0 ra ere bai, biak pegatuta egoteko. Bati azkenean bottom border ere kendu zaio bikoitza izan ez izatearren  -->
-            <input type="text" id="erabiltzailea" name="erabiltzailea" style="width:100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; margin-bottom:0; box-sizing: border-box; border-bottom: 0px;" placeholder="Erabiltzailea" required maxlength="50"> <br>
-            <input type="password" id="pasahitza" name="pasahitza" style="width:100%; border-top-left-radius: 0px; border-top-right-radius: 0px; margin-top: 0; box-sizing: border-box;"  placeholder="Pasahitza" required maxlength="255"><br>
+            <input type="text" id="erabiltzailea" name="erabiltzailea" class="connected-input-top" placeholder="Erabiltzailea" required maxlength="50"> <br>
+            <input type="password" id="pasahitza" name="pasahitza" class="connected-input-bottom" placeholder="Pasahitza" required maxlength="255"><br>
 
             <div class="botoiak">
-                <button type="submit" class="btn-primary" style="width:100%" id="login_submit">Sartu</button> <br>
-                <button type="button" class="btn-secondary" style="width:100%" onclick="window.location.href='index.php'">Atzera</button> <br>
-                <button type="button" class="btn-link" onclick="window.location.href='register.php'">Ez duzu konturik? Erregistratu</button>
+                <button type="submit" class="btn-primary full-width" id="login_submit">Sartu</button> <br>
+                <a href="index.php" class="btn-secondary full-width">Atzera</a> <br>
+                <a href="register.php" class="btn-link">Ez duzu konturik? Erregistratu</a>
             </div>
         </form>
     </div>
