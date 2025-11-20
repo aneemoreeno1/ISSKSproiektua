@@ -5,7 +5,7 @@
 
   Ane Moreno Ruiz
 
-# Erasotuta izan den taldea
+# Erasoa jaso duen taldea
 
   Alubias Comunitarias taldea:
   
