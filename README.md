@@ -5,12 +5,22 @@
 
   Ane Moreno Ruiz
 
-# Erasoa jaso duen taldea
+# Biktimak
 
-  Alubias Comunitarias taldea:
+  Larrain Gonzalez
   
+  Surya Ortega
+  
+  Gaizka Divasson
+  
+  Erlantz Loriz
+  
+  Asier Barrio
+
+## "Biktima" proiektuaren URL-a
   https://github.com/lagonzal42/segurProiektu
   
+
     
 # Erabilitako tresnen instalaketa
 
